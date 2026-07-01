@@ -138,6 +138,10 @@
       <input type="range" id="i_pay" min="5000" max="300000" step="1000" value="70000">
     </div>
     <div class="field">
+      <div class="flab"><span>Ставка по кредитам, % годовых</span><span class="fval"><input type="number" id="n_rate" class="numin" style="width:70px" min="0" max="60" step="1" value="35" inputmode="numeric"> %</span></div>
+      <input type="range" id="i_rate" min="0" max="60" step="1" value="35">
+    </div>
+    <div class="field">
       <div class="flab"><span>Срок процедуры (списание долга)</span><span class="fval"><input type="number" id="n_mon" class="numin" style="width:80px" min="6" max="36" step="1" value="14" inputmode="numeric"> мес</span></div>
       <input type="range" id="i_mon" min="6" max="36" step="1" value="14">
     </div>
@@ -164,10 +168,12 @@
   <div class="cols">
     <div class="col now">
       <h3>Как сейчас</h3>
-      <div class="row"><span>Долг</span><b id="d_debt"></b></div>
-      <div class="row"><span>Платите в месяц</span><b id="d_payref"></b></div>
-      <div class="row"><span>За год уходит банку</span><b class="em-red" id="d_year"></b></div>
-      <div class="barnote">Платите годами, а долг почти не двигается — из ямы можно так и не выбраться.</div>
+      <div class="row"><span>Долг под ~<span id="d_rate"></span>% годовых</span><b id="d_debt"></b></div>
+      <div class="row"><span>Только проценты в месяц</span><b class="em-red" id="d_intm"></b></div>
+      <div class="row"><span>Проценты за год</span><b class="em-red" id="d_inty"></b></div>
+      <div class="barnote" id="d_note"></div>
+      <div class="bar"><div class="seg-p" id="bar_p"></div><div class="seg-i" id="bar_i"></div></div>
+      <div class="barlab"><span><span id="d_ps"></span> в долг</span><span><span id="d_is"></span> в проценты</span></div>
     </div>
     <div class="col prog">
       <h3>По программе 127-ФЗ (списание)</h3>
@@ -204,24 +210,30 @@
 <script>
   var f=function(n){return Math.round(n).toLocaleString('ru-RU')+' ₽';};
   var SERVICE_MO=13500;
-  var nd=document.getElementById('n_debt'),np=document.getElementById('n_pay'),nm=document.getElementById('n_mon');
-  var rd=document.getElementById('i_debt'),rp=document.getElementById('i_pay'),rm=document.getElementById('i_mon');
+  var nd=document.getElementById('n_debt'),np=document.getElementById('n_pay'),nm=document.getElementById('n_mon'),nr=document.getElementById('n_rate');
+  var rd=document.getElementById('i_debt'),rp=document.getElementById('i_pay'),rm=document.getElementById('i_mon'),rr=document.getElementById('i_rate');
   function num(el){return parseFloat(el.value)||0;}
   function set(id,v){var e=document.getElementById(id); if(e) e.textContent=v;}
   function clampR(r,v){return Math.max(+r.min,Math.min(+r.max,v));}
   function render(){
-    var D=num(nd),P=num(np),Mo=Math.max(1,num(nm));
+    var D=num(nd),P=num(np),Mo=Math.max(1,num(nm)),R=num(nr)/100;
     var serviceTotal=SERVICE_MO*Mo;
+    var intM=D*R/12, intY=D*R, toPrin=P-intM, intShare=P>0?Math.min(1,Math.max(0,intM/P)):1;
     set('h_wipe',f(D)); set('h_mon',Mo); set('h_serv',f(serviceTotal));
-    set('d_debt',f(D)); set('d_payref',f(P)); set('d_year',f(P*12));
+    set('d_debt',f(D)); set('d_rate',num(nr)); set('d_intm',f(intM)); set('d_inty',f(intY));
+    set('d_ps',Math.round((1-intShare)*100)+'%'); set('d_is',Math.round(intShare*100)+'%');
+    document.getElementById('bar_p').style.width=((1-intShare)*100)+'%';
+    document.getElementById('bar_i').style.width=(intShare*100)+'%';
+    if(toPrin>0){ set('d_note','Из платежа '+f(P)+' в проценты уходит '+f(intM)+', в долг — только '+f(toPrin)+'. Долг почти не двигается.'); }
+    else { set('d_note','Платёж '+f(P)+' даже не покрывает проценты '+f(intM)+' — долг РАСТЁТ примерно на '+f(-toPrin)+' в месяц.'); }
     set('p_wipe',f(D)); set('p_mon',Mo); set('p_serv',f(serviceTotal));
     var now=new Date(), free=new Date(now.getFullYear(),now.getMonth()+Mo,1);
     set('p_year',free.toLocaleDateString('ru-RU',{month:'long',year:'numeric'}));
     document.getElementById('cue_text').textContent=
-      'Смотрите: у вас долг '+f(D)+', вы платите '+f(P)+' в месяц и годами из этого не выберетесь. По 127-ФЗ этот долг списывается примерно за '+Mo+' месяцев — вы платите только за процедуру, старт от 13 500 ₽ в месяц. Через год с небольшим вы полностью без долгов. Начнём?';
+      'Смотрите: у вас долг '+f(D)+' под '+num(nr)+'% — только проценты съедают '+f(intM)+' в месяц, долг почти не двигается. По 127-ФЗ этот долг списывается примерно за '+Mo+' месяцев — вы платите только за процедуру, старт от 13 500 ₽ в месяц. Через год с небольшим вы полностью без долгов. Начнём?';
   }
-  [[rd,nd],[rp,np],[rm,nm]].forEach(function(p){p[0].addEventListener('input',function(){p[1].value=p[0].value;render();});});
-  [[nd,rd],[np,rp],[nm,rm]].forEach(function(p){p[0].addEventListener('input',function(){p[1].value=clampR(p[1],num(p[0]));render();});});
+  [[rd,nd],[rp,np],[rm,nm],[rr,nr]].forEach(function(p){p[0].addEventListener('input',function(){p[1].value=p[0].value;render();});});
+  [[nd,rd],[np,rp],[nm,rm],[nr,rr]].forEach(function(p){p[0].addEventListener('input',function(){p[1].value=clampR(p[1],num(p[0]));render();});});
 
   var body=document.body;
   document.querySelectorAll('#modeswitch button').forEach(function(b){
