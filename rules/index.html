@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Правила работы менеджера — SALE 100.0</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="description" content="Как мы работаем: один экран задач, путь лида по шагам, что считается делом, деньги, рейтинг, красные линии.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700;800&family=Golos+Text:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F6F2E9; --card:#FFFFFF; --ink:#191713; --muted:#615B50;
+    --green:#0E5C46; --green-deep:#0A3D2E; --amber:#C2790F; --red:#9A2D22;
+    --grey:#7C756A; --gold:#C99A33;
+    --line:rgba(25,23,19,.12);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--paper);color:var(--ink);font-family:"Golos Text",sans-serif;line-height:1.55;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:900px;margin:0 auto;padding:0 22px}
+  h1,h2,h3,.kicker{font-family:"Unbounded",sans-serif}
+  a{color:inherit}
+
+  header{padding:56px 0 20px}
+  .kicker{font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:var(--green);font-weight:700}
+  h1{font-size:clamp(34px,6.5vw,58px);line-height:1;font-weight:800;letter-spacing:-.02em;margin:14px 0 0}
+  h1 .hl{color:var(--green)}
+  .lead{font-size:clamp(15px,2.2vw,19px);color:var(--muted);max-width:740px;margin:16px 0 0;font-weight:500}
+  .promise{margin:22px 0 0;padding:18px 22px;background:var(--green-deep);color:#F6F2E9;border-radius:16px;font-size:clamp(15px,2.1vw,18px);font-weight:500;line-height:1.45}
+  .promise b{color:#F4C775;font-weight:600}
+
+  h2.sec{font-size:clamp(21px,3.2vw,28px);font-weight:800;letter-spacing:-.01em;margin:46px 0 4px}
+  .sub{color:var(--muted);font-size:15px;margin-bottom:16px;max-width:740px}
+
+  /* day rules */
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:6px}
+  @media (max-width:700px){.grid2{grid-template-columns:1fr}}
+  .rl{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:15px 17px}
+  .rl h4{font-family:"Unbounded";font-weight:700;font-size:14.5px;margin-bottom:6px}
+  .rl h4 .n{color:var(--amber)}
+  .rl p{font-size:14px;color:var(--muted)}
+  .rl p b{color:var(--ink)}
+
+  /* lead path steps */
+  .step{position:relative;display:grid;grid-template-columns:46px 1fr;gap:15px;padding:11px 0}
+  .step::before{content:"";position:absolute;left:22px;top:50px;bottom:-11px;width:2px;background:var(--line)}
+  .step:last-child::before{display:none}
+  .sdot{width:46px;height:46px;border-radius:13px;display:flex;align-items:center;justify-content:center;font-family:"Unbounded";font-weight:800;font-size:17px;color:#fff;z-index:1}
+  .d-neu{background:var(--grey)} .d-amber{background:var(--amber)} .d-green{background:var(--green)} .d-win{background:var(--green-deep)}
+  .sbody{background:var(--card);border:1px solid var(--line);border-radius:15px;padding:15px 17px}
+  .sbody .st{font-family:"Unbounded";font-weight:700;font-size:16px;line-height:1.2}
+  .sbody .win{display:inline-block;font-family:"Unbounded";font-weight:700;font-size:11px;background:#FBF1D9;border:1px solid var(--gold);color:#7a5b12;border-radius:8px;padding:3px 9px;margin-left:8px;vertical-align:middle}
+  .sbody p{font-size:14px;color:var(--muted);margin-top:7px}
+  .sbody p b{color:var(--ink)}
+  .sbody .next{font-size:13px;margin-top:8px;color:var(--green-deep);font-weight:600}
+  .sbody .lose{font-size:13px;margin-top:4px;color:var(--red)}
+
+  /* money */
+  .money{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:6px}
+  @media (max-width:700px){.money{grid-template-columns:1fr}}
+  .mc{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:15px 17px;text-align:center}
+  .mc .mv{font-family:"Unbounded";font-weight:800;font-size:20px;color:var(--green)}
+  .mc p{font-size:13px;color:var(--muted);margin-top:5px}
+
+  /* ladder */
+  .ladder{background:var(--card);border:1px solid var(--line);border-radius:15px;padding:17px 19px;margin-top:6px}
+  .ladder ol{margin:8px 0 0 20px;font-size:14.5px;line-height:1.8}
+  .ladder p{font-size:13px;color:var(--muted);margin-top:9px}
+
+  /* red lines */
+  .stopbox{background:#FBEDEB;border:1px solid rgba(154,45,34,.28);border-radius:16px;padding:19px 21px;margin-top:6px}
+  .stopbox h3{font-family:"Unbounded";font-weight:700;font-size:15px;color:var(--red)}
+  .stopbox ul{margin:10px 0 0 20px;font-size:14px;line-height:1.75}
+  .stopbox .note{font-size:13px;color:var(--red);font-weight:600;margin-top:10px}
+
+  /* tools */
+  .tools{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:6px}
+  @media (max-width:700px){.tools{grid-template-columns:1fr}}
+  .tool{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:15px 17px;text-decoration:none;transition:.15s;display:block}
+  .tool:hover{border-color:var(--green)}
+  .tool b{font-family:"Unbounded";font-weight:700;font-size:14.5px;display:block}
+  .tool span{font-size:13px;color:var(--muted);display:block;margin-top:4px}
+  .tool i{font-style:normal;font-family:"Unbounded";font-weight:700;font-size:12.5px;color:var(--green);display:block;margin-top:8px}
+
+  /* ten rules */
+  .ten{margin-top:6px;background:var(--green-deep);color:#F1ECE0;border-radius:18px;padding:22px 26px}
+  .ten ol{margin:6px 0 0 20px;font-size:15px;line-height:2}
+  .ten b{color:#F4C775;font-weight:600}
+
+  footer{margin:56px 0 46px;padding-top:20px;border-top:1px solid var(--line);color:var(--muted);font-size:13px}
+  footer b{font-family:"Unbounded";color:var(--ink);font-weight:700}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="kicker">Правила работы · менеджер</div>
+    <h1>Как мы <span class="hl">работаем</span></h1>
+    <p class="lead">Ты не выбираешь, кому звонить, и не держишь договорённости в голове — система ставит задачи и следит за временем. Твоя работа: идти по списку сверху вниз, вести по скрипту, показывать расчёт и брать договор и деньги.</p>
+    <div class="promise">Три закона: <b>деньги идут за тем, кто закрыл</b> · этап двигают <b>только договор и деньги</b>, не звонки · лид и рейтинг теряешь <b>только если забил</b> — не за «клиент не созрел».</div>
+  </header>
+
+  <!-- 1. ДЕНЬ -->
+  <h2 class="sec">1 · Твой день — один экран</h2>
+  <p class="sub">Утром открыл «Задачи сегодня» — и просто идёшь сверху вниз. Выше стоит тот, кто раньше сгорит; при равных — кто ближе к деньгам.</p>
+  <div class="grid2">
+    <div class="rl"><h4><span class="n">Порядок</span> — сверху вниз</h4><p>🔥 горячее от бота (клиент готов платить — минуты) → 🆕 <b>новые лиды</b> (тают за минуты, конкуренты тоже звонят) → 💰 деньги в движении (сегодня) → 📅 по договорённости (в свой час) → 🔁 автоматика (не трогаешь).</p></div>
+    <div class="rl"><h4><span class="n">Таймер</span> — на каждой задаче</h4><p>Просрочил — задача краснеет, рейтинг вниз, <b>новые лиды закрываются</b>, пока не разгребёшь. Разгрёб — поток открылся.</p></div>
+    <div class="rl"><h4><span class="n">Дело</span>, а не галочка</h4><p>Задача закрыта только <b>делом</b>: звонок (телефония видит), сообщение клиенту, следующий шаг с датой. Галочка «сделано» без дела не считается. Перенос задачи без ответа клиента время не останавливает.</p></div>
+    <div class="rl"><h4><span class="n">Норма</span> дня</h4><p>До <b>10 новых</b> лидов или <b>6 консультаций</b> — что раньше. На руках — до 35 лидов. Больше система не даст: качество дороже количества.</p></div>
+  </div>
+
+  <!-- 2. ПУТЬ ЛИДА -->
+  <h2 class="sec">2 · Путь лида — 7 шагов</h2>
+  <p class="sub">На каждом шаге: что делаешь, сколько времени, что будет, если бросить.</p>
+
+  <div class="step"><div class="sdot d-neu">1</div><div class="sbody">
+    <div class="st">Новый лид <span class="win">первые минуты</span></div>
+    <p>Звони сразу — клиент только что оставил заявку, он у телефона. <b>3 недозвона</b> → система дозванивается сама (автодозвон + бот), поймает — вернёт тебе горячим.</p>
+  </div></div>
+
+  <div class="step"><div class="sdot d-neu">2</div><div class="sbody">
+    <div class="st">Дозвонился → консультация <span class="win">в тот же звонок</span></div>
+    <p>Полная консультация по <b>чек-листу из скрипта</b>: диагностика до цены. Не наш / отказ — закрывай честно, с причиной (фраза клиента в записи). За «не наш» не штрафуют.</p>
+    <div class="next">→ Консультацию провёл — лид теперь на тебе. Это слышит ИИ по записи, статус наступает сам.</div>
+  </div></div>
+
+  <div class="step"><div class="sdot d-amber">3</div><div class="sbody">
+    <div class="st">Думает <span class="win">48 часов на шаг · до договора ~4 дня</span></div>
+    <p>Не отпускай в «подумаю» без даты: <b>всегда договаривайся, когда созвон</b>. Клиент сам назвал дату («перезвоните 15-го, зарплата») — лид паркуется и вернётся тебе автоматически.</p>
+    <div class="next">→ Согласен — шли презентацию, договор сегодня.</div>
+    <div class="lose">Бросил без попыток → лид в общий пул, его дожмёт другой.</div>
+  </div></div>
+
+  <div class="step"><div class="sdot d-amber">4</div><div class="sbody">
+    <div class="st">Договор на подписи <span class="win">1 час — горячее окно</span></div>
+    <p>Ведёшь клиента по экранам презентации до <b>подписи по СМС</b>. Говори прямо: «сначала договор — он вас защищает, платить будете после». 30 минут тишины — перезвони сразу.</p>
+    <div class="lose">Час без единой попытки → «завис»: пауза новых лидов, через 2 часа — пул.</div>
+  </div></div>
+
+  <div class="step"><div class="sdot d-green">5</div><div class="sbody">
+    <div class="st">Подписал → деньги сегодня <span class="win">день · ведёшь — до 3 дней</span></div>
+    <p>Проси по лестнице: <b>13 500 сегодня</b> → не тянет — <b>990</b> → совсем никак — дробление «хоть 1 000, чтобы начать, остаток к зарплате». Цена одна для всех: 13 500/мес · 189 000 · разово 169 000 · госплатежи 50 000 отдельно.</p>
+    <div class="lose">День без единой попытки → пул с пометкой «договор подписан».</div>
+  </div></div>
+
+  <div class="step"><div class="sdot d-green">6</div><div class="sbody">
+    <div class="st">Оплатил 990 → добор до 13 500 <span class="win">цель 7 дней · потолок 14</span></div>
+    <p>990 — не сделка, а старт: клиент заказывает КИ через Госуслуги, система готовит заключение — <b>презентуешь и берёшь 13 500</b>. Каждое касание — конкретное дело (документ или платёж), не «как дела».</p>
+    <div class="lose">3 дня без попытки → пул с пометкой «оплатил 990».</div>
+  </div></div>
+
+  <div class="step"><div class="sdot d-win">7</div><div class="sbody">
+    <div class="st">Сделка → сопровождение → 2-й платёж <span class="win">каждый день на связи</span></div>
+    <p>Взял 13 500 → анкета + <b>декларация клиента</b> (всё понял, без лишних обещаний) → передал юристу (свяжется за 3 часа) → «поздравляю с началом процедуры». Дальше — <b>каждый день на связи до 2-го платежа</b>: чем больше клиент внёс, тем меньше риск, что уйдёт.</p>
+  </div></div>
+
+  <!-- 3. ДЕНЬГИ -->
+  <h2 class="sec">3 · Твои деньги</h2>
+  <p class="sub">Комиссия — за оплату 13 500 или полную. 990 — не сделка. Бросил лид → закрыл другой → комиссия у другого.</p>
+  <div class="money">
+    <div class="mc"><div class="mv">50%</div><p>сразу — как клиент подписал декларацию</p></div>
+    <div class="mc"><div class="mv">50%</div><p>после 2-го платежа клиента. Не довёл до 2-го — вторая половина не выплачивается</p></div>
+    <div class="mc"><div class="mv">×0</div><p>наобещал лишнего → клиент расторгся → комиссии нет. Честная продажа = твои деньги целы</p></div>
+  </div>
+
+  <!-- 4. КАК ТЕРЯЕТСЯ ЛИД -->
+  <h2 class="sec">4 · Как теряется лид — и за что бьют</h2>
+  <p class="sub">Пул — не наказание: лид не гниёт, его добьёт другой. Наказание — только за заброс.</p>
+  <div class="grid2">
+    <div class="rl"><h4><span class="n">Бьют</span> — за ноль попыток</h4><p>Забыл про лид, не сделал ни одной попытки в окно → лид в пул + <b>рейтинг вниз</b>. Спрятать не выйдет: пинг «как дела?» лид не держит — держат разговор, договор, деньги, документ.</p></div>
+    <div class="rl"><h4><span class="n">Не бьют</span> — за молчание клиента</h4><p>Честно звонил, клиент пропал → лид уйдёт в пул, <b>рейтинг цел</b>. «Старался, но не созрел» — это не твоя вина, это жизнь.</p></div>
+  </div>
+  <div class="ladder">
+    <b style="font-family:'Unbounded';font-size:13.5px">Лестница — что будет, если систематически бросать:</b>
+    <ol>
+      <li>Просрочил задачу → красная в виджете, напоминание.</li>
+      <li>Забросил лид → пул + минус рейтинг.</li>
+      <li>За неделю заброшено ~20% лидов → стоп новых + разбор с руководителем.</li>
+      <li>~40% или повтор → снятие с линии.</li>
+    </ol>
+    <p>Один промах не топит — топит паттерн. Всё считается по проценту за период, не за один случай. Совсем без лидов не оставляем (~5/день), кроме последней ступени.</p>
+  </div>
+
+  <!-- 5. КРАСНЫЕ ЛИНИИ -->
+  <h2 class="sec">5 · Красные линии</h2>
+  <p class="sub">Эти фразы рушат дело клиента в суде и подставляют компанию. ИИ слышит каждую — звонок обнуляется, комиссия и рейтинг сгорают.</p>
+  <div class="stopbox">
+    <h3>Никогда не говорим:</h3>
+    <ul>
+      <li>«100% спишем / утвердим, иначе вернём» — решает суд, не мы</li>
+      <li>«Центробанк / государство платит проценты за вас»</li>
+      <li>«Мы аккредитованы государством / это госпрограмма»</li>
+      <li>«Возьмите займ / докредитуйтесь, чтобы оплатить нас»</li>
+      <li>«Откроем самозанятость, проведём чеками как будто…» — фиктивный доход</li>
+      <li>«Перепишите имущество / снимите деньги, чтобы не увидели»</li>
+      <li>«В кредитной истории не видно — скроем от банков»</li>
+      <li>Пугать 159 УК, чтобы закрыть сегодня</li>
+      <li>«Поздравляю с началом процедуры» — до фактической оплаты</li>
+    </ul>
+    <div class="note">Как сказать то же самое честно и не слабее — эталонные замены в скрипте, раздел «Комплаенс-стоп».</div>
+  </div>
+
+  <!-- 6. ИНСТРУМЕНТЫ -->
+  <h2 class="sec">6 · Твои инструменты</h2>
+  <p class="sub">Всё, что нужно на звонке, — три страницы.</p>
+  <div class="tools">
+    <a class="tool" href="../script/"><b>Скрипт продаж</b><span>13 шагов звонка, чек-лист диагностики, 12 возражений с эталонами</span><i>Открыть →</i></a>
+    <a class="tool" href="../calculator/"><b>Калькулятор</b><span>Показать клиенту его переплату и списание за ~14 месяцев</span><i>Открыть →</i></a>
+    <a class="tool" href="../widget/"><b>Задачи сегодня</b><span>Главный экран: как выглядит твой день (демо кликается)</span><i>Открыть →</i></a>
+  </div>
+
+  <!-- 10 ПРАВИЛ -->
+  <h2 class="sec">Коротко: 10 правил</h2>
+  <div class="ten">
+    <ol>
+      <li>Иди по задачам <b>сверху вниз</b> — не выбирай.</li>
+      <li>Новый лид — <b>звони в первые минуты</b>.</li>
+      <li>Консультация — <b>по чек-листу, до цены</b>.</li>
+      <li>Не наш — <b>закрой честно</b>, с причиной. За это не бьют.</li>
+      <li>«Подумаю» — <b>только с датой созвона</b>.</li>
+      <li>Сначала <b>договор</b>, потом деньги. Договор — сегодня.</li>
+      <li>Проси по лестнице: <b>13 500 → 990 → хоть 1 000</b>.</li>
+      <li>Каждое касание — <b>дело</b>: документ, платёж, шаг с датой.</li>
+      <li>После оплаты — <b>каждый день на связи до 2-го платежа</b>.</li>
+      <li>Красные линии <b>не пересекаем</b> — честная продажа продаёт не слабее.</li>
+    </ol>
+  </div>
+
+  <footer><b>SALE 100.0</b> · Правила работы менеджера (v1, июль 2026). Цена одна для всей компании: 13 500 ₽/мес · 189 000 ₽ · разово 169 000 ₽ · госплатежи 50 000 ₽ отдельно.</footer>
+
+</div>
+</body>
+</html>
