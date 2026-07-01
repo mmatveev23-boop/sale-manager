@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Калькулятор облегчения — SALE 100.0</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="description" content="Калькулятор облегчения: сколько клиент переплачивает по процентам сейчас и каким будет платёж по программе реструктуризации 127-ФЗ. Приём Марченко «оцифровка облегчения». Два режима: менеджер и клиент.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700;800&family=Golos+Text:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F6F2E9; --card:#FFFFFF; --ink:#191713; --muted:#615B50;
+    --green:#0E5C46; --green-deep:#0A3D2E; --amber:#C2790F; --red:#9A2D22;
+    --grey:#7C756A; --gold:#C99A33;
+    --line:rgba(25,23,19,.12);
+    --bg-red:#FBEDEB; --bg-green:#E9F1EC; --line-red:rgba(154,45,34,.25); --line-green:rgba(14,92,70,.22);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--paper);color:var(--ink);font-family:"Golos Text",sans-serif;line-height:1.55;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:900px;margin:0 auto;padding:0 22px}
+  h1,h2,h3,.kicker,.big{font-family:"Unbounded",sans-serif}
+  a{color:inherit}
+
+  header{padding:56px 0 14px}
+  .kicker{font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:var(--green);font-weight:700}
+  h1{font-size:clamp(34px,6.5vw,58px);line-height:1;font-weight:800;letter-spacing:-.02em;margin:14px 0 0}
+  h1 .hl{color:var(--green)}
+  .lead{font-size:clamp(15px,2.2vw,19px);color:var(--muted);max-width:720px;margin:16px 0 0;font-weight:500}
+
+  /* mode switch */
+  .modewrap{display:flex;align-items:center;gap:12px;margin-top:22px;flex-wrap:wrap}
+  .modeswitch{display:inline-flex;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:4px}
+  .modeswitch button{font-family:"Unbounded";font-weight:700;font-size:13px;border:none;background:none;color:var(--muted);padding:8px 16px;border-radius:9px;cursor:pointer;transition:.15s}
+  .modeswitch button.on{background:var(--green-deep);color:#F6F2E9}
+  .modehint{font-size:13.5px;color:var(--muted)}
+
+  /* controls */
+  .ctrls{margin-top:20px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px 22px;display:flex;flex-direction:column;gap:18px}
+  .field .flab{display:flex;justify-content:space-between;align-items:baseline;font-size:14px;color:var(--muted);margin-bottom:8px}
+  .field .fval{font-family:"Unbounded";font-weight:700;font-size:17px;color:var(--ink)}
+  input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:6px;border-radius:6px;background:#E4DCCB;outline:none}
+  input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:22px;height:22px;border-radius:50%;background:var(--green);cursor:pointer;border:3px solid #fff;box-shadow:0 0 0 1px var(--line)}
+  input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;background:var(--green);cursor:pointer;border:3px solid #fff}
+
+  /* hero */
+  .hero{margin-top:18px;background:var(--green-deep);color:#F1ECE0;border-radius:18px;padding:22px 26px;display:flex;flex-wrap:wrap;gap:20px;justify-content:space-between;align-items:flex-end}
+  .hero .hlab{font-size:13px;color:#B9CBC0;font-weight:500}
+  .hero .big{font-size:clamp(30px,6vw,46px);font-weight:800;line-height:1;color:#F4C775;margin-top:4px}
+  .hero .big .u{font-family:"Golos Text";font-size:15px;font-weight:500;color:#E1D6BE}
+  .hero .sub{font-size:14px;color:#CFC1A8;margin-top:7px}
+  .hero .sub s{color:#9FB1A6}
+  .hero .r{text-align:right}
+  @media (max-width:560px){.hero{flex-direction:column;align-items:flex-start}.hero .r{text-align:left}}
+
+  /* cue (manager) — крупный блок «что сказать» */
+  .cue{margin-top:16px;background:#FBF4E2;border:2px solid var(--gold);border-radius:16px;padding:22px 26px}
+  .cue .cl{font-family:"Unbounded";font-weight:800;font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:#7a5b12}
+  .cue p{font-size:clamp(19px,3.4vw,26px);line-height:1.4;margin-top:12px;font-weight:500;color:var(--ink)}
+  .cue p::before{content:"«"} .cue p::after{content:"»"}
+
+  /* columns */
+  .cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;margin-top:14px}
+  .col{border-radius:16px;padding:18px 20px}
+  .col.now{background:var(--bg-red);border:1px solid var(--line-red)}
+  .col.prog{background:var(--bg-green);border:1px solid var(--line-green)}
+  .col h3{font-family:"Unbounded";font-weight:700;font-size:15px;display:flex;align-items:center;gap:8px;margin-bottom:12px}
+  .col.now h3{color:var(--red)} .col.prog h3{color:var(--green)}
+  .row{display:flex;justify-content:space-between;align-items:baseline;gap:12px;font-size:14.5px;padding:7px 0;border-bottom:1px solid rgba(25,23,19,.07)}
+  .row:last-of-type{border:none}
+  .row b{font-family:"Unbounded";font-weight:700;font-size:15px}
+  .row .em-red{color:var(--red)} .row .em-green{color:var(--green)}
+  .barnote{font-size:13px;color:var(--muted);margin:12px 0 6px}
+  .bar{display:flex;height:16px;border-radius:8px;overflow:hidden;border:1px solid var(--line)}
+  .bar .seg-p{background:var(--green)} .bar .seg-i{background:var(--red)}
+  .barlab{display:flex;justify-content:space-between;font-size:12.5px;margin-top:5px;color:var(--muted)}
+  .prognote{font-size:13px;color:var(--green);margin-top:12px;line-height:1.5}
+
+  /* bridge */
+  .bridge{margin-top:16px;border-radius:16px;padding:18px 22px;display:flex;flex-wrap:wrap;gap:14px;align-items:center;justify-content:space-between}
+  .bridge.mgr{background:var(--card);border:1px solid var(--line)}
+  .bridge.cli{background:#FBF4E2;border:1.5px solid var(--gold)}
+  .bridge .bt{font-size:15px;max-width:60%}
+  .bridge .bt b{color:var(--green)}
+  .bridge.cli .bt b{color:#7a5b12}
+  @media (max-width:560px){.bridge .bt{max-width:100%}}
+  .cta{font-family:"Unbounded";font-weight:700;font-size:14px;text-decoration:none;background:var(--green-deep);color:#F6F2E9;padding:13px 22px;border-radius:12px;border:none;cursor:pointer;display:inline-flex;align-items:center;gap:9px}
+  .cta.gold{background:var(--gold);color:#3a2a06}
+  .chips{display:flex;flex-wrap:wrap;gap:8px}
+  .chip{background:#F1EEE6;border:1px solid var(--line);border-radius:9px;padding:7px 12px;font-size:13px;font-weight:500}
+  .chip b{font-family:"Unbounded";color:var(--green)}
+
+  .disc{margin-top:16px;font-size:12.5px;color:var(--muted);line-height:1.6;border-top:1px solid var(--line);padding-top:12px}
+
+  /* mode visibility */
+  .mgronly,.clionly{display:none}
+  body.mode-mgr .mgronly{display:flex}
+  body.mode-cli .clionly{display:flex}
+  body.mode-mgr .cue{display:block}
+  body.mode-cli .cue{display:none}
+
+  footer{margin:52px 0 46px;padding-top:20px;border-top:1px solid var(--line);color:var(--muted);font-size:13px}
+  footer b{font-family:"Unbounded";color:var(--ink);font-weight:700}
+</style>
+</head>
+<body class="mode-mgr">
+<div class="wrap">
+
+  <header>
+    <div class="kicker">Калькулятор облегчения · приём Марченко</div>
+    <h1>Сколько вы <span class="hl">переплачиваете</span></h1>
+    <p class="lead">Не «спишем проценты», а его собственная арифметика: сколько из платежа уходит в проценты сейчас и каким будет платёж по программе. Боль слева, облегчение справа. Это оцифровка — главный крючок закрытия.</p>
+
+    <a href="../script/" style="display:inline-flex;align-items:center;gap:8px;margin-top:16px;font-family:'Unbounded';font-weight:700;font-size:13px;text-decoration:none;color:var(--green)">← Как продаёт Света: скрипт продаж</a>
+
+    <div class="modewrap">
+      <div class="modeswitch" id="modeswitch">
+        <button data-mode="mgr" class="on">Режим менеджера</button>
+        <button data-mode="cli">Режим клиента</button>
+      </div>
+      <span class="modehint" id="modehint">Крутишь на звонке и спрашиваешь «потянете?».</span>
+    </div>
+  </header>
+
+  <div class="ctrls">
+    <div class="field">
+      <div class="flab"><span>Сумма долга</span><span class="fval" id="o_debt"></span></div>
+      <input type="range" id="i_debt" min="100000" max="5000000" step="10000" value="1680000">
+    </div>
+    <div class="field">
+      <div class="flab"><span>Платёж в месяц сейчас</span><span class="fval" id="o_pay"></span></div>
+      <input type="range" id="i_pay" min="5000" max="200000" step="1000" value="70000">
+    </div>
+    <div class="field">
+      <div class="flab"><span>Сколько ещё лет платить по графику</span><span class="fval" id="o_yrs"></span></div>
+      <input type="range" id="i_yrs" min="1" max="15" step="1" value="5">
+    </div>
+  </div>
+
+  <div class="hero">
+    <div>
+      <div class="hlab">Не уйдёт банку — остаётся у вас</div>
+      <div class="big" id="h_save"></div>
+      <div class="sub">столько процентов вы бы переплатили за <span id="h_yrs2"></span> лет</div>
+    </div>
+    <div class="r">
+      <div class="hlab">Старт работы сегодня</div>
+      <div class="big" style="font-size:clamp(28px,5.5vw,42px)">от 13 500 ₽</div>
+      <div class="sub">остаток — с зарплаты</div>
+    </div>
+  </div>
+
+  <div class="cue">
+    <div class="cl">Что сказать менеджеру</div>
+    <p id="cue_text"></p>
+  </div>
+
+  <div class="cols">
+    <div class="col now">
+      <h3>Как сейчас</h3>
+      <div class="row"><span>Отдадите всего за <span id="d_yrs"></span> лет</span><b id="d_total"></b></div>
+      <div class="row"><span>Из них процентов банку</span><b class="em-red" id="d_int"></b></div>
+      <div class="barnote">Из платежа <span id="d_payref"></span> в долг идёт только <b id="d_prinpm"></b>, остальное — проценты:</div>
+      <div class="bar"><div class="seg-p" id="bar_p"></div><div class="seg-i" id="bar_i"></div></div>
+      <div class="barlab"><span><span id="d_ps"></span> в долг</span><span><span id="d_is"></span> в проценты</span></div>
+    </div>
+    <div class="col prog">
+      <h3>По программе 127-ФЗ</h3>
+      <div class="row"><span>Старт сегодня (услуга компании)</span><b class="em-green">от 13 500 ₽</b></div>
+      <div class="row"><span>Платёж по долгу кредиторам</span><b class="em-green" id="p_pay"></b></div>
+      <div class="row"><span>Проценты</span><b class="em-green">0 ₽</b></div>
+      <div class="row"><span>Срок</span><b>5 лет · свобода в <span id="p_year"></span></b></div>
+      <div class="prognote"><b>13 500</b> — это старт работы (оплата услуги компании). <b>Платёж по долгу</b> кредиторам — отдельные деньги, начинается после суда. Это разные платежи. Начисление процентов прекращается: гасите тело долга, а не переплату.</div>
+    </div>
+  </div>
+
+  <div class="bridge mgr mgronly">
+    <div class="bt">Не давит сумма? <b>Начать можно с 1 000 ₽ сегодня</b> — этого хватит, чтобы юрист взял дело в работу. Остаток — с ближайшей зарплаты.</div>
+    <div class="chips">
+      <span class="chip">Старт <b>от 1 000 ₽</b></span>
+      <span class="chip">Рассрочка <b>17 000 × 10</b></span>
+      <span class="chip">Разом <b>99 000</b></span>
+    </div>
+  </div>
+
+  <div class="bridge cli clionly">
+    <div class="bt"><b>Хотите точный расчёт по вашей ситуации?</b> Юрист бесплатно разберёт ваши кредиты и скажет, какой будет платёж именно у вас.</div>
+    <a class="cta gold" id="cli_cta" href="#zayavka">Записаться на разбор →</a>
+  </div>
+
+  <div class="disc">Ориентировочный расчёт по программе реструктуризации долгов (127-ФЗ). Точную сумму платежа и срок утверждает суд; государственные пошлины и публикации оплачиваются отдельно. Это не гарантия результата и не индивидуальная финансовая рекомендация.</div>
+
+  <footer>
+    <b>SALE 100.0</b> · Калькулятор облегчения. Режим менеджера — крутить на звонке (оцифровка + «потянете?»). Режим клиента — ссылка зависшим лидам (задача: вернуть в звонок, а не закрыть по ссылке). Кнопка «Записаться» подключается к форме заявки / Salebot.
+  </footer>
+
+</div>
+
+<script>
+  var f=function(n){return Math.round(n).toLocaleString('ru-RU')+' ₽';};
+  var debt=document.getElementById('i_debt'),pay=document.getElementById('i_pay'),yrs=document.getElementById('i_yrs');
+  function g(el){return parseFloat(el.value);}
+  function set(id,v){var e=document.getElementById(id); if(e) e.textContent=v;}
+  function render(){
+    var D=g(debt),P=g(pay),Y=g(yrs),M=Y*12;
+    var total=P*M, interest=Math.max(0,total-D);
+    var prinPM=Math.min(P,D/M), intPM=Math.max(0,P-prinPM);
+    var ps=P>0?prinPM/P:0;
+    var newPay=D/60, save=interest;
+    set('o_debt',f(D)); set('o_pay',f(P)); set('o_yrs',Y+' лет');
+    set('h_save',f(save)); set('h_yrs2',Y);
+    set('d_yrs',Y); set('d_total',f(total)); set('d_int',f(interest));
+    set('d_payref',f(P)); set('d_prinpm',f(prinPM));
+    set('d_ps',Math.round(ps*100)+'%'); set('d_is',Math.round((1-ps)*100)+'%');
+    document.getElementById('bar_p').style.width=(ps*100)+'%';
+    document.getElementById('bar_i').style.width=((1-ps)*100)+'%';
+    set('p_pay',f(newPay)+' /мес');
+    set('p_year',(new Date().getFullYear()+5));
+    document.getElementById('cue_text').textContent=
+      'Смотрите: за '+Y+' лет вы отдадите банку '+f(total)+' при долге '+f(D)+' — это '+f(interest)+' лишних процентов. По программе проценты списываются: платите только долг, и эти '+f(interest)+' остаются у вас. Начать можно с 13 500 ₽ сегодня, остаток — с зарплаты. Договорились?';
+  }
+  [debt,pay,yrs].forEach(function(el){el.addEventListener('input',render);});
+
+  var body=document.body;
+  document.querySelectorAll('#modeswitch button').forEach(function(b){
+    b.addEventListener('click',function(){
+      document.querySelectorAll('#modeswitch button').forEach(function(x){x.classList.remove('on');});
+      b.classList.add('on');
+      var m=b.getAttribute('data-mode');
+      body.className='mode-'+m;
+      document.getElementById('modehint').textContent = m==='mgr'
+        ? 'Крутишь на звонке и спрашиваешь «потянете?».'
+        : 'Ссылка зависшим лидам. Задача — вернуть в звонок, а не закрыть по ссылке.';
+    });
+  });
+  render();
+</script>
+</body>
+</html>

@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Скрипт продаж по методу Марченко — SALE 100.0</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="description" content="Боевой скрипт продаж по методу Светланы Марченко: 13 шагов звонка с реальными репликами, диагностический чек-лист, отработка возражений и комплаенс-флаги «не говорим / говорим».">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700;800&family=Golos+Text:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F6F2E9; --card:#FFFFFF; --ink:#191713; --muted:#615B50;
+    --green:#0E5C46; --green-deep:#0A3D2E; --amber:#C2790F; --red:#9A2D22;
+    --grey:#7C756A; --gold:#C99A33;
+    --line:rgba(25,23,19,.12);
+    --say-bg:#FBF8F0;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--paper);color:var(--ink);font-family:"Golos Text",sans-serif;line-height:1.55;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:980px;margin:0 auto;padding:0 22px}
+  h1,h2,h3,.num,.kicker,.tag{font-family:"Unbounded",sans-serif}
+  a{color:inherit}
+
+  header{padding:60px 0 22px}
+  .kicker{font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:var(--green);font-weight:700}
+  h1{font-size:clamp(36px,7vw,64px);line-height:1;font-weight:800;letter-spacing:-.02em;margin:14px 0 0}
+  h1 .hl{color:var(--green)}
+  .lead{font-size:clamp(16px,2.3vw,20px);color:var(--muted);max-width:760px;margin:18px 0 0;font-weight:500}
+  .promise{margin:24px 0 0;padding:20px 24px;background:var(--green-deep);color:#F6F2E9;border-radius:16px;font-size:clamp(15px,2.2vw,19px);font-weight:500;line-height:1.45}
+  .promise b{color:#F4C775;font-weight:600}
+
+  .note{margin:16px 0 0;display:flex;gap:11px;align-items:flex-start;background:#FBF1D9;border:1px solid var(--gold);border-radius:13px;padding:13px 16px;font-size:14px;color:#7a5b12}
+  .note b{color:#7a5b12}
+
+  /* step index chips */
+  .idx{display:flex;flex-wrap:wrap;gap:7px;margin:24px 0 6px}
+  .idx a{background:var(--card);border:1px solid var(--line);border-radius:9px;padding:6px 11px;font-size:12.5px;font-weight:500;text-decoration:none;color:var(--muted);transition:.15s}
+  .idx a:hover{border-color:var(--green);color:var(--green)}
+  .idx a b{font-family:"Unbounded";font-weight:700;color:var(--ink)}
+
+  h2.sec{font-size:clamp(22px,3.4vw,30px);font-weight:800;letter-spacing:-.01em;margin:52px 0 4px}
+  .sub{color:var(--muted);font-size:15.5px;margin-bottom:18px;max-width:760px}
+
+  /* steps */
+  .step{position:relative;display:grid;grid-template-columns:48px 1fr;gap:16px;padding:12px 0}
+  .step::before{content:"";position:absolute;left:23px;top:52px;bottom:-12px;width:2px;background:var(--line)}
+  .step:last-child::before{display:none}
+  .sdot{width:48px;height:48px;border-radius:13px;display:flex;align-items:center;justify-content:center;font-family:"Unbounded";font-weight:800;font-size:18px;color:#fff;z-index:1}
+  .d-neu{background:var(--grey)} .d-amber{background:var(--amber)} .d-green{background:var(--green)} .d-win{background:var(--green-deep)}
+  .sbody{background:var(--card);border:1px solid var(--line);border-radius:15px;padding:16px 18px}
+  .sbody .st{font-family:"Unbounded";font-weight:700;font-size:17px;line-height:1.2}
+  .sbody .goal{color:var(--muted);font-size:14px;margin-top:3px}
+  .say{margin-top:11px;background:var(--say-bg);border:1px solid var(--line);border-left:3px solid var(--green);border-radius:0 11px 11px 0;padding:11px 14px}
+  .say .lbl{font-family:"Unbounded";font-weight:700;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--green)}
+  .say p{font-size:15px;margin-top:5px;color:var(--ink)}
+  .say p + p{margin-top:8px}
+  .say p::before{content:"«"} .say p::after{content:"»"}
+  .why{font-size:13.5px;color:var(--muted);margin-top:10px}
+  .why b{color:var(--ink);font-weight:600}
+
+  /* compliance flag */
+  .flag{margin-top:11px;border-radius:11px;padding:11px 14px;background:#FBEDEB;border:1px solid rgba(154,45,34,.25);font-size:13.5px}
+  .flag .ft{font-family:"Unbounded";font-weight:700;font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:var(--red);display:flex;align-items:center;gap:7px}
+  .badge{display:inline-block;font-family:"Unbounded";font-weight:700;font-size:10.5px;letter-spacing:.04em;padding:2px 7px;border-radius:6px;color:#fff;vertical-align:middle}
+  .b-no{background:var(--red)} .b-yes{background:var(--green)}
+  .flag .ln{margin-top:7px;line-height:1.5}
+  .flag .ln b{color:var(--ink)}
+
+  /* diagnostic checklist */
+  .checkgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:6px}
+  @media (max-width:720px){.checkgrid{grid-template-columns:1fr}}
+  .cgroup{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px}
+  .cgroup h4{font-family:"Unbounded";font-weight:700;font-size:14px;color:var(--green);margin-bottom:9px}
+  .citem{display:flex;gap:9px;align-items:flex-start;padding:5px 0;font-size:14px;cursor:pointer;user-select:none}
+  .citem input{margin-top:3px;width:16px;height:16px;accent-color:var(--green);flex:none}
+  .citem.done span{color:var(--grey);text-decoration:line-through}
+  .ccount{font-size:13px;color:var(--muted);margin-top:10px}
+  .ccount b{font-family:"Unbounded";color:var(--green)}
+
+  /* ladder + price */
+  .ladder{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:6px}
+  @media (max-width:720px){.ladder{grid-template-columns:1fr}}
+  .lstep{border-radius:14px;padding:15px 17px;border:1px solid var(--line);background:var(--card)}
+  .lstep .ln{font-family:"Unbounded";font-weight:700;font-size:13px;color:var(--amber)}
+  .lstep h4{font-family:"Unbounded";font-weight:700;font-size:18px;margin:5px 0 3px}
+  .lstep p{font-size:13.5px;color:var(--muted)}
+  .lstep.s1{border-color:rgba(14,92,70,.35)} .lstep.s1 h4{color:var(--green)}
+
+  .pricebox{margin-top:16px;background:var(--green-deep);color:#F1ECE0;border-radius:18px;padding:22px 24px}
+  .pricebox .q{font-size:17px;font-weight:500;line-height:1.4}
+  .pricebox .q b{color:#F4C775;font-weight:600}
+  .ptwo{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px}
+  @media (max-width:620px){.ptwo{grid-template-columns:1fr}}
+  .ptwo .pc{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.15);border-radius:12px;padding:14px 16px}
+  .ptwo .pc b{font-family:"Unbounded";font-weight:700;color:#fff;font-size:13px;display:block;margin-bottom:7px;letter-spacing:.03em}
+  .ptwo .pc .li{font-size:14px;padding:3px 0;display:flex;justify-content:space-between;gap:10px;border-bottom:1px solid rgba(255,255,255,.09)}
+  .ptwo .pc .li:last-child{border:none}
+  .ptwo .pc .li i{font-style:normal;color:#cdbfa6;font-size:12px}
+
+  /* objections accordion */
+  .obj{background:var(--card);border:1px solid var(--line);border-radius:13px;margin-top:10px;overflow:hidden}
+  .obj > button{width:100%;text-align:left;background:none;border:none;cursor:pointer;padding:15px 18px;display:flex;align-items:center;gap:12px;font-family:inherit;color:inherit}
+  .obj .onum{font-family:"Unbounded";font-weight:800;font-size:14px;color:var(--amber);flex:none;width:26px}
+  .obj .otitle{font-weight:600;font-size:15.5px;flex:1}
+  .obj .ocl{font-family:"Unbounded";color:var(--client,#7C756A);font-size:13px}
+  .obj .chev{transition:.2s;color:var(--muted);flex:none}
+  .obj.open .chev{transform:rotate(90deg)}
+  .obj .panel{display:none;padding:0 18px 16px 56px}
+  .obj.open .panel{display:block}
+  .obj .said{font-size:14px;color:var(--muted);font-style:italic;margin-bottom:10px}
+  .obj .ans{background:var(--say-bg);border:1px solid var(--line);border-left:3px solid var(--green);border-radius:0 10px 10px 0;padding:10px 13px;font-size:14.5px;margin-bottom:7px}
+  .obj .ans::before{content:"«"} .obj .ans::after{content:"»"}
+  .obj .ow{font-size:13px;color:var(--muted);margin-top:8px}
+  .obj .ow b{color:var(--ink)}
+  .obj .stop{margin-top:9px;font-size:13px;color:var(--red)}
+
+  /* stop list */
+  .stopbox{background:#FBEDEB;border:1px solid rgba(154,45,34,.28);border-radius:16px;padding:20px 22px;margin-top:8px}
+  .stopbox h3{font-family:"Unbounded";font-weight:700;font-size:16px;color:var(--red);margin-bottom:4px}
+  .stopbox .si{display:grid;grid-template-columns:1fr 1fr;gap:9px 18px;margin-top:14px}
+  @media (max-width:720px){.stopbox .si{grid-template-columns:1fr}}
+  .stopbox .sr{font-size:13.5px;border-top:1px solid rgba(154,45,34,.18);padding-top:8px}
+  .stopbox .sr .no{color:var(--red);font-weight:600}
+  .stopbox .sr .yes{color:var(--green);font-weight:600;display:block;margin-top:3px}
+
+  footer{margin:64px 0 50px;padding-top:22px;border-top:1px solid var(--line);color:var(--muted);font-size:13.5px}
+  footer b{font-family:"Unbounded";color:var(--ink);font-weight:700}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="kicker">Скрипт продаж · по методу Марченко</div>
+    <h1>Как продаёт <span class="hl">Марченко</span></h1>
+    <p class="lead">Реальный разбор лучшего менеджера по 251 звонку. Это не «идеальный скрипт из методички» — это что она делает на самом деле, по шагам, её словами. Любой менеджер идёт сверху вниз и получает её результат без её скила.</p>
+    <div class="promise">Её сила — три приёма: <b>оцифровка облегчения</b> («будет 15 000 вместо 70 000 — потянете?»), <b>дробление барьера</b> («внесите хоть 1 000, чтобы начать») и <b>замок следующего шага</b> (дата в конце каждого звонка). Остальное — дисциплина, которую делает система.</div>
+    <div class="note"><span class="badge b-no">важно</span><span>Часть её фраз — юридический риск (отмечены красным блоком <b>«не говорим / говорим»</b>). Это приёмы, которые дают конверсию, но в боевой скрипт их брать нельзя — рядом дана честная замена, которая продаёт не слабее.</span></div>
+
+    <div class="idx">
+      <a href="#s1"><b>1</b> Открытие</a>
+      <a href="#s2"><b>2</b> Повод</a>
+      <a href="#s3"><b>3</b> Диагностика</a>
+      <a href="#s4"><b>4</b> Решение</a>
+      <a href="#s5"><b>5</b> Контраст</a>
+      <a href="#s6"><b>6</b> Экономия</a>
+      <a href="#s7"><b>7</b> Процесс</a>
+      <a href="#s8"><b>8</b> Доверие</a>
+      <a href="#s9"><b>9</b> Гарантии</a>
+      <a href="#s10"><b>10</b> Цена</a>
+      <a href="#s11"><b>11</b> Договор</a>
+      <a href="#s12"><b>12</b> Деньги</a>
+      <a href="#s13"><b>13</b> Онбординг</a>
+    </div>
+  </header>
+
+  <h2 class="sec">Звонок по шагам</h2>
+  <p class="sub">13 шагов. Каждый снимает одно конкретное возражение перед следующим: доверие → понимание → выгода → процесс → надёжность → цена → прозрачность → деньги → удержание.</p>
+
+  <!-- STEP 1 -->
+  <div class="step" id="s1">
+    <div class="sdot d-neu">1</div>
+    <div class="sbody">
+      <div class="st">Открытие — эксперт за 10 секунд</div>
+      <div class="goal">Цель: мгновенно задать статус специалиста и снять «кто звонит / зачем», получить разрешение.</div>
+      <div class="say"><div class="lbl">Говорит</div>
+        <p>Меня зовут Марченко Светлана Владимировна, старший юрист, компания «До 0». Ваша заявочка. Удобно вам сейчас переговорить?</p>
+        <p>Опыт работы более 10 лет, поэтому помочь вам точно смогу.</p>
+      </div>
+      <div class="why"><b>Почему работает:</b> одна фраза = имя + должность + бренд + стаж + разрешение. «Старший юрист» переводит из «продажи» в «консультацию специалиста».</div>
+    </div>
+  </div>
+
+  <!-- STEP 2 -->
+  <div class="step" id="s2">
+    <div class="sdot d-neu">2</div>
+    <div class="sbody">
+      <div class="st">Повод обращения — клиент сам себя продаёт</div>
+      <div class="goal">Цель: получить «да» на разговор и вытащить боль его словами.</div>
+      <div class="say"><div class="lbl">Говорит</div>
+        <p>Сориентируйте коротко: что произошло, почему приняли решение обратиться к нам?</p>
+        <p>А знаете, какие последствия, если вообще ничего не делать в текущей ситуации?</p>
+      </div>
+      <div class="why"><b>Почему работает:</b> «коротко» снижает порог — клиент начинает говорить и сам формулирует проблему. Вопрос про последствия включает страх и делает её решением, а не навязыванием.</div>
+    </div>
+  </div>
+
+  <!-- STEP 3 -->
+  <div class="step" id="s3">
+    <div class="sdot d-neu">3</div>
+    <div class="sbody">
+      <div class="st">Диагностика по чек-листу — захват контроля</div>
+      <div class="goal">Цель: собрать картину (долг, кредиторы, доход, имущество, риски) — это квалификация, материал для расчёта и контроль над диалогом. Полный чек-лист — ниже.</div>
+      <div class="say"><div class="lbl">Говорит</div>
+        <p>Сориентируйте, кто ваши кредиторы? МФО — их сколько штук: 10, 20, 30?</p>
+        <p>До того как просрочка пошла — сколько вы платили по обязательствам в месяц? А как же вы справлялись, на что жили?</p>
+        <p>Какой исход вы видите для себя идеальным — выплатить и снизить нагрузку или всё списать?</p>
+      </div>
+      <div class="why"><b>Почему работает:</b> ведёт она, через закрытые уточняющие вопросы — клиент в режиме «отвечаю эксперту». «На что жили» переводит анкету в эмоцию. Вопрос про идеальный исход — клиент сам выбирает продукт.</div>
+    </div>
+  </div>
+
+  <!-- STEP 4 -->
+  <div class="step" id="s4">
+    <div class="sdot d-amber">4</div>
+    <div class="sbody">
+      <div class="st">Переход к решению — 127-ФЗ как право</div>
+      <div class="goal">Цель: назвать продукт как закон, а не услугу, и объединить долги в один маленький платёж.</div>
+      <div class="say"><div class="lbl">Говорит</div>
+        <p>Реструктуризация — это 127 закон о несостоятельности. Простыми словами: объединяем все обязательства в один график, в котором вы выплачиваете только тело долга, проценты вы платить не будете.</p>
+        <p>Платёж у вас будет 28 000. Потянете такой платёж?</p>
+      </div>
+      <div class="why"><b>Почему работает:</b> «это закон, ему подчиняются все банки» снимает «это лазейка». Главный приём — назвать новый платёж конкретной цифрой и спросить «потянете?»: клиент уже соглашается на маленькую сумму, не оспаривая саму процедуру.</div>
+    </div>
+  </div>
+
+  <!-- STEP 5 -->
+  <div class="step" id="s5">
+    <div class="sdot d-amber">5</div>
+    <div class="sbody">
+      <div class="st">Контраст — закрыть рефинанс и банкротство</div>
+      <div class="goal">Цель: убрать знакомые клиенту альтернативы и спозиционировать продукт как единственный подходящий именно ему.</div>
+      <div class="say"><div class="lbl">Говорит</div>
+        <p>Рефинансирование вам никто не одобрит — нагрузка высокая, зарплата не позволяет взять новый кредит. И проценты там остаются.</p>
+        <p>Банкротство вам не подойдёт — у вас имущество, это не ваш вариант. Реструктуризация не для всех, только для платёжеспособных — поэтому вы идеально подходите.</p>
+      </div>
+      <div class="why"><b>Почему работает:</b> контраст всегда персональный (есть имущество → пугает банкротством; есть доход → льстит «вы идеально подходите»). «Я бы вас не взяла, если бы…» инвертирует продажу — теперь клиент квалифицируется у неё.</div>
+    </div>
+  </div>
+
+  <!-- STEP 6 -->
+  <div class="step" id="s6">
+    <div class="sdot d-amber">6</div>
+    <div class="sbody">
+      <div class="st">Оцифровка экономии — деньги «домой, а не банку»</div>
+      <div class="goal">Цель: материализовать выгоду, показать пропасть между «как сейчас» и «как будет».</div>
+      <div class="say"><div class="lbl">Говорит</div>
+        <p>Здесь два варианта: либо два миллиона, которые планировали отдать банку на процентах, остаются у вас дома в кармане — на себя и на семью. Либо платите эти деньги в банк, и всё остаётся как есть — по 70 000.</p>
+        <p>Сейчас вы каждый месяц сливаете всю зарплату на проценты. Было бы 50 — будет 15, экономия 700 000, эти деньги у вас, а не на процентах банку.</p>
+      </div>
+      <div class="why"><b>Почему работает:</b> превращает абстрактные проценты в «2 млн дома» — осязаемый личный выигрыш. Формула «было → станет → мост».</div>
+      <a href="../calculator/" style="display:inline-flex;align-items:center;gap:8px;margin-top:11px;font-family:'Unbounded';font-weight:700;font-size:13px;text-decoration:none;background:var(--green-deep);color:#F6F2E9;padding:11px 16px;border-radius:11px">Открыть калькулятор облегчения →</a>
+    </div>
+  </div>
+
+  <!-- STEP 7 -->
+  <div class="step" id="s7">
+    <div class="sdot d-green">7</div>
+    <div class="sbody">
+      <div class="st">Процесс и суды — снять страх неизвестности</div>
+      <div class="goal">Цель: показать «всё делаем за вас», дать клиенту понятную карту.</div>
+      <div class="say"><div class="lbl">Говорит</div>
+        <p>Берём вас в работу → вы на законных основаниях прекращаете оплачивать кредиты → оповещаем кредиторов → отзыв персональных данных → переадресация → собираем документы → первый суд → финансовый управляющий → второй суд утверждает план. По срокам это примерно 8–10 месяцев, на судах присутствовать не нужно.</p>
+        <p>Не будет такого, что мы дали задание, а вы сами ищете. Мы вас ведём, ваша задача — быть как правой рукой: быть на связи и вовремя предоставлять документы. Всё остальное делаем мы.</p>
+      </div>
+      <div class="why"><b>Почему работает:</b> длинный процесс разбит на понятные шаги со сроками. «Ваша задача — быть правой рукой» снимает 90% тревоги о трудозатратах.</div>
+      <div class="flag"><div class="ft"><span class="badge b-no">не говорим / говорим</span></div>
+        <div class="ln"><span class="no" style="color:var(--red)">✕ «Прекращаете платить уже сегодня»</span> как команда и <b>«пишем ходатайство в ЦБ о возмещении процентов за вас»</b>.<br>
+        <span style="color:var(--green)">✓ «По 127-ФЗ начисление договорных процентов прекращается с даты введения процедуры — вы перестаёте платить проценты сверху. Порядок прекращения платежей определит юрист по вашей ситуации».</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 8 -->
+  <div class="step" id="s8">
+    <div class="sdot d-green">8</div>
+    <div class="sbody">
+      <div class="st">Доверие к компании — легитимизация</div>
+      <div class="goal">Цель: снять остатки недоверия к частной фирме масштабом и проверяемыми фактами.</div>
+      <div class="say"><div class="lbl">Говорит</div>
+        <p>Мы федеральная компания, на рынке более 10 лет, более 5000 завершённых дел по реструктуризации, порядка 3000 в работе. Расчётный счёт ведётся в Сбербанке.</p>
+      </div>
+      <div class="why"><b>Почему работает:</b> комбинирует объём дел + узнаваемый символ (Сбербанк). Создаёт ощущение «попал в надёжные руки».</div>
+      <div class="flag"><div class="ft"><span class="badge b-no">не говорим / говорим</span></div>
+        <div class="ln"><span style="color:var(--red)">✕ «Аккредитованы государством», «государство курирует каждую сделку», «честный знак», «государственная программа».</span><br>
+        <span style="color:var(--green)">✓ «Мы частная юридическая компания, работаем по федеральному закону 127-ФЗ. У нас [N] завершённых дел, товарный знак зарегистрирован в Роспатенте, расчёты идут через Сбербанк. Пришлю вам определения судов по реальным делам, чтобы вы убедились».</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 9 -->
+  <div class="step" id="s9">
+    <div class="sdot d-green">9</div>
+    <div class="sbody">
+      <div class="st">Гарантии — снять «а вдруг не сработает»</div>
+      <div class="goal">Цель: закрыть страх «заберёте деньги / суд откажет».</div>
+      <div class="say"><div class="lbl">Говорит</div>
+        <p>В договоре прописаны гарантии: мы не затягиваем сроки; сумма в одностороннем порядке не меняется; конфиденциальность — информация от вас к нам распространению не подлежит.</p>
+      </div>
+      <div class="why"><b>Почему работает:</b> гарантии перечислены пакетом из договора, а не на словах — это усиливает вес.</div>
+      <div class="flag"><div class="ft"><span class="badge b-no">не говорим / говорим</span></div>
+        <div class="ln"><span style="color:var(--red)">✕ «Гарантия 100% утверждение плана, иначе вернём всю сумму (в двойном размере)», «ни одного проигранного дела».</span><br>
+        <span style="color:var(--green)">✓ «По договору: если план не будет утверждён по нашей вине — возвращаем уплаченное в порядке и сроки из договора. Окончательное решение принимает суд, мы готовим дело так, чтобы свести риски к минимуму».</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 10 -->
+  <div class="step" id="s10">
+    <div class="sdot d-win">10</div>
+    <div class="sbody">
+      <div class="st">Цена лесенкой — «листок на 2 части»</div>
+      <div class="goal">Цель: назвать цену так, чтобы не пугала — разнести на статьи, дать выбор, заякорить скидкой.</div>
+      <div class="say"><div class="lbl">Говорит</div>
+        <p>Возьмите листок, делим на 2 части. В первой — государственные платежи, во второй — услуги компании.</p>
+        <p>Госплатежи: 25 000 госпошлина (вносите через 2 месяца, после первого суда), 15 000 публикация ЕФРСБ (через 3 месяца), 10 000 почтовые расходы — можно частями.</p>
+        <p>Услуги компании — два варианта: беспроцентная рассрочка по 17 000 на 10 месяцев, либо разовый платёж 99 000 — если разом, у вас скидка 71 000. Как вам комфортнее?</p>
+      </div>
+      <div class="why"><b>Почему работает:</b> деление на статьи снижает шок от суммы; якорь (170 000 рядом с 99 000) делает скидку ощутимым выигрышем; выбор даёт иллюзию контроля.</div>
+      <div class="flag"><div class="ft"><span class="badge b-no">внимание</span></div>
+        <div class="ln"><b>Цена должна быть единой по компании.</b> В звонках звучат разные суммы — это прямой риск «устно ≠ договор» и расторжений. Числа выше — пример из её звонков; финальные утверждает заказчик.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 11 -->
+  <div class="step" id="s11">
+    <div class="sdot d-win">11</div>
+    <div class="sbody">
+      <div class="st">Прозрачность — сначала договор, потом деньги</div>
+      <div class="goal">Цель: обезоружить страх «отдам деньги в пустоту». Этот шаг сам по себе закрывает.</div>
+      <div class="say"><div class="lbl">Говорит</div>
+        <p>Прежде чем вы заплатите — мы сначала вместе прочитаем договор, я сформирую вам личный кабинет, пройдёмся по реквизитам компании, чтобы вы убедились, что попали в надёжные руки. И только потом оплата.</p>
+      </div>
+      <div class="why"><b>Почему работает:</b> «сначала договор — потом деньги» снимает главный страх и демонстрирует, что скрывать нечего. У нас это уже архитектура: подпись по SMS → потом платёж.</div>
+    </div>
+  </div>
+
+  <!-- STEP 12 -->
+  <div class="step" id="s12">
+    <div class="sdot d-win">12</div>
+    <div class="sbody">
+      <div class="st">Взятие денег — дробление барьера</div>
+      <div class="goal">Цель: опустить порог входа до символической суммы и зафиксировать следующий контакт.</div>
+      <div class="say"><div class="lbl">Говорит</div>
+        <p>Внесите сегодня хоть 1 000 — и мы с вами уже хотя бы начнём работу: я установлю переадресацию, начну собирать документы. Остаток — к зарплате.</p>
+        <p>В личном кабинете нажимаете СБП либо картой и проплачиваете. Как оплатите — я вам сразу перезвоню.</p>
+      </div>
+      <div class="why"><b>Почему работает:</b> микро-обязательство (1 000 ₽) снимает «нет денег сегодня» — точку, где теряется больше всего сделок. «Оплатите — сразу перезвоню» гарантирует следующий контакт.</div>
+      <div class="flag"><div class="ft"><span class="badge b-no">не говорим / говорим</span></div>
+        <div class="ln"><span style="color:var(--red)">✕ «Докредитуйтесь / возьмите займ, чтобы оплатить нас», «завысьте доход в заявке», «снимите всё и держите дома».</span><br>
+        <span style="color:var(--green)">✓ «Первый платёж можно внести частями — часть сегодня, остаток с ближайшей зарплаты. Новые кредиты ради оплаты брать не советую — это ухудшит вашу позицию в процедуре».</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 13 -->
+  <div class="step" id="s13">
+    <div class="sdot d-win">13</div>
+    <div class="sbody">
+      <div class="st">Онбординг — ранняя победа и хендовер</div>
+      <div class="goal">Цель: дать «мной занялись», зафиксировать 2-й платёж, бесшовно передать юристу.</div>
+      <div class="say"><div class="lbl">Говорит</div>
+        <p>Поздравляю вас с началом процедуры, спасибо большое за доверие.</p>
+        <p>Передаю вас на юриста — он свяжется в течение 3 часов, ведёт ваше дело от начала до конца. Возьмите блокнот и ручку, информации будет много.</p>
+        <p>График платежей стоит на 25 число, следующий платёж 25-го — важно платить вовремя. Я в любом случае всегда на связи, в выходные тоже; не возьму трубку — значит с клиентом, всегда перезвоню.</p>
+      </div>
+      <div class="why"><b>Почему работает:</b> «поздравляю с началом процедуры» превращает оплату в победу клиента, а не расставание с деньгами. Передача юристу с дедлайном «3 часа» = непрерывность заботы. Фиксация даты закрепляет 2-й платёж — на нём держится отложенная выплата менеджеру.</div>
+    </div>
+  </div>
+
+  <!-- DIAGNOSTIC CHECKLIST -->
+  <h2 class="sec">Диагностический чек-лист</h2>
+  <p class="sub">Шаг 3 в деталях — то, что Марченко собирает до цены. Тыкай галочки прямо на звонке: пока не закрыл блок, цену не называешь.</p>
+  <div class="checkgrid" id="checklist">
+    <div class="cgroup">
+      <h4>Открытие и повод</h4>
+      <label class="citem"><input type="checkbox"><span>Удобно говорить? Располагаете ~30 минутами?</span></label>
+      <label class="citem"><input type="checkbox"><span>Что произошло, почему решили обратиться?</span></label>
+      <label class="citem"><input type="checkbox"><span>Почему займы, а не банки? Отказы были?</span></label>
+      <label class="citem"><input type="checkbox"><span>Знаете последствия, если ничего не делать?</span></label>
+      <label class="citem"><input type="checkbox"><span>Идеальный исход — выплатить или всё списать?</span></label>
+      <label class="citem"><input type="checkbox"><span>Про реструктуризацию слышали раньше?</span></label>
+    </div>
+    <div class="cgroup">
+      <h4>Кредиторы и долг</h4>
+      <label class="citem"><input type="checkbox"><span>Кто кредиторы — какие банки?</span></label>
+      <label class="citem"><input type="checkbox"><span>МФО/займы — сколько штук? Общая сумма?</span></label>
+      <label class="citem"><input type="checkbox"><span>Остаток долга по каждому / общий?</span></label>
+      <label class="citem"><input type="checkbox"><span>Выписку из БКИ запрашивали, знаете точную сумму?</span></label>
+      <label class="citem"><input type="checkbox"><span>Есть залоговые объекты (авто, квартира)?</span></label>
+      <label class="citem"><input type="checkbox"><span>По залогу: банк, срок, сумма, платёж?</span></label>
+      <label class="citem"><input type="checkbox"><span>Есть кредиты без единого платежа?</span></label>
+    </div>
+    <div class="cgroup">
+      <h4>Платежи и просрочка</h4>
+      <label class="citem"><input type="checkbox"><span>Сколько в месяц отдаёте по всем обязательствам?</span></label>
+      <label class="citem"><input type="checkbox"><span>Ещё как долго платить по графику?</span></label>
+      <label class="citem"><input type="checkbox"><span>Когда следующий платёж, какой датой, сколько?</span></label>
+      <label class="citem"><input type="checkbox"><span>Просрочка идёт? Сколько по времени?</span></label>
+      <label class="citem"><input type="checkbox"><span>Коллекторы звонят? Беспокоят родственников?</span></label>
+      <label class="citem"><input type="checkbox"><span>Заявление по 159 ст., суд был?</span></label>
+    </div>
+    <div class="cgroup">
+      <h4>Доход и занятость</h4>
+      <label class="citem"><input type="checkbox"><span>Официально трудоустроены? Доход, вся ли белая?</span></label>
+      <label class="citem"><input type="checkbox"><span>Если не работаете — на что платите? Доход супруга?</span></label>
+      <label class="citem"><input type="checkbox"><span>ИП, ООО, самозанятость есть?</span></label>
+      <label class="citem"><input type="checkbox"><span>Куда приходит зарплата (какой банк)?</span></label>
+    </div>
+    <div class="cgroup">
+      <h4>Семья и имущество</h4>
+      <label class="citem"><input type="checkbox"><span>Семейное положение, как давно?</span></label>
+      <label class="citem"><input type="checkbox"><span>Несовершеннолетние дети, выплаты на них?</span></label>
+      <label class="citem"><input type="checkbox"><span>Что на вас зарегистрировано? Единственное жильё?</span></label>
+      <label class="citem"><input type="checkbox"><span>Что на супруга?</span></label>
+      <label class="citem"><input type="checkbox"><span>Авто — цена, когда куплено, в автокредите ли?</span></label>
+      <label class="citem"><input type="checkbox"><span>Акции, золото, вклады, оружие?</span></label>
+      <label class="citem"><input type="checkbox"><span>Сделки с недвижимостью за 3 года (вы и супруг)?</span></label>
+    </div>
+    <div class="cgroup">
+      <h4>Риски / комплаенс</h4>
+      <label class="citem"><input type="checkbox"><span>Судимость у вас, у супруга?</span></label>
+      <label class="citem"><input type="checkbox"><span>Поручитель/созаёмщик есть?</span></label>
+      <label class="citem"><input type="checkbox"><span>Поддельные документы при оформлении кредитов?</span></label>
+      <label class="citem"><input type="checkbox"><span>Исполнительные производства, алименты?</span></label>
+      <label class="citem"><input type="checkbox"><span>Иждивенцы, лица под опекой?</span></label>
+      <label class="citem"><input type="checkbox"><span>Регион проживания / прописки (для суда)?</span></label>
+    </div>
+  </div>
+  <div class="ccount" id="ccount">Отмечено <b>0</b> из <span id="ctotal">0</span></div>
+
+  <!-- LADDER + PRICE -->
+  <h2 class="sec">Лестница закрытия и цена</h2>
+  <p class="sub">Проси по убыванию: сначала полный первый платёж, потом дробление, потом — хотя бы договор. Пауза без даты возврата не существует.</p>
+  <div class="ladder">
+    <div class="lstep s1"><div class="ln">Ступень 1</div><h4>Полный первый платёж</h4><p>Сегодня. Сразу передача в сопровождение, дожима нет.</p></div>
+    <div class="lstep"><div class="ln">Ступень 2</div><h4>Дробление от 1 000 ₽</h4><p>«Внесите хоть сколько, чтобы начать» + остаток к зарплате. Заказываем кредитную историю.</p></div>
+    <div class="lstep"><div class="ln">Ступень 3</div><h4>Договор без оплаты</h4><p>Подписали — бот добивает оплатой. Но статус двигают только деньги.</p></div>
+  </div>
+
+  <div class="pricebox">
+    <div class="q">«Листок делим на 2 части»: <b>госплатежи</b> отдельно, <b>услуги компании</b> отдельно. Так сумма не пугает.</div>
+    <div class="ptwo">
+      <div class="pc"><b>Госплатежи (позже, поэтапно)</b>
+        <div class="li"><span>Госпошлина суда</span><i>25 000 · через 2 мес</i></div>
+        <div class="li"><span>Публикация ЕФРСБ</span><i>15 000 · через 3 мес</i></div>
+        <div class="li"><span>Почтовые расходы</span><i>10 000 · частями</i></div>
+      </div>
+      <div class="pc"><b>Услуги компании (на старте)</b>
+        <div class="li"><span>Рассрочка</span><i>17 000 × 10 мес</i></div>
+        <div class="li"><span>Разом</span><i>99 000 · скидка 71 000</i></div>
+        <div class="li"><span>Старт работы</span><i>от 1 000 сегодня</i></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- OBJECTIONS -->
+  <h2 class="sec">Отработка возражений</h2>
+  <p class="sub">12 ситуаций из реальных звонков. Нажми, чтобы раскрыть эталонный ответ. Где есть красная строка — так не говорим.</p>
+
+  <div class="obj"><button><span class="onum">1</span><span class="otitle">«Дорого / где взять всю сумму сразу»</span><span class="chev">▸</span></button>
+    <div class="panel"><div class="said">«99 000 сразу — где их взять? Колеблюсь между рассрочкой и разовым.»</div>
+      <div class="ans">Два варианта: беспроцентная рассрочка по 17 000 на 10 месяцев, либо разовый платёж 99 000 — тогда скидка 71 000. Как вам комфортнее?</div>
+      <div class="ans">Можно внести часть — 2, 5, 10 тысяч, мы уже начинаем процесс, а остаток вы довносите к зарплате. Если разово не сложится — переоформлю на рассрочку, ничего страшного.</div>
+      <div class="ow"><b>Почему работает:</b> выбор + якорь-скидка + обещанный мягкий откат на рассрочку (нет страха ошибиться).</div>
+    </div>
+  </div>
+
+  <div class="obj"><button><span class="onum">2</span><span class="otitle">«Нет денег сегодня, зарплата позже»</span><span class="chev">▸</span></button>
+    <div class="panel"><div class="said">«Сегодня не смогу, зарплата только 15-го.»</div>
+      <div class="ans">Внесите сегодня сколько сможете — 1 000, 2 000, без разницы. Я установлю переадресацию, начну собирать документы, а остаток до конца месяца. Так удобно?</div>
+      <div class="ow"><b>Почему работает:</b> микро-обязательство снимает барьер, клиент уже «зашёл»; «начну работу» = процесс пошёл; привязка остатка к зарплате = реалистичный дедлайн, не давление.</div>
+    </div>
+  </div>
+
+  <div class="obj"><button><span class="onum">3</span><span class="otitle">«Не верится, какая-то сказка / развод»</span><span class="chev">▸</span></button>
+    <div class="panel"><div class="said">«Не верится, что можно не платить. Это не банкротство случайно?»</div>
+      <div class="ans">Так и работает реструктуризация, по-другому никак — у вас просто должна пойти просрочка. Клад же вы завтра не найдёте, чтобы всё разом отдать.</div>
+      <div class="ans">Можете сами загуглить «реструктуризация по 127-ФЗ» — увидите ровно ту же информацию, что я вам преподношу.</div>
+      <div class="ans">Прежде чем платить — сначала вместе прочитаем договор, я сформирую личный кабинет, пройдёмся по реквизитам. И только потом оплата.</div>
+      <div class="ow"><b>Почему работает:</b> не спорит с эмоцией, нормализует; «проверьте сами» = нечего скрывать; «сначала договор» снимает страх отдать деньги в пустоту.</div>
+    </div>
+  </div>
+
+  <div class="obj"><button><span class="onum">4</span><span class="otitle">«Я официально не работаю»</span><span class="chev">▸</span></button>
+    <div class="panel"><div class="said">«Я официально не работаю, как проводить процедуру?»</div>
+      <div class="ans">Для плана суду нужен подтверждаемый доход. Легальные пути — официальное трудоустройство, реальная самозанятость с фактической деятельностью, учёт дохода супруга, договор аренды.</div>
+      <div class="ow"><b>Почему работает:</b> превращает дисквалифицирующее возражение в решаемую задачу — клиент не чувствует себя «отказником».</div>
+      <div class="stop"><span class="badge b-no">не говорим</span> «Открываем самозанятость и проводим сумму чеками — как будто торты печёте». Это фиктивный доход — основание отказать в плане и лишить списания.</div>
+    </div>
+  </div>
+
+  <div class="obj"><button><span class="onum">5</span><span class="otitle">«Страшно: коллекторы, угрозы»</span><span class="chev">▸</span></button>
+    <div class="panel"><div class="said">«Они же мне звонить будут, шлют СМС с угрозами родственникам.»</div>
+      <div class="ans">Процедура новая, и каждому, кто в неё заходит, страшно — это нормально. Но это закон, ему подчиняются все банки. На телефон ставим переадресацию, делаем отзыв персональных данных — чтобы никто не беспокоил.</div>
+      <div class="ans">Можете сказать кредитору, что у вас реструктуризация по 127-ФЗ и юрист свяжется с ними — имеете полное право. Давить и запугивать они не имеют права, работают по 230-ФЗ.</div>
+      <div class="ow"><b>Почему работает:</b> легитимизирует страх, даёт скрипт что сказать, опирается на закон.</div>
+      <div class="stop"><span class="badge b-no">осторожно</span> Без «звонки прекратятся на 90% / полностью после суда» — это обещание результата по сроку.</div>
+    </div>
+  </div>
+
+  <div class="obj"><button><span class="onum">6</span><span class="otitle">«Сделайте сами, я не разберусь»</span><span class="chev">▸</span></button>
+    <div class="panel"><div class="said">«Я в этом ничего не понимаю, выписку не возьму, договоры не найду.»</div>
+      <div class="ans">Не будет такого, что мы дали задание, а вы сами ищете. Мы вас ведём, ваша задача — быть как правой рукой: быть на связи и вовремя предоставлять документы.</div>
+      <div class="ans">Выписка делается через Госуслуги бесплатно, никуда ходить не нужно. Кредитный договор — в приложении банка «о кредите» → скачать. Завтра сделаем это вместе, я проговорю каждый шаг.</div>
+      <div class="ow"><b>Почему работает:</b> метафора «правая рука» + конкретные шаги + «сделаем вместе» делят ответственность, а не перекладывают.</div>
+    </div>
+  </div>
+
+  <div class="obj"><button><span class="onum">7</span><span class="otitle">Технический затык (связь, бот, оплата)</span><span class="chev">▸</span></button>
+    <div class="panel"><div class="said">«Переадресацию поставила — звонки всё равно идут / не получается оплатить.»</div>
+      <div class="ans">Нельзя ставить переадресацию на постоянную — тогда до вас никто не дозвонится. Делаете «при условии»: нет ответа / занято / недоступен; нет ответа — 20 секунд.</div>
+      <div class="ans">Оплату можно в течение дня, как удобно, не обязательно прямо сейчас.</div>
+      <div class="ow"><b>Почему работает:</b> не бросает клиента на техбарьере (главная причина срыва оплаты после согласия), снимает срочность, чтобы глюк не убил сделку.</div>
+    </div>
+  </div>
+
+  <div class="obj"><button><span class="onum">8</span><span class="otitle">«А машину / квартиру не заберут?»</span><span class="chev">▸</span></button>
+    <div class="panel"><div class="said">«При банкротстве же квартиру заберут? Машина остаётся?»</div>
+      <div class="ans">Мы идём в реструктуризацию — это не банкротство. Имущество, движимое и недвижимое, никаким образом не трогается. Машина не залог.</div>
+      <div class="ans">Залоговый кредит платите только до первого суда — это 1–2 платежа. После первого суда всё замораживается.</div>
+      <div class="ow"><b>Почему работает:</b> чёткая отстройка «реструктуризация ≠ банкротство» закрывает корневой страх.</div>
+      <div class="stop"><span class="badge b-no">осторожно</span> Без «100% сохраним» — исход по залогу решает суд.</div>
+    </div>
+  </div>
+
+  <div class="obj"><button><span class="onum">9</span><span class="otitle">«Может, взять займ на оплату?»</span><span class="chev">▸</span></button>
+    <div class="panel"><div class="said">«Может, кредитку/займ на эту сумму взять?»</div>
+      <div class="ans">В займы заходить не нужно — там почти 300% годовых, потом с ними тяжело бороться. Лучше пусть просрочка начнётся, но займы не берите.</div>
+      <div class="ow"><b>Почему работает:</b> позиция «не лезьте в займы» — здравая и клиентоориентированная, повышает доверие.</div>
+      <div class="stop"><span class="badge b-no">не говорим</span> «Докредитуйтесь, возьмите этот займ — он зайдёт в общую массу». Это наращивание долга у неплатёжеспособного перед процедурой.</div>
+    </div>
+  </div>
+
+  <div class="obj"><button><span class="onum">10</span><span class="otitle">«Надо подумать / посоветоваться»</span><span class="chev">▸</span></button>
+    <div class="panel"><div class="said">«Дайте посоветоваться с мужем, переварю день-два.»</div>
+      <div class="ans">Конечно. Давайте я сформирую вам личный кабинет, чтобы вы почитали договор, направлю определения судов и завершённые дела — чтобы вы убедились, что мы существуем. А завтра в 18:00 я вас наберу.</div>
+      <div class="ow"><b>Почему работает:</b> не давит, но забирает паузу под контроль: «домашнее задание» (соцдоказательство) + жёсткая дата следующего касания → пауза не превращается в слив.</div>
+    </div>
+  </div>
+
+  <div class="obj"><button><span class="onum">11</span><span class="otitle">«Дайте гарантию, что всё получится»</span><span class="chev">▸</span></button>
+    <div class="panel"><div class="said">«А вдруг не утвердят? В договоре написано, что решает суд.»</div>
+      <div class="ans">В договоре закреплено: не затягиваем сроки; сумма в одностороннем порядке не меняется; конфиденциальность. Если план не утвердят по нашей вине — возвращаем уплаченное по договору.</div>
+      <div class="ans">Окончательное решение принимает суд — мы готовим дело так, чтобы свести риски к минимуму, и покажу вам определения по похожим делам.</div>
+      <div class="ow"><b>Почему работает:</b> честная условная гарантия из договора весит больше, чем громкое обещание.</div>
+      <div class="stop"><span class="badge b-no">не говорим</span> «100% утвердим или вернём всю сумму» — обещание судебного результата, который от компании не зависит.</div>
+    </div>
+  </div>
+
+  <div class="obj"><button><span class="onum">12</span><span class="otitle">Срыв / отчаяние (клиент плачет)</span><span class="chev">▸</span></button>
+    <div class="panel"><div class="said">«Я настолько в яме… как вы в этом живёте.»</div>
+      <div class="ans">Я понимаю, не переживайте, не плачьте — проблемы скидываем на нас, мы точно сможем помочь. В вашей вине того, что так сложилось, нет — зарплаты не растут, кредиты дорогие, человек попадает в долговую яму.</div>
+      <div class="ow"><b>Почему работает:</b> раппорт + снятие вины («не ваша вина — система») переводит клиента из стыда и паралича в доверие. Дёшево и воспроизводимо.</div>
+    </div>
+  </div>
+
+  <!-- STOP LIST -->
+  <h2 class="sec">Комплаенс-стоп — никогда не говорим</h2>
+  <p class="sub">Эти приёмы дают конверсию, но это ядро риска: вводят клиента в заблуждение, обещают неподконтрольный результат или вредят его же делу в суде. AI-гард обнуляет звонок с такими фразами. Рядом — честная замена.</p>
+  <div class="stopbox">
+    <h3>9 классов под запретом</h3>
+    <div class="si">
+      <div class="sr"><span class="no">✕ «Центробанк / государство возмещает проценты за вас»</span><span class="yes">✓ «Начисление договорных процентов прекращается с даты введения процедуры»</span></div>
+      <div class="sr"><span class="no">✕ «100% утвердим, иначе вернём всю сумму»</span><span class="yes">✓ «Вернём по договору, если не утвердят по нашей вине; решает суд»</span></div>
+      <div class="sr"><span class="no">✕ Фиктивные чеки самозанятости «как будто торты стряпаете»</span><span class="yes">✓ «Нужен реальный подтверждаемый доход — легальные пути»</span></div>
+      <div class="sr"><span class="no">✕ «Аккредитованы государством / честный знак / госпрограмма»</span><span class="yes">✓ «Частная компания по 127-ФЗ, [N] дел, знак в Роспатенте»</span></div>
+      <div class="sr"><span class="no">✕ «Докредитуйтесь / наберите займов, чтобы оплатить нас»</span><span class="yes">✓ «Вносим частями из реальных средств»</span></div>
+      <div class="sr"><span class="no">✕ «Перепишите имущество, снимите и спрячьте деньги»</span><span class="yes">✓ «Имущество прозрачно для управляющего; что защищено — разберём легально»</span></div>
+      <div class="sr"><span class="no">✕ «В БКИ не видно — скроем нагрузку от новых кредиторов»</span><span class="yes">✓ «Процедура отражается в БКИ; рейтинг временно ниже, потом восстановится»</span></div>
+      <div class="sr"><span class="no">✕ «Напишут заявление по 159 — мы не поможем» (как пугалка)</span><span class="yes">✓ «Чем раньше начать, тем спокойнее проходит процедура»</span></div>
+      <div class="sr"><span class="no">✕ «Поздравляю с началом процедуры» до фактической оплаты</span><span class="yes">✓ Статус «процедура началась» — только после подтверждённого платежа</span></div>
+    </div>
+  </div>
+
+  <footer>
+    <b>SALE 100.0</b> · Скрипт по методу Марченко — реконструкция по 251 звонку (июнь 2026). Полный разбор: <code>docs/marchenko-method-analysis-2026-06.md</code>.<br>
+    Это рабочий инструмент менеджера: ядро метода легально (оцифровка, дробление, замок шага, ранняя победа), комплаенс-нарушения вырезаны и заменены. Цены — пример из звонков, финальные утверждает компания.
+  </footer>
+
+</div>
+
+<script>
+  document.querySelectorAll('.obj > button').forEach(function(b){
+    b.addEventListener('click',function(){ b.parentElement.classList.toggle('open'); });
+  });
+  var boxes=document.querySelectorAll('#checklist input[type=checkbox]');
+  var cc=document.querySelector('#ccount b');
+  document.getElementById('ctotal').textContent=boxes.length;
+  function upd(){
+    var n=0;
+    boxes.forEach(function(c){ c.parentElement.classList.toggle('done',c.checked); if(c.checked)n++; });
+    cc.textContent=n;
+  }
+  boxes.forEach(function(c){ c.addEventListener('change',upd); });
+  upd();
+</script>
+</body>
+</html>
