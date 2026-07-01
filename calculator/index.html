@@ -115,7 +115,7 @@
   <header>
     <div class="kicker">Калькулятор облегчения · приём Марченко</div>
     <h1>Сколько вы <span class="hl">переплачиваете</span></h1>
-    <p class="lead">Не «спишем проценты», а его собственная арифметика: сколько из платежа уходит в проценты сейчас и каким будет платёж по программе. Боль слева, облегчение справа. Это оцифровка — главный крючок закрытия.</p>
+    <p class="lead">Не абстракция, а его собственная арифметика: сколько он платит в никуда сейчас и как весь долг списывается по 127-ФЗ примерно за 14 месяцев. Боль слева, облегчение справа — это оцифровка, главный крючок закрытия.</p>
 
     <a href="../script/" style="display:inline-flex;align-items:center;gap:8px;margin-top:16px;font-family:'Unbounded';font-weight:700;font-size:13px;text-decoration:none;color:var(--green)">← Как продаёт Света: скрипт продаж</a>
 
@@ -138,21 +138,21 @@
       <input type="range" id="i_pay" min="5000" max="300000" step="1000" value="70000">
     </div>
     <div class="field">
-      <div class="flab"><span>Сколько ещё лет платить по графику</span><span class="fval"><input type="number" id="n_yrs" class="numin" style="width:66px" min="1" max="40" step="1" value="5" inputmode="numeric"> лет</span></div>
-      <input type="range" id="i_yrs" min="1" max="20" step="1" value="5">
+      <div class="flab"><span>Срок процедуры (списание долга)</span><span class="fval"><input type="number" id="n_mon" class="numin" style="width:80px" min="6" max="36" step="1" value="14" inputmode="numeric"> мес</span></div>
+      <input type="range" id="i_mon" min="6" max="36" step="1" value="14">
     </div>
   </div>
 
   <div class="hero">
     <div>
-      <div class="hlab">Не уйдёт банку — остаётся у вас</div>
-      <div class="big" id="h_save"></div>
-      <div class="sub">столько процентов вы бы переплатили за <span id="h_yrs2"></span> лет</div>
+      <div class="hlab">Спишем долга по 127-ФЗ</div>
+      <div class="big" id="h_wipe"></div>
+      <div class="sub">через ~<span id="h_mon"></span> месяцев долгов не останется</div>
     </div>
     <div class="r">
-      <div class="hlab">Старт работы сегодня</div>
-      <div class="big" style="font-size:clamp(28px,5.5vw,42px)">от 13 500 ₽</div>
-      <div class="sub">остаток — с зарплаты</div>
+      <div class="hlab">За процедуру</div>
+      <div class="big" style="font-size:clamp(26px,5vw,40px)">от 13 500 ₽<span style="font-size:15px">/мес</span></div>
+      <div class="sub">≈ <span id="h_serv"></span> за процедуру + госпошлины</div>
     </div>
   </div>
 
@@ -164,28 +164,27 @@
   <div class="cols">
     <div class="col now">
       <h3>Как сейчас</h3>
-      <div class="row"><span>Отдадите всего за <span id="d_yrs"></span> лет</span><b id="d_total"></b></div>
-      <div class="row"><span>Из них процентов банку</span><b class="em-red" id="d_int"></b></div>
-      <div class="barnote">Из платежа <span id="d_payref"></span> в долг идёт только <b id="d_prinpm"></b>, остальное — проценты:</div>
-      <div class="bar"><div class="seg-p" id="bar_p"></div><div class="seg-i" id="bar_i"></div></div>
-      <div class="barlab"><span><span id="d_ps"></span> в долг</span><span><span id="d_is"></span> в проценты</span></div>
+      <div class="row"><span>Долг</span><b id="d_debt"></b></div>
+      <div class="row"><span>Платите в месяц</span><b id="d_payref"></b></div>
+      <div class="row"><span>За год уходит банку</span><b class="em-red" id="d_year"></b></div>
+      <div class="barnote">Платите годами, а долг почти не двигается — из ямы можно так и не выбраться.</div>
     </div>
     <div class="col prog">
-      <h3>По программе 127-ФЗ</h3>
-      <div class="row"><span>Старт сегодня (услуга компании)</span><b class="em-green">от 13 500 ₽</b></div>
-      <div class="row"><span>Платёж по долгу кредиторам</span><b class="em-green" id="p_pay"></b></div>
-      <div class="row"><span>Проценты</span><b class="em-green">0 ₽</b></div>
-      <div class="row"><span>Срок</span><b>5 лет · свобода в <span id="p_year"></span></b></div>
-      <div class="prognote"><b>13 500</b> — это старт работы (оплата услуги компании). <b>Платёж по долгу</b> кредиторам — отдельные деньги, начинается после суда. Это разные платежи. Начисление процентов прекращается: гасите тело долга, а не переплату.</div>
+      <h3>По программе 127-ФЗ (списание)</h3>
+      <div class="row"><span>Долг списывается</span><b class="em-green" id="p_wipe"></b></div>
+      <div class="row"><span>Срок</span><b>~<span id="p_mon"></span> мес · без долгов — <span id="p_year"></span></b></div>
+      <div class="row"><span>Платите за процедуру</span><b class="em-green">от 13 500 ₽/мес</b></div>
+      <div class="row"><span>Госпошлины</span><b>~50 000 ₽ · поэтапно</b></div>
+      <div class="prognote">Сам долг вы кредиторам <b>не выплачиваете</b> — он списывается по 127-ФЗ. Платите только за процедуру: услуга ≈ <span id="p_serv"></span> (старт от 13 500) + госпошлины. Срок и итог утверждает суд.</div>
     </div>
   </div>
 
   <div class="bridge mgr mgronly">
-    <div class="bt">Не давит сумма? <b>Начать можно с 1 000 ₽ сегодня</b> — этого хватит, чтобы юрист взял дело в работу. Остаток — с ближайшей зарплаты.</div>
+    <div class="bt">Не давит сумма? <b>Начать можно с 13 500 ₽ сегодня</b> — юрист берёт дело в работу, остальное платите помесячно во время процедуры.</div>
     <div class="chips">
-      <span class="chip">Старт <b>от 1 000 ₽</b></span>
-      <span class="chip">Рассрочка <b>17 000 × 10</b></span>
-      <span class="chip">Разом <b>99 000</b></span>
+      <span class="chip">Старт <b>от 13 500 ₽</b></span>
+      <span class="chip">Услуга <b>≈ 189 000</b></span>
+      <span class="chip">Госпошлины <b>~50 000</b></span>
     </div>
   </div>
 
@@ -194,7 +193,7 @@
     <a class="cta gold" id="cli_cta" href="#zayavka">Записаться на разбор →</a>
   </div>
 
-  <div class="disc">Ориентировочный расчёт по программе реструктуризации долгов (127-ФЗ). Точную сумму платежа и срок утверждает суд; государственные пошлины и публикации оплачиваются отдельно. Это не гарантия результата и не индивидуальная финансовая рекомендация.</div>
+  <div class="disc">Ориентировочный расчёт по процедуре списания долгов (банкротство физлиц, 127-ФЗ). Срок и объём списания зависят от вашей ситуации и решения суда; часть имущества может быть реализована. Госпошлины и публикации оплачиваются отдельно. Это не гарантия результата и не индивидуальная финансовая рекомендация.</div>
 
   <footer>
     <b>SALE 100.0</b> · Калькулятор облегчения. Режим менеджера — крутить на звонке (оцифровка + «потянете?»). Режим клиента — ссылка зависшим лидам (задача: вернуть в звонок, а не закрыть по ссылке). Кнопка «Записаться» подключается к форме заявки / Salebot.
@@ -204,30 +203,25 @@
 
 <script>
   var f=function(n){return Math.round(n).toLocaleString('ru-RU')+' ₽';};
-  var nd=document.getElementById('n_debt'),np=document.getElementById('n_pay'),ny=document.getElementById('n_yrs');
-  var rd=document.getElementById('i_debt'),rp=document.getElementById('i_pay'),ry=document.getElementById('i_yrs');
+  var SERVICE_MO=13500;
+  var nd=document.getElementById('n_debt'),np=document.getElementById('n_pay'),nm=document.getElementById('n_mon');
+  var rd=document.getElementById('i_debt'),rp=document.getElementById('i_pay'),rm=document.getElementById('i_mon');
   function num(el){return parseFloat(el.value)||0;}
   function set(id,v){var e=document.getElementById(id); if(e) e.textContent=v;}
   function clampR(r,v){return Math.max(+r.min,Math.min(+r.max,v));}
   function render(){
-    var D=num(nd),P=num(np),Y=Math.max(1,num(ny)),M=Y*12;
-    var total=P*M, interest=Math.max(0,total-D);
-    var prinPM=Math.min(P,D/M), intPM=Math.max(0,P-prinPM);
-    var ps=P>0?prinPM/P:0;
-    var newPay=D/60, save=interest;
-    set('h_save',f(save)); set('h_yrs2',Y);
-    set('d_yrs',Y); set('d_total',f(total)); set('d_int',f(interest));
-    set('d_payref',f(P)); set('d_prinpm',f(prinPM));
-    set('d_ps',Math.round(ps*100)+'%'); set('d_is',Math.round((1-ps)*100)+'%');
-    document.getElementById('bar_p').style.width=(ps*100)+'%';
-    document.getElementById('bar_i').style.width=((1-ps)*100)+'%';
-    set('p_pay',f(newPay)+' /мес');
-    set('p_year',(new Date().getFullYear()+5));
+    var D=num(nd),P=num(np),Mo=Math.max(1,num(nm));
+    var serviceTotal=SERVICE_MO*Mo;
+    set('h_wipe',f(D)); set('h_mon',Mo); set('h_serv',f(serviceTotal));
+    set('d_debt',f(D)); set('d_payref',f(P)); set('d_year',f(P*12));
+    set('p_wipe',f(D)); set('p_mon',Mo); set('p_serv',f(serviceTotal));
+    var now=new Date(), free=new Date(now.getFullYear(),now.getMonth()+Mo,1);
+    set('p_year',free.toLocaleDateString('ru-RU',{month:'long',year:'numeric'}));
     document.getElementById('cue_text').textContent=
-      'Смотрите: за '+Y+' лет вы отдадите банку '+f(total)+' при долге '+f(D)+' — это '+f(interest)+' лишних процентов. По программе проценты списываются: платите только долг, и эти '+f(interest)+' остаются у вас. Начать можно с 13 500 ₽ сегодня, остаток — с зарплаты. Договорились?';
+      'Смотрите: у вас долг '+f(D)+', вы платите '+f(P)+' в месяц и годами из этого не выберетесь. По 127-ФЗ этот долг списывается примерно за '+Mo+' месяцев — вы платите только за процедуру, старт от 13 500 ₽ в месяц. Через год с небольшим вы полностью без долгов. Начнём?';
   }
-  [[rd,nd],[rp,np],[ry,ny]].forEach(function(p){p[0].addEventListener('input',function(){p[1].value=p[0].value;render();});});
-  [[nd,rd],[np,rp],[ny,ry]].forEach(function(p){p[0].addEventListener('input',function(){p[1].value=clampR(p[1],num(p[0]));render();});});
+  [[rd,nd],[rp,np],[rm,nm]].forEach(function(p){p[0].addEventListener('input',function(){p[1].value=p[0].value;render();});});
+  [[nd,rd],[np,rp],[nm,rm]].forEach(function(p){p[0].addEventListener('input',function(){p[1].value=clampR(p[1],num(p[0]));render();});});
 
   var body=document.body;
   document.querySelectorAll('#modeswitch button').forEach(function(b){
