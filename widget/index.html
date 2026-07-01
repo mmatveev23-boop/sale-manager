@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Задачи сегодня — виджет менеджера · SALE 100.0</title>
 <meta name="robots" content="noindex, nofollow">
-<meta name="description" content="Главный экран менеджера по правилам v1: задачи с таймерами, деньги сверху, стоп-кран новых лидов, исходы только артефактом.">
+<meta name="description" content="Главный экран менеджера по правилам v1: задачи с таймерами (кто раньше сгорит — тот выше: новые лиды тают за минуты), стоп-кран новых лидов, исходы только артефактом.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700;800&family=Golos+Text:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -117,9 +117,22 @@
       </div>
     </div>
 
-    <!-- 2. ДЕНЬГИ В ДВИЖЕНИИ -->
+    <!-- 2. НОВЫЕ — тают за минуты -->
     <div class="sec">
-      <div class="sec-h c-money"><span class="ico">💰</span>Деньги в движении <span class="cnt">· 3 задачи · «денежность» ставит движок, не ты</span></div>
+      <div class="sec-h c-new"><span class="ico">🆕</span>Новые лиды <span class="cnt">· FIFO · тают за минуты — конкуренты тоже звонят</span></div>
+      <div class="empty" id="newEmpty"><b>⛔ Закрыто.</b> Новые не падают, пока висит просроченный Дмитрий С. (ниже, в «Деньгах в движении») — коснись его, и поток откроется.</div>
+      <div class="task" id="newLead" style="display:none" data-deadline="900">
+        <div class="t-top"><span class="t-name">Новый лид · Елена Т.</span><span class="t-chip">заявка с сайта</span><span class="t-spacer"></span><span class="timer"><span class="tv">—</span><small>первое касание · SLA 15 мин</small></span></div>
+        <div class="t-what">Долг ~1,2 млн, оставила заявку 2 минуты назад. <b>Скорость решает:</b> в первые минуты она у телефона и ещё ни с кем не говорила. Звони, диагностика по чек-листу.</div>
+        <div class="t-act"><button class="btn" onclick="touch(this)">Позвонить →</button></div>
+        <div class="out"><button class="oc" onclick="doneT(this,'Консультация идёт — ИИ зафиксирует по записи')">Дозвонился</button><button class="oc" onclick="doneT(this,'3 попытки + смс → авто-дозвонщики')">Недозвон ×3</button></div>
+        <div class="done-note">✓ Касание зафиксировано артефактом: <span class="dn">—</span></div>
+      </div>
+    </div>
+
+    <!-- 3. ДЕНЬГИ В ДВИЖЕНИИ -->
+    <div class="sec">
+      <div class="sec-h c-money"><span class="ico">💰</span>Деньги в движении <span class="cnt">· 3 задачи · дедлайн «сегодня» · «денежность» ставит движок, не ты</span></div>
 
       <div class="task over" id="overdueCard" data-overdue="22320">
         <div class="t-top"><span class="t-name">Дмитрий С.</span><span class="t-chip money">договор подписан · 0 ₽</span><span class="t-spacer"></span><span class="timer"><span class="tv">—</span><small>ноль попыток · окно 1 день</small></span></div>
@@ -147,7 +160,7 @@
       </div>
     </div>
 
-    <!-- 3. ПО ДОГОВОРЁННОСТИ -->
+    <!-- 4. ПО ДОГОВОРЁННОСТИ -->
     <div class="sec">
       <div class="sec-h c-date"><span class="ico">📅</span>По договорённости сегодня <span class="cnt">· клиент назвал время — ИИ слышал в записи</span></div>
       <div class="task" data-deadline="12600">
@@ -160,19 +173,6 @@
       <div class="task dim">
         <div class="t-top"><span class="t-name">Игорь Г.</span><span class="t-chip">парковка</span><span class="t-spacer"></span><span class="timer">15 июля<small>зарплата — сам назвал дату</small></span></div>
         <div class="t-what">«Перезвоните 15-го, будет зарплата» — договорённость в записи. Лид запаркован, <b>вернётся тебе автоматически 15-го</b>. Таймер не тикает, бот греет.</div>
-      </div>
-    </div>
-
-    <!-- 4. НОВЫЕ -->
-    <div class="sec">
-      <div class="sec-h c-new"><span class="ico">🆕</span>Новые лиды <span class="cnt">· FIFO · первое касание — минуты</span></div>
-      <div class="empty" id="newEmpty"><b>⛔ Закрыто.</b> Новые не падают, пока висит просроченный Дмитрий С. — коснись его, и поток откроется.</div>
-      <div class="task" id="newLead" style="display:none" data-deadline="900">
-        <div class="t-top"><span class="t-name">Новый лид · Елена Т.</span><span class="t-chip">заявка с сайта</span><span class="t-spacer"></span><span class="timer"><span class="tv">—</span><small>первое касание · SLA 15 мин</small></span></div>
-        <div class="t-what">Долг ~1,2 млн, оставила заявку 2 минуты назад. <b>Скорость решает</b> — звони, диагностика по чек-листу.</div>
-        <div class="t-act"><button class="btn" onclick="touch(this)">Позвонить →</button></div>
-        <div class="out"><button class="oc" onclick="doneT(this,'Консультация идёт — ИИ зафиксирует по записи')">Дозвонился</button><button class="oc" onclick="doneT(this,'3 попытки + смс → авто-дозвонщики')">Недозвон ×3</button></div>
-        <div class="done-note">✓ Касание зафиксировано артефактом: <span class="dn">—</span></div>
       </div>
     </div>
 
@@ -189,7 +189,7 @@
       <b>Правила одного экрана:</b> задача закрывается только <b>артефактом</b> (звонок в телефонии · сообщение в Salebot · следующий шаг с датой) — галочка руками не считается · пинг «как дела?» лид не держит — держат разговор, договор, деньги, документ · просрочка = минус в рейтинг и стоп новых · заброшенный лид уходит в пул — его закроет другой, комиссия у него · клиент молчит при твоих честных попытках → лид уходит без штрафа тебе.
     </div>
   </div>
-  <div class="demo">Демо-прототип · данные вымышленные · порядок секций = приоритет: деньги ближе — выше</div>
+  <div class="demo">Демо-прототип · данные вымышленные · порядок = кто раньше сгорит, тот выше; при равных дедлайнах — кто ближе к деньгам</div>
 </div>
 
 <script>
