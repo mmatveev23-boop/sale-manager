@@ -40,7 +40,11 @@
   /* controls */
   .ctrls{margin-top:20px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px 22px;display:flex;flex-direction:column;gap:18px}
   .field .flab{display:flex;justify-content:space-between;align-items:baseline;font-size:14px;color:var(--muted);margin-bottom:8px}
-  .field .fval{font-family:"Unbounded";font-weight:700;font-size:17px;color:var(--ink)}
+  .field .fval{font-family:"Unbounded";font-weight:700;font-size:17px;color:var(--ink);display:inline-flex;align-items:center;gap:6px}
+  .numin{font-family:"Unbounded";font-weight:700;font-size:17px;color:var(--ink);width:150px;text-align:right;border:1px solid var(--line);border-radius:8px;padding:5px 9px;background:var(--card);-moz-appearance:textfield}
+  .numin::-webkit-outer-spin-button,.numin::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+  .numin:hover{border-color:var(--muted)}
+  .numin:focus{outline:none;border-color:var(--green);box-shadow:0 0 0 3px rgba(14,92,70,.12)}
   input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:6px;border-radius:6px;background:#E4DCCB;outline:none}
   input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:22px;height:22px;border-radius:50%;background:var(--green);cursor:pointer;border:3px solid #fff;box-shadow:0 0 0 1px var(--line)}
   input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;background:var(--green);cursor:pointer;border:3px solid #fff}
@@ -126,16 +130,16 @@
 
   <div class="ctrls">
     <div class="field">
-      <div class="flab"><span>Сумма долга</span><span class="fval" id="o_debt"></span></div>
-      <input type="range" id="i_debt" min="100000" max="5000000" step="10000" value="1680000">
+      <div class="flab"><span>Сумма долга</span><span class="fval"><input type="number" id="n_debt" class="numin" min="0" step="10000" value="1680000" inputmode="numeric"> ₽</span></div>
+      <input type="range" id="i_debt" min="100000" max="10000000" step="10000" value="1680000">
     </div>
     <div class="field">
-      <div class="flab"><span>Платёж в месяц сейчас</span><span class="fval" id="o_pay"></span></div>
-      <input type="range" id="i_pay" min="5000" max="200000" step="1000" value="70000">
+      <div class="flab"><span>Платёж в месяц сейчас</span><span class="fval"><input type="number" id="n_pay" class="numin" min="0" step="1000" value="70000" inputmode="numeric"> ₽</span></div>
+      <input type="range" id="i_pay" min="5000" max="300000" step="1000" value="70000">
     </div>
     <div class="field">
-      <div class="flab"><span>Сколько ещё лет платить по графику</span><span class="fval" id="o_yrs"></span></div>
-      <input type="range" id="i_yrs" min="1" max="15" step="1" value="5">
+      <div class="flab"><span>Сколько ещё лет платить по графику</span><span class="fval"><input type="number" id="n_yrs" class="numin" style="width:66px" min="1" max="40" step="1" value="5" inputmode="numeric"> лет</span></div>
+      <input type="range" id="i_yrs" min="1" max="20" step="1" value="5">
     </div>
   </div>
 
@@ -200,16 +204,17 @@
 
 <script>
   var f=function(n){return Math.round(n).toLocaleString('ru-RU')+' ₽';};
-  var debt=document.getElementById('i_debt'),pay=document.getElementById('i_pay'),yrs=document.getElementById('i_yrs');
-  function g(el){return parseFloat(el.value);}
+  var nd=document.getElementById('n_debt'),np=document.getElementById('n_pay'),ny=document.getElementById('n_yrs');
+  var rd=document.getElementById('i_debt'),rp=document.getElementById('i_pay'),ry=document.getElementById('i_yrs');
+  function num(el){return parseFloat(el.value)||0;}
   function set(id,v){var e=document.getElementById(id); if(e) e.textContent=v;}
+  function clampR(r,v){return Math.max(+r.min,Math.min(+r.max,v));}
   function render(){
-    var D=g(debt),P=g(pay),Y=g(yrs),M=Y*12;
+    var D=num(nd),P=num(np),Y=Math.max(1,num(ny)),M=Y*12;
     var total=P*M, interest=Math.max(0,total-D);
     var prinPM=Math.min(P,D/M), intPM=Math.max(0,P-prinPM);
     var ps=P>0?prinPM/P:0;
     var newPay=D/60, save=interest;
-    set('o_debt',f(D)); set('o_pay',f(P)); set('o_yrs',Y+' лет');
     set('h_save',f(save)); set('h_yrs2',Y);
     set('d_yrs',Y); set('d_total',f(total)); set('d_int',f(interest));
     set('d_payref',f(P)); set('d_prinpm',f(prinPM));
@@ -221,7 +226,8 @@
     document.getElementById('cue_text').textContent=
       'Смотрите: за '+Y+' лет вы отдадите банку '+f(total)+' при долге '+f(D)+' — это '+f(interest)+' лишних процентов. По программе проценты списываются: платите только долг, и эти '+f(interest)+' остаются у вас. Начать можно с 13 500 ₽ сегодня, остаток — с зарплаты. Договорились?';
   }
-  [debt,pay,yrs].forEach(function(el){el.addEventListener('input',render);});
+  [[rd,nd],[rp,np],[ry,ny]].forEach(function(p){p[0].addEventListener('input',function(){p[1].value=p[0].value;render();});});
+  [[nd,rd],[np,rp],[ny,ry]].forEach(function(p){p[0].addEventListener('input',function(){p[1].value=clampR(p[1],num(p[0]));render();});});
 
   var body=document.body;
   document.querySelectorAll('#modeswitch button').forEach(function(b){
