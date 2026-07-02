@@ -168,6 +168,20 @@
     <div class="rl"><h4><span class="n">Окно</span> на касание</h4><p>У каждого статуса своё окно (таблица в шаге 2): думает — раз в 48 часов · договор на подписи — часы · подписан — каждый день · 990 — каждый день первые 5 дней, дальше раз в 48 ч (ведёшь — лид твой). Система сама видит попытки — <b>окно попытки закрывает только звонок</b> (телефония), сообщение — в дополнение. Окно сгорело с нулём попыток → лид в пул, тебе — рейтинг вниз и метка <b>«взял, но бросил»</b>.</p></div>
     <div class="rl"><h4><span class="n">Счёт</span> — как в спорте</h4><p>По каждому видно: <b>взял → довёл до денег → бросил по 48 часам</b>. Эта конверсия — часть рейтинга. Много «взял, но бросил» → стоп новых лидов → разбор → снятие с линии (лестница ниже).</p></div>
   </div>
+  <div style="margin-top:12px;background:var(--card);border:1.5px solid var(--gold);border-radius:16px;padding:16px 19px;overflow-x:auto">
+    <b style="font-family:'Unbounded';font-size:13.5px">Окна одним взглядом</b>
+    <table style="width:100%;border-collapse:collapse;margin-top:10px;font-size:14px">
+      <tr style="text-align:left"><th style="padding:6px 10px 6px 0;font-size:11.5px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted)">Где лид</th><th style="padding:6px 0;font-size:11.5px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted)">Твоё окно</th></tr>
+      <tr style="border-top:1px solid var(--line)"><td style="padding:8px 10px 8px 0;font-weight:600">Новый лид</td><td style="padding:8px 0">первый набор — <b>5 минут</b> (горячее от бота — минута)</td></tr>
+      <tr style="border-top:1px solid var(--line)"><td style="padding:8px 10px 8px 0;font-weight:600">Думает</td><td style="padding:8px 0">шаг <b>раз в 48 часов</b> · весь статус до ~4 дней</td></tr>
+      <tr style="border-top:1px solid var(--line)"><td style="padding:8px 10px 8px 0;font-weight:600">Договор на подписи</td><td style="padding:8px 0"><b>горячий час</b> · 2 часа без попытки → пул</td></tr>
+      <tr style="border-top:1px solid var(--line)"><td style="padding:8px 10px 8px 0;font-weight:600">Подписан, ждём оплату</td><td style="padding:8px 0">попытка <b>каждый день</b> · продлевает только дело, не разговор</td></tr>
+      <tr style="border-top:1px solid var(--line)"><td style="padding:8px 10px 8px 0;font-weight:600">Оплатил 990, добор</td><td style="padding:8px 0"><b>каждый день первые 5 дней</b>, дальше раз в 48 ч · ведёшь по-настоящему — лид твой</td></tr>
+      <tr style="border-top:1px solid var(--line)"><td style="padding:8px 10px 8px 0;font-weight:600">До 2-го платежа</td><td style="padding:8px 0">ритм ведёт бот · ты — по эскалации <b>в день сигнала</b></td></tr>
+    </table>
+    <p style="font-size:12.5px;color:var(--muted);margin-top:9px">Ноль попыток в окно → лид в пул + метка «взял, но бросил». Все окна идут в рабочие часы — ночь, выходной и больничный таймер не съедают.</p>
+  </div>
+
   <div style="margin-top:12px;background:var(--green-deep);color:#F1ECE0;border-radius:16px;padding:18px 22px;font-size:14.5px;line-height:1.65">
     <b style="font-family:'Unbounded';font-size:13px;color:#F4C775">Закрыл лида — система проверит. Обмануть не получится.</b><br>
     Как только ты пообщался с клиентом, система оценивает звонок и дальше контролирует каждый статус лида. Закрытые ИИ выборочно прослушивает и сверяет причину с записью: был наш клиент, а ты его закрыл → лид вернётся в работу другому, тебе — флаг и разбор. Закрываешь заметно больше команды → разбор каждого закрытия. И закрытый не исчезает: через 30–90 дней он вернётся в систему — повторное закрытие того же клиента видно сразу. <b>Честно работать — проще.</b>
