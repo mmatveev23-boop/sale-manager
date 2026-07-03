@@ -229,6 +229,7 @@
       <button class="tab" data-v="team"><span class="n">2</span>Команда — дашборд РОПа</button>
       <button class="tab" data-v="call"><span class="n">3</span>Разбор звонка</button>
       <button class="tab" data-v="settings"><span class="n">4</span>Настройки ИИ</button>
+      <button class="tab" data-v="calib"><span class="n">5</span>Калибровка</button>
     </div>
   </header>
 
@@ -510,7 +511,7 @@
 
   <!-- ================= ЭКРАН СЕССИИ КАЛИБРОВКИ (открывается с дашборда) ================= -->
   <section class="view" id="v-calib">
-    <div class="why-tool"><b>Сессия калибровки · понедельник, ~30 минут.</b> Оценка ИИ скрыта, пока не сравнишь. Твои оценки в рейтинг менеджеров не идут — это сверка «одинаково ли мы с ИИ слышим звонок». Разошлись больше 10% — расхождение станет строкой в промт через песочницу.</div>
+    <div class="why-tool"><b>Сессия калибровки · понедельник, ~30 минут.</b> Это сверка «одинаково ли мы с ИИ слышим звонок» — чтобы менеджеры верили оценке. <b>Ты НЕ ставишь «понравилось / не понравилось» и не выдумываешь баллы.</b> Ты отвечаешь на 8 вопросов-фактов «было или не было» — тех же, по которым судит ИИ (назвал 13 500? взял дату? проговорил договор?). Баллы из галочек считает система. Оценка ИИ скрыта, пока не нажмёшь «Сравнить». Разошлись — смотрим цитату из записи: <b>ИИ ошибся → одна строка-правило в промт</b> (через песочницу и золотой набор); ты ошибся — ок, сверились. Расхождение &lt;5% = линейке можно верить. Твои оценки в рейтинг менеджеров не идут.</div>
 
     <div class="call-h">
       <a href="#" onclick="showView('team');return false" style="font-weight:700;font-size:13px;text-decoration:none">← к дашборду</a>
@@ -556,7 +557,7 @@
       </div>
 
       <div class="panel" style="background:var(--card)">
-        <div class="ph">Что было в звонке? Отметь</div>
+        <div class="ph">8 фактов: было или не было? Не «нравится», а факт</div>
         <div id="calibItems" style="font-size:12.5px;line-height:1.5"></div>
         <div style="display:flex;gap:8px;margin-top:12px;align-items:center;flex-wrap:wrap">
           <button class="btn pri" id="calibCompare" style="flex:0 0 auto;padding:10px 16px;font-size:13px">Сравнить с ИИ</button>
