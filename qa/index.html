@@ -244,7 +244,6 @@
             <div class="t">ИИ-разбор звонка</div>
             <div class="s">Иван С. · долг 740 000 ₽ · звонок завершён 14:51 · 18:24</div>
           </div>
-          <span class="chip c-green conf">уверенность ИИ 87%</span>
           <span class="x" title="закрыть">✕</span>
         </div>
         <div class="pp-b">
@@ -257,7 +256,10 @@
           <div class="score-row">
             <div>
               <div class="score-big">78<small> /100</small></div>
-              <div class="score-meta">цель 90 · гейт консультации <b style="color:var(--green)">10/12 ✓</b><br>говорил ты: <b>58%</b> (цель ≤45%) · монолог <b>2:50</b> · вопросов <b>9</b></div>
+              <div style="display:flex;gap:6px;margin-top:8px;flex-wrap:wrap">
+                <span class="chip c-amber">цель 90</span>
+                <span class="chip c-green">гейт 10/12 ✓</span>
+              </div>
             </div>
             <div class="series">
               <div class="dots"><span class="d ok" title="92"></span><span class="d low" title="81"></span><span class="d low" title="78 — этот звонок"></span><span class="d"></span><span class="d"></span></div>
@@ -267,7 +269,7 @@
 
           <div class="grid2">
             <div class="panel ladder">
-              <div class="ph">Лестница денег (40% оценки)</div>
+              <div class="ph">Деньги в звонке — 4 шага · 40% оценки</div>
               <div class="li"><span class="ok-i">✓</span><div>Оцифровал боль: «платите 41 000, из них 35 500 — проценты»</div></div>
               <div class="li"><span class="ok-i">✓</span><div>Цена-канон + «потянете?»: 13 500/мес</div></div>
               <div class="li"><span class="ok-i">✓</span><div>Дата ЗП + минималка: 2 000 ₽ в зачёт, добор 10-го</div></div>
@@ -313,6 +315,7 @@
             <div id="dispDone" style="display:none;margin-top:8px;font-weight:600">Спор открыт ⚖️ Оценка НЕ идёт в рейтинг до разбора. РОП получил звонок с твоим комментарием — ответ в течение 24 часов: примет / частично примет / отклонит с объяснением.</div>
           </div>
 
+          <div style="font-size:11px;color:var(--faint);text-align:center;margin-top:12px">речь: говорил ты 58% (цель ≤45%) · самый длинный монолог 2:50 · вопросов задано 9</div>
           <div class="pp-links">
             <a href="#" onclick="showView('call');return false">▶ Прослушать звонок с разметкой</a>
             <a href="#" onclick="return false">Открыть сделку в amoCRM</a>
@@ -321,7 +324,55 @@
       </div>
     </div>
 
-    <p class="note">Окно всплывает автоматически через ~1 минуту после завершения звонка (транскрибация + оценка). «Согласен/Не согласен» обязательны: пока менеджер не отреагировал, следующая задача из конвейера не выдаётся (постобработка ACW). Балл и этапы — из одного промта AI-QA (docs/ai-qa-consultation-prompt.md): этапы — это те же пункты рубрики, разложенные по хронологии звонка.</p>
+    <!-- МЕХАНИКА ОЦЕНКИ -->
+    <div class="sec-t">Механика оценки — как окно считает</div>
+    <div class="panel" style="background:var(--card);margin-bottom:14px">
+      <div class="donow" style="background:var(--paper);border-color:var(--line);margin-top:0">
+        <div class="st"><span class="n">1</span><div><b>Звонок завершился → окно само через ~60 секунд.</b> Запись приходит из телефонии, транскрибируется (уже работает), дубли склеиваются, ИИ оценивает по промту v1.1 — менеджер ничего не запускает.</div></div>
+        <div class="st"><span class="n">2</span><div><b>Балл — одна рубрика канона:</b> эмпатия 20 + возражения 25 + деньги в звонке 40 + шаг с датой 15 = 100. Комплаенс — поверх (сейчас режим «пропускаем»: фраза на замену показывается, балл не режется).</div></div>
+        <div class="st"><span class="n">3</span><div><b>«Этапы звонка» — те же пункты по хронологии</b>, второй системы оценки нет. Блок «Деньги в звонке — 4 шага» (оцифровал → цена+«потянете?» → дата+минималка → закрыл) в промте называется money_ladder — не путать со старой лестницей цен 13 500 → 990.</div></div>
+        <div class="st"><span class="n">4</span><div><b>Главная ошибка — всегда ОДНА:</b> самый дорогой проваленный пункт (по весу и влиянию на деньги). Не список из десяти — чинится одно, закрепляется, дальше следующее.</div></div>
+        <div class="st"><span class="n">5</span><div><b>«Что сделать сейчас»</b> = совет ИИ (next_best_action) + хвосты, которые видит система (деньги взяты, договора нет → «договор сегодня»). Жмёшь «Согласен» — задачи создаются в карточке сделки сами.</div></div>
+        <div class="st"><span class="n">6</span><div><b>Серия к снятию с линии</b> — последние 5 закрытых оценок; обрывы (partial) и звонки со спором не считаются. Если запись плохого качества, ИИ помечает оценку «предварительной» — она тоже вне серии, и её легко оспорить.</div></div>
+      </div>
+    </div>
+
+    <!-- ДЛЯ ПРОГРАММИСТА -->
+    <div class="panel" style="background:var(--card)">
+      <div class="ph">Для программиста — как это настроить (постановка)</div>
+      <pre style="background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:14px 16px;font-size:11.5px;line-height:1.6;overflow:auto;white-space:pre-wrap;font-family:ui-monospace,Menlo,monospace">
+ПАЙПЛАЙН (цель: окно ≤60 сек после звонка)
+телефония webhook call_finished → аудио → ASR/транскрибация (уже работает)
+→ дедуп записей (lead_id + timestamp ±2 мин: pbx + оператор = один звонок)
+→ LLM, промт v1.1 (docs/ai-qa-consultation-prompt.md) → JSON-оценка
+→ сохранить: evals(call_id, manager_id, lead_id, json, status, created_at)
+→ push в окно менеджера (виджет amo: websocket или поллинг ≤10 сек)
+
+МАППИНГ JSON → ЭЛЕМЕНТЫ ОКНА
+score_total → балл 78/100 · diagnostics.collected_count → «гейт 10/12» ·
+consultation_happened → ответственность наступила, лид занял слот
+money_ladder.{digitized_pain · price_and_ask · date_plus_minimum · closed_now} → «Деньги в звонке» (4 строки)
+empathy / objections / next_step → «Этапы звонка» (фиксированный маппинг пунктов на 6 этапов)
+главная ошибка = самый весомый проваленный пункт: closed_now → objections.не_отработано → date_plus_minimum → …
+next_best_action + хвосты движка (payment_received && !contract_signed → задача «договор сегодня») → «Что сделать сейчас»
+compliance_flags[] → плашка «фраза на замену» (режим «пропускаем»: балл НЕ трогаем, тренд копим на дашборд)
+confidence: в шапке НЕ показывать; если &lt;0.7 → бейдж «оценка предварительная», звонок вне серии и вне средних
+
+СТАТУСЫ ОЦЕНКИ (обязательный ответ менеджера = постобработка ACW)
+pending_ack → acknowledged | disputed(comment ОБЯЗАТЕЛЕН) → accepted | partially_accepted | rejected → resolved
+пока pending_ack — конвейер НЕ выдаёт следующую задачу
+disputed → оценка вне рейтинга и вне серии · задача РОПу · SLA 24 ч · любой исход с комментарием
+API: POST /evals/{id}/ack · POST /evals/{id}/dispute {comment} · PATCH /evals/{id}/resolution (РОП)
+
+СЕРИЯ И СНЯТИЕ С ЛИНИИ
+окно серии = последние 5 закрытых оценок (исключая partial, confidence&lt;0.7, открытые споры)
+все 5 &lt; 90 → событие line_pause: кран новых задач закрыт + задача «тренировка с РОПом»
+возврат: line_resume — вручную РОПом после разбора; пороги 90/65 и окно 5 — конфиг из «Настроек ИИ», не хардкод
+
+СОБЫТИЯ (журнал + дайджест РОПу собирается из них)
+eval_created · eval_acknowledged · eval_disputed · dispute_resolved · line_pause · line_resume · tasks_created</pre>
+      <p class="note" style="margin-top:8px">«Согласен/Не согласен» обязательны — это и есть постобработка (ACW): пока менеджер не отреагировал, следующая задача из конвейера не выдаётся. Балл, этапы и советы — из ОДНОГО промта (docs/ai-qa-consultation-prompt.md), полный текст — во вкладке «Настройки ИИ».</p>
+    </div>
   </section>
 
   <!-- ================= ВЬЮ 2. ДАШБОРД ================= -->
