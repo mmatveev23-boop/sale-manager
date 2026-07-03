@@ -1,0 +1,923 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI-оценка звонков — попап · команда · разбор · SALE 100.0</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="description" content="Прототип контура AI-QA: окно менеджера после звонка (оценка по этапам + главная ошибка + согласен/не согласен), дашборд РОПа по менеджерам, разбор звонка с плеером и транскриптом. Всё на каноне v2.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700;800&family=Golos+Text:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F6F2E9; --card:#FFFFFF; --ink:#191713; --muted:#615B50; --faint:#8A938A;
+    --green:#0E5C46; --green-deep:#0A3D2E; --amber:#C2790F; --red:#9A2D22; --gold:#C99A33;
+    --line:rgba(25,23,19,.12); --green-soft:rgba(14,92,70,.08); --red-soft:#FBEDEB; --amber-soft:#FdF3E3;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--paper);font-family:"Golos Text",sans-serif;color:var(--ink);-webkit-font-smoothing:antialiased;padding:34px 18px 10px;display:flex;justify-content:center}
+  .wrap{width:100%;max-width:1080px}
+  a{color:var(--green)}
+
+  /* ===== ШАПКА СТРАНИЦЫ ===== */
+  .kicker{font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;font-weight:700;color:var(--gold);font-family:"Unbounded"}
+  h1{font-family:"Unbounded";font-weight:800;font-size:clamp(23px,4vw,34px);line-height:1.14;margin:10px 0 12px}
+  h1 .hl{color:var(--green)}
+  .lead{font-size:15.5px;line-height:1.55;color:var(--muted);max-width:860px}
+  .promise{margin-top:14px;background:linear-gradient(160deg,var(--green-deep),#0c2a20);color:#EFEAD9;border-radius:14px;padding:13px 18px;font-size:14px;line-height:1.55}
+  .promise b{color:#F4C775}
+
+  /* ===== ТАБЫ ===== */
+  .tabs{display:flex;gap:8px;margin:22px 0 18px;flex-wrap:wrap;position:sticky;top:0;z-index:50;background:var(--paper);padding:10px 0}
+  .tab{border:1px solid var(--line);background:var(--card);border-radius:999px;padding:10px 17px;font-family:"Golos Text";font-size:13.5px;font-weight:600;color:var(--muted);cursor:pointer;display:inline-flex;align-items:center;gap:8px;transition:.15s}
+  .tab .n{width:20px;height:20px;border-radius:50%;background:var(--paper);display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;font-family:"Unbounded"}
+  .tab.on{background:var(--green-deep);border-color:var(--green-deep);color:#F1ECE0}
+  .tab.on .n{background:rgba(255,255,255,.15);color:#F4C775}
+  .view{display:none}
+  .view.on{display:block}
+
+  /* ===== ОБЩЕЕ ===== */
+  .why-tool{background:rgba(201,154,51,.1);border:1px solid rgba(201,154,51,.35);border-radius:13px;padding:12px 16px;font-size:13.5px;line-height:1.55;color:#6b4e12;margin:0 0 16px}
+  .why-tool b{color:#3a2a06}
+  .sec-t{font-family:"Unbounded";font-weight:700;font-size:16px;margin:26px 0 10px}
+  .note{font-size:12.5px;color:var(--faint);line-height:1.5;margin-top:10px}
+  .chip{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:4px 11px;font-size:11.5px;font-weight:700}
+  .c-green{background:var(--green-soft);color:var(--green)}
+  .c-red{background:var(--red-soft);color:var(--red)}
+  .c-amber{background:var(--amber-soft);color:var(--amber)}
+  .c-gray{background:var(--paper);color:var(--muted);border:1px solid var(--line)}
+
+  /* ===== ВЬЮ 1: ПОПАП МЕНЕДЖЕРА ===== */
+  .stage{background:linear-gradient(180deg,#e7e1d3,#ded6c4);border:1px solid var(--line);border-radius:20px;padding:26px 14px 30px;display:flex;justify-content:center;position:relative;overflow:hidden}
+  .stage:before{content:"поверх amoCRM · окно всплывает автоматически после завершения звонка";position:absolute;top:10px;left:0;right:0;text-align:center;font-size:11px;color:#8d8574;letter-spacing:.04em}
+  .pp{width:100%;max-width:480px;background:var(--card);border:1px solid var(--line);border-radius:18px;box-shadow:0 26px 60px -24px rgba(20,30,25,.5);overflow:hidden;margin-top:14px}
+  .pp-h{display:flex;align-items:center;gap:10px;padding:14px 18px 12px;border-bottom:1px solid var(--line)}
+  .pp-h .t{font-family:"Unbounded";font-weight:700;font-size:14.5px}
+  .pp-h .s{font-size:11.5px;color:var(--faint);margin-top:2px}
+  .pp-h .x{margin-left:auto;color:var(--faint);font-size:18px;cursor:pointer;line-height:1}
+  .conf{margin-left:auto}
+  .pp-b{padding:14px 18px 18px}
+  .outcome{display:flex;gap:12px;background:var(--amber-soft);border:1px solid rgba(194,121,15,.3);border-radius:13px;padding:11px 13px;font-size:13px;line-height:1.5}
+  .outcome .ic{font-size:17px}
+  .outcome b.next{color:var(--amber)}
+  .score-row{display:flex;gap:14px;align-items:center;margin:14px 0 4px}
+  .score-big{font-family:"Unbounded";font-weight:800;font-size:40px;line-height:1;color:var(--amber)}
+  .score-big small{font-size:15px;color:var(--faint);font-weight:500}
+  .score-meta{font-size:12px;color:var(--muted);line-height:1.5}
+  .series{margin-left:auto;text-align:right}
+  .series .dots{display:flex;gap:4px;justify-content:flex-end}
+  .series .d{width:14px;height:14px;border-radius:4px;background:#EDE7D8;border:1px solid var(--line)}
+  .series .d.ok{background:var(--green);border-color:var(--green)}
+  .series .d.low{background:var(--red);border-color:var(--red)}
+  .series .sl{font-size:10.5px;color:var(--faint);margin-top:4px}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
+  @media(max-width:520px){.grid2{grid-template-columns:1fr}}
+  .panel{border:1px solid var(--line);border-radius:13px;padding:12px 13px}
+  .panel .ph{font-size:11px;text-transform:uppercase;letter-spacing:.06em;font-weight:700;color:var(--muted);margin-bottom:9px}
+  .ladder .li{display:flex;align-items:flex-start;gap:8px;font-size:12.5px;line-height:1.45;padding:4px 0}
+  .ok-i{color:var(--green);font-weight:700}
+  .no-i{color:var(--red);font-weight:700}
+  .stagebar{margin:6px 0}
+  .stagebar .sn{display:flex;justify-content:space-between;font-size:12px;font-weight:600}
+  .stagebar .sn b{font-family:"Unbounded";font-size:12px}
+  .stagebar .tr{height:6px;border-radius:4px;background:#EDE7D8;margin-top:4px;overflow:hidden}
+  .stagebar .fl{height:100%;border-radius:4px}
+  .g .fl{background:var(--green)} .g .sn b{color:var(--green)}
+  .a .fl{background:var(--amber)} .a .sn b{color:var(--amber)}
+  .r .fl{background:var(--red)} .r .sn b{color:var(--red)}
+  .mainerr{margin-top:12px;background:var(--red-soft);border:1px solid rgba(154,45,34,.3);border-radius:13px;padding:12px 14px}
+  .mainerr .mh{font-size:12px;font-weight:700;color:var(--red);text-transform:uppercase;letter-spacing:.05em}
+  .mainerr p{font-size:13.5px;line-height:1.5;margin-top:5px}
+  .donow{margin-top:10px;background:var(--amber-soft);border:1px solid rgba(194,121,15,.3);border-radius:13px;padding:12px 14px}
+  .donow .mh{font-size:12px;font-weight:700;color:var(--amber);text-transform:uppercase;letter-spacing:.05em;margin-bottom:7px}
+  .donow .st{display:flex;gap:9px;align-items:flex-start;font-size:13px;line-height:1.45;padding:3px 0}
+  .donow .st .n{width:18px;height:18px;flex-shrink:0;border-radius:50%;background:var(--amber);color:#fff;font-size:11px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;margin-top:1px}
+  .compl{margin-top:10px;border:1px dashed rgba(154,45,34,.4);border-radius:13px;padding:11px 14px;font-size:12.5px;line-height:1.5}
+  .compl .mh{font-size:11.5px;font-weight:700;color:var(--red)}
+  .compl .swap{color:var(--green);font-weight:600}
+  .pp-btns{display:flex;gap:10px;margin-top:14px}
+  .btn{flex:1;border:none;border-radius:12px;padding:13px 10px;font-family:"Golos Text";font-size:14px;font-weight:700;cursor:pointer;transition:.15s}
+  .btn.pri{background:var(--green);color:#fff}
+  .btn.pri:hover{background:var(--green-deep)}
+  .btn.gho{background:var(--card);border:1.5px solid var(--line);color:var(--ink)}
+  .btn.gho:hover{border-color:var(--red);color:var(--red)}
+  .pp-links{display:flex;gap:14px;justify-content:center;margin-top:12px;font-size:12.5px}
+  .agreed{display:none;margin-top:12px;border-radius:12px;padding:12px 14px;font-size:13px;line-height:1.5;font-weight:600}
+  .agreed.yes{background:var(--green-soft);color:var(--green-deep)}
+  .agreed.no{background:var(--red-soft);color:var(--red)}
+  .agreed.show{display:block}
+
+  /* ===== ВЬЮ 2: ДАШБОРД ===== */
+  .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+  .kpi{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:13px 15px;cursor:pointer;transition:.15s;position:relative}
+  .kpi:hover{border-color:var(--green);box-shadow:0 6px 18px -10px rgba(14,92,70,.35)}
+  .kpi:after{content:"фильтр →";position:absolute;right:11px;top:11px;font-size:9.5px;color:var(--faint);opacity:0;transition:.15s}
+  .kpi:hover:after{opacity:1}
+  .kpi.active{border-color:var(--green);background:var(--green-soft)}
+  .fchips{display:flex;gap:8px;align-items:center;margin:14px 0 0;flex-wrap:wrap}
+  .fchip{display:inline-flex;align-items:center;gap:7px;background:var(--green-deep);color:#F1ECE0;border-radius:999px;padding:7px 13px;font-size:12.5px;font-weight:600}
+  .fchip .x{cursor:pointer;opacity:.7;font-weight:700}
+  .fchip .x:hover{opacity:1}
+  .kpi .kl{font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;font-weight:700;color:var(--muted)}
+  .kpi .kv{font-family:"Unbounded";font-weight:800;font-size:24px;margin-top:5px}
+  .kpi .ks{font-size:11.5px;color:var(--faint);margin-top:3px}
+  .attn{margin-top:14px;background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden}
+  .attn .ah{padding:12px 16px;border-bottom:1px solid var(--line);font-family:"Unbounded";font-weight:700;font-size:13.5px}
+  .attn .ai{display:flex;align-items:center;gap:11px;padding:11px 16px;border-bottom:1px solid var(--line);font-size:13px;line-height:1.45}
+  .attn .ai:last-child{border-bottom:none}
+  .attn .ai .go{margin-left:auto;flex-shrink:0;font-size:12.5px;font-weight:700;color:var(--green);cursor:pointer;white-space:nowrap}
+  .tblwrap{margin-top:14px;background:var(--card);border:1px solid var(--line);border-radius:16px;overflow-x:auto}
+  table{width:100%;border-collapse:collapse;font-size:13px;min-width:920px}
+  th{font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);font-weight:700;text-align:left;padding:12px 10px;border-bottom:1px solid var(--line);white-space:nowrap}
+  td{padding:11px 10px;border-bottom:1px solid var(--line);vertical-align:middle;white-space:nowrap}
+  tr:last-child td{border-bottom:none}
+  tr.row{cursor:pointer;transition:.12s}
+  tr.row:hover{background:var(--green-soft)}
+  .mgr{display:flex;align-items:center;gap:9px;font-weight:600}
+  .ava{width:28px;height:28px;border-radius:50%;color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0}
+  .cell-score{font-family:"Unbounded";font-weight:700;font-size:13px;border-radius:8px;padding:5px 9px;display:inline-block;min-width:46px;text-align:center}
+  .s-g{background:var(--green-soft);color:var(--green)}
+  .s-a{background:var(--amber-soft);color:var(--amber)}
+  .s-r{background:var(--red-soft);color:var(--red)}
+  .ax{font-weight:600}
+  .ax.g{color:var(--green)} .ax.a{color:var(--amber)} .ax.r{color:var(--red)}
+  .legend{display:flex;gap:16px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin-top:10px}
+  .legend i{font-style:normal;display:inline-flex;align-items:center;gap:6px}
+  .sw{width:10px;height:10px;border-radius:3px;display:inline-block}
+
+  /* ===== ВЬЮ 3: РАЗБОР ЗВОНКА ===== */
+  .call-h{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px 18px;display:flex;gap:18px;flex-wrap:wrap;align-items:center}
+  .call-h .who{line-height:1.4}
+  .call-h .who b{font-size:15px}
+  .call-h .who span{display:block;font-size:12.5px;color:var(--muted)}
+  .call-h .facts{display:flex;gap:14px;flex-wrap:wrap;font-size:12.5px;color:var(--muted)}
+  .call-h .facts b{display:block;color:var(--ink);font-size:13.5px;margin-top:1px}
+  .call-h .sc{margin-left:auto;text-align:right}
+  .call-h .sc .v{font-family:"Unbounded";font-weight:800;font-size:30px;color:var(--amber);line-height:1}
+  .call-h .sc .l{font-size:11px;color:var(--faint);margin-top:2px}
+  .call-actions{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+  .mini-btn{border:1.5px solid var(--line);background:var(--card);border-radius:10px;padding:8px 13px;font-size:12.5px;font-weight:600;cursor:pointer;font-family:"Golos Text"}
+  .mini-btn:hover{border-color:var(--green);color:var(--green)}
+  .player{margin-top:14px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:15px 18px}
+  .pl-top{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+  .play{width:44px;height:44px;border-radius:50%;background:var(--green);color:#fff;border:none;font-size:16px;cursor:pointer;flex-shrink:0}
+  .play:hover{background:var(--green-deep)}
+  .pl-time{font-family:"Unbounded";font-size:13px;font-weight:700;min-width:96px}
+  .speeds{display:flex;gap:5px}
+  .spd{border:1px solid var(--line);background:var(--card);border-radius:8px;padding:5px 9px;font-size:11.5px;font-weight:700;cursor:pointer;font-family:"Golos Text"}
+  .spd.on{background:var(--green-deep);color:#fff;border-color:var(--green-deep)}
+  .talk{margin-left:auto;font-size:12px;color:var(--muted);text-align:right;line-height:1.5}
+  .talk b{color:var(--ink)}
+  .tline{position:relative;margin-top:14px}
+  .tl-track{display:flex;height:26px;border-radius:8px;overflow:hidden}
+  .tl-seg{position:relative;cursor:pointer}
+  .tl-seg:hover{filter:brightness(1.12)}
+  .seg-1{background:#0E5C46} .seg-2{background:#3D7A5E} .seg-3{background:#C2790F} .seg-4{background:#9A2D22} .seg-5{background:#C99A33} .seg-6{background:#365C8C}
+  .cursor{position:absolute;top:-5px;bottom:-5px;width:2.5px;background:var(--ink);border-radius:2px;left:52%;pointer-events:none}
+  .marks{position:relative;height:22px;margin-top:4px}
+  .mark{position:absolute;top:0;transform:translateX(-50%);font-size:13px;cursor:pointer;line-height:1}
+  .tl-legend{display:flex;gap:12px;flex-wrap:wrap;font-size:11.5px;color:var(--muted);margin-top:8px}
+  .call-grid{display:grid;grid-template-columns:1.25fr .95fr;gap:14px;margin-top:14px;align-items:start}
+  @media(max-width:880px){.call-grid{grid-template-columns:1fr}}
+  .transcript{background:var(--card);border:1px solid var(--line);border-radius:16px;max-height:560px;overflow-y:auto}
+  .tr-h{position:sticky;top:0;background:var(--card);padding:12px 16px;border-bottom:1px solid var(--line);font-family:"Unbounded";font-weight:700;font-size:13px;z-index:2;display:flex;align-items:center;gap:10px}
+  .tr-h input{margin-left:auto;border:1px solid var(--line);border-radius:8px;padding:6px 10px;font-size:12px;font-family:"Golos Text";width:150px}
+  .rep{display:flex;gap:10px;padding:9px 16px;font-size:13px;line-height:1.5;border-left:3px solid transparent;cursor:pointer}
+  .rep:hover{background:var(--green-soft)}
+  .rep .tc{font-size:10.5px;color:var(--faint);font-weight:700;min-width:36px;padding-top:3px}
+  .rep .sp{width:22px;height:22px;border-radius:50%;flex-shrink:0;font-size:10px;font-weight:700;color:#fff;display:inline-flex;align-items:center;justify-content:center;margin-top:1px}
+  .sp.m{background:var(--green)} .sp.k{background:#7C756A}
+  .rep.hl-price{border-left-color:var(--gold);background:rgba(201,154,51,.07)}
+  .rep.hl-obj{border-left-color:var(--amber);background:var(--amber-soft)}
+  .rep.hl-flag{border-left-color:var(--red);background:var(--red-soft)}
+  .rep .tag{display:inline-block;font-size:10px;font-weight:700;border-radius:6px;padding:2px 7px;margin-left:6px;vertical-align:1px}
+  .tag.t-price{background:rgba(201,154,51,.18);color:#7a5b12}
+  .tag.t-obj{background:rgba(194,121,15,.15);color:var(--amber)}
+  .tag.t-flag{background:rgba(154,45,34,.13);color:var(--red)}
+  .scorecol .panel{background:var(--card);margin-bottom:12px}
+  .crit{padding:7px 0;border-bottom:1px dashed var(--line);font-size:12.5px;line-height:1.5}
+  .crit:last-child{border-bottom:none}
+  .crit .cq{display:block;color:var(--faint);font-size:11.5px;margin-top:2px;font-style:italic}
+  .crit .pts{float:right;font-family:"Unbounded";font-size:11.5px;font-weight:700}
+  .pages{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+  .pg{border:1px solid var(--line);border-radius:9px;padding:7px 8px;font-size:11px;line-height:1.35;text-align:center}
+  .pg b{display:block;font-size:10px;color:var(--faint);font-weight:700}
+  .pg.done{background:var(--green-soft);border-color:rgba(14,92,70,.3)}
+  .pg.miss{background:var(--red-soft);border-color:rgba(154,45,34,.35)}
+  .dispute-box{background:var(--red-soft);border:1px solid rgba(154,45,34,.3);border-radius:13px;padding:12px 14px;font-size:13px;line-height:1.5}
+  .coach{margin-top:2px}
+  .coach textarea{width:100%;border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-family:"Golos Text";font-size:13px;min-height:64px;resize:vertical}
+  .coach .row{display:flex;gap:8px;margin-top:8px}
+
+  footer{margin:56px 0 44px;padding-top:20px;border-top:1px solid var(--line);color:var(--muted);font-size:13px;line-height:1.6}
+  footer b{font-family:"Unbounded";color:var(--ink);font-weight:700}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="kicker">AI-QA · контур оценки звонков · прототип</div>
+    <h1>ИИ слышит каждый звонок — <span class="hl">менеджер видит, что чинить</span></h1>
+    <p class="lead">Три экрана одного контура: <b>окно менеджеру</b> сразу после звонка (одна главная ошибка + что сделать сейчас), <b>дашборд РОПа</b> по всем менеджерам и <b>разбор звонка</b> с плеером и транскриптом. Оценка везде одна — рубрика канона v2 (эмпатия 20 · возражения 25 · лестница денег 40 · шаг с датой 15), развёрнутая по этапам звонка, как менеджер учит скрипт.</p>
+    <div class="promise">Правило линии: цель звонка — <b>90+</b>. Звонок ниже цели — окно показывает главную ошибку. <b>5 звонков подряд ниже 90</b> → менеджер снимается с линии на тренировку с РОПом (пороги 65/90 — канон свода, окно серии калибруется). Не согласен с оценкой — жми «Не согласен», лид уходит на разбор, а не в рейтинг.</div>
+
+    <div class="tabs">
+      <button class="tab on" data-v="popup"><span class="n">1</span>Окно менеджера после звонка</button>
+      <button class="tab" data-v="team"><span class="n">2</span>Команда — дашборд РОПа</button>
+      <button class="tab" data-v="call"><span class="n">3</span>Разбор звонка</button>
+      <button class="tab" data-v="settings"><span class="n">4</span>Настройки ИИ</button>
+    </div>
+  </header>
+
+  <!-- ================= ВЬЮ 1. ПОПАП ================= -->
+  <section class="view on" id="v-popup">
+    <div class="why-tool"><b>Зачем это окно:</b> тренер после каждого звонка. Менеджер не ждёт пятничный разбор — через минуту после трубки видит балл, одну главную ошибку и 2–3 действия, пока клиент горячий. Согласен — исправляет сейчас; не согласен — спор уходит РОПу, оценка в рейтинг не идёт до разбора.</div>
+
+    <div class="stage">
+      <div class="pp">
+        <div class="pp-h">
+          <div>
+            <div class="t">ИИ-разбор звонка</div>
+            <div class="s">Иван С. · долг 740 000 ₽ · звонок завершён 14:51 · 18:24</div>
+          </div>
+          <span class="chip c-green conf">уверенность ИИ 87%</span>
+          <span class="x" title="закрыть">✕</span>
+        </div>
+        <div class="pp-b">
+
+          <div class="outcome">
+            <span class="ic">⚠️</span>
+            <div><b>Итог звонка: частичка 2 000 ₽ в зачёт.</b> Дата добора: 10-е (зарплата).<br>Следующий шаг: <b class="next">договор + подпись СМС — сегодня</b>. Деньги взяты, договор не проговорён — закрой хвост.</div>
+          </div>
+
+          <div class="score-row">
+            <div>
+              <div class="score-big">78<small> /100</small></div>
+              <div class="score-meta">цель 90 · гейт консультации <b style="color:var(--green)">10/12 ✓</b><br>говорил ты: <b>58%</b> (цель ≤45%) · монолог <b>2:50</b> · вопросов <b>9</b></div>
+            </div>
+            <div class="series">
+              <div class="dots"><span class="d ok" title="92"></span><span class="d low" title="81"></span><span class="d low" title="78 — этот звонок"></span><span class="d"></span><span class="d"></span></div>
+              <div class="sl">серия: <b>2 из 5</b> ниже 90 → на 5-м подряд — снятие с линии на тренировку</div>
+            </div>
+          </div>
+
+          <div class="grid2">
+            <div class="panel ladder">
+              <div class="ph">Лестница денег (40% оценки)</div>
+              <div class="li"><span class="ok-i">✓</span><div>Оцифровал боль: «платите 41 000, из них 35 500 — проценты»</div></div>
+              <div class="li"><span class="ok-i">✓</span><div>Цена-канон + «потянете?»: 13 500/мес</div></div>
+              <div class="li"><span class="ok-i">✓</span><div>Дата ЗП + минималка: 2 000 ₽ в зачёт, добор 10-го</div></div>
+              <div class="li"><span class="no-i">✕</span><div>Закрыл на действие: <b>договор не проговорён</b> — подпись не взята</div></div>
+            </div>
+            <div class="panel">
+              <div class="ph">Этапы звонка (по скрипту)</div>
+              <div class="stagebar g"><div class="sn"><span>1 · Контакт</span><b>90</b></div><div class="tr"><div class="fl" style="width:90%"></div></div></div>
+              <div class="stagebar g"><div class="sn"><span>2 · Диагностика</span><b>82</b></div><div class="tr"><div class="fl" style="width:82%"></div></div></div>
+              <div class="stagebar a"><div class="sn"><span>3 · Оцифровка боли</span><b>71</b></div><div class="tr"><div class="fl" style="width:71%"></div></div></div>
+              <div class="stagebar r"><div class="sn"><span>4 · Презентация</span><b>60</b></div><div class="tr"><div class="fl" style="width:60%"></div></div></div>
+              <div class="stagebar a"><div class="sn"><span>5 · Возражения</span><b>66</b></div><div class="tr"><div class="fl" style="width:66%"></div></div></div>
+              <div class="stagebar g"><div class="sn"><span>6 · Закрытие</span><b>84</b></div><div class="tr"><div class="fl" style="width:84%"></div></div></div>
+            </div>
+          </div>
+
+          <div class="mainerr">
+            <div class="mh">Главная ошибка — одна</div>
+            <p>После частички 2 000 ₽ <b>не проговорён договор</b> (страница 5 презентации пропущена). Деньги без договора = риск «устно ≠ договор» и расторжения. Сначала договор — он защищает клиента, потом деньги.</p>
+          </div>
+
+          <div class="donow">
+            <div class="mh">Что сделать сейчас</div>
+            <div class="st"><span class="n">1</span><div>Отправить ссылку на презентацию → страница «Договор», прочитать вместе ключевые пункты</div></div>
+            <div class="st"><span class="n">2</span><div>Взять подпись по СМС (или по паспорту) — сегодня, пока клиент горячий</div></div>
+            <div class="st"><span class="n">3</span><div>Подтвердить дату добора 10-е задачей с датой в карточке</div></div>
+          </div>
+
+          <div class="compl">
+            <div class="mh">🚩 Комплаенс: 1 фраза на замену (обучение, балл не режет)</div>
+            «После суда вам точно всё спишут» — обещание результата за суд. <span class="swap">Говори: «Решение принимает суд — наша работа подготовить дело так, чтобы рисков не осталось».</span>
+          </div>
+
+          <div class="pp-btns">
+            <button class="btn pri" id="agreeBtn">Согласен — беру в работу</button>
+            <button class="btn gho" id="disputeBtn">Не согласен → разбор с РОПом</button>
+          </div>
+          <div class="agreed yes" id="agreedYes">Принято. Оценка идёт в рейтинг, задачи из «Что сделать сейчас» созданы в карточке сделки.</div>
+          <div class="agreed no" id="agreedNo">
+            <div style="margin-bottom:8px">С чем не согласен? Комментарий обязателен — без него спор не уходит.</div>
+            <textarea id="dispText" placeholder="Например: клиент сам прервал звонок, договор собиралась отправить следом…" style="width:100%;border:1px solid rgba(154,45,34,.35);border-radius:10px;padding:9px 11px;font-family:'Golos Text';font-size:13px;min-height:56px;resize:vertical;font-weight:400"></textarea>
+            <button class="btn pri" id="dispSend" style="margin-top:8px;width:100%;background:var(--red)">Отправить спор РОПу</button>
+            <div id="dispDone" style="display:none;margin-top:8px;font-weight:600">Спор открыт ⚖️ Оценка НЕ идёт в рейтинг до разбора. РОП получил звонок с твоим комментарием — ответ в течение 24 часов: примет / частично примет / отклонит с объяснением.</div>
+          </div>
+
+          <div class="pp-links">
+            <a href="#" onclick="showView('call');return false">▶ Прослушать звонок с разметкой</a>
+            <a href="#" onclick="return false">Открыть сделку в amoCRM</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <p class="note">Окно всплывает автоматически через ~1 минуту после завершения звонка (транскрибация + оценка). «Согласен/Не согласен» обязательны: пока менеджер не отреагировал, следующая задача из конвейера не выдаётся (постобработка ACW). Балл и этапы — из одного промта AI-QA (docs/ai-qa-consultation-prompt.md): этапы — это те же пункты рубрики, разложенные по хронологии звонка.</p>
+  </section>
+
+  <!-- ================= ВЬЮ 2. ДАШБОРД ================= -->
+  <section class="view" id="v-team">
+    <div class="why-tool"><b>Зачем этот дашборд:</b> РОП за 30 секунд видит, кто тянет, кто просел и где именно (этап), кого снимать на тренировку и какие споры ждут разбора. Клик по строке — звонки менеджера; клик по звонку — разбор с записью. Одна и та же оценка, что видит менеджер — никаких «двух правд».</div>
+
+    <div style="display:flex;gap:6px;margin-bottom:12px" id="periodChips">
+      <button class="spd on">Сегодня</button><button class="spd">Неделя</button><button class="spd">Месяц</button><button class="spd">Период…</button>
+    </div>
+    <div class="kpis">
+      <div class="kpi" data-filter="all"><div class="kl">Звонков сегодня</div><div class="kv">19</div><div class="ks">оценено ИИ · 100%</div></div>
+      <div class="kpi" data-filter="sorted"><div class="kl">Средняя оценка</div><div class="kv" style="color:var(--amber)">79.6 <small style="font-size:12px;color:var(--green)">▲ +2.1</small></div><div class="ks">к прошлой неделе · цель 90</div></div>
+      <div class="kpi" data-filter="below90"><div class="kl">Ниже цели 90</div><div class="kv" style="color:var(--amber)">12</div><div class="ks">из 19 звонков</div></div>
+      <div class="kpi" data-filter="dispute"><div class="kl">Открытые споры</div><div class="kv" style="color:var(--red)">2</div><div class="ks">разбор ≤ 24 ч</div></div>
+      <div class="kpi" data-filter="flag"><div class="kl">Комплаенс-флаги</div><div class="kv" style="color:var(--red)">5</div><div class="ks">режим «пропускаем» — обучение</div></div>
+    </div>
+
+    <div class="attn">
+      <div class="ah">Требуют внимания сегодня</div>
+      <div class="ai">⚖️ <div><b>Спор по оценке:</b> Петрова Дарья не согласна с «Закрытие 48» (звонок 14:51, Иван С.) — «клиент сам прервал звонок». Оценка заморожена.</div><span class="go" onclick="showView('call')">Разобрать →</span></div>
+      <div class="ai">🔻 <div><b>Серия ниже цели:</b> Ляшенко Андрей — 4 из 5 звонков ниже 90. Ещё один — автоматическое снятие с линии на тренировку.</div><span class="go" onclick="applyFilter({type:'mgr',mgr:'Ляшенко Андрей'})">К звонкам →</span></div>
+      <div class="ai">🚩 <div><b>Комплаенс-паттерн:</b> Мифтахов Раф — 3-й флаг «гарантия результата» за неделю (режим «пропускаем»: балл не режем, но паттерн = разбор).</div><span class="go" onclick="applyFilter({type:'mgr',mgr:'Мифтахов Раф'})">К звонкам →</span></div>
+    </div>
+
+    <div class="sec-t">Детализация по менеджерам · сегодня</div>
+    <div class="tblwrap">
+      <table>
+        <thead><tr>
+          <th>#</th><th>Менеджер</th><th>Звонков</th><th>Общая</th>
+          <th>Контакт</th><th>Диагностика</th><th>Боль</th><th>Презентация</th><th>Возражения</th><th>Закрытие</th>
+          <th>Серия &lt;90</th><th>Риски</th><th></th>
+        </tr></thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </div>
+    <div class="legend">
+      <i><span class="sw" style="background:var(--green)"></span>90+ цель</i>
+      <i><span class="sw" style="background:var(--amber)"></span>65–89 работаем (без штрафа)</i>
+      <i><span class="sw" style="background:var(--red)"></span>&lt;65 красная зона — рейтинг вниз</i>
+      <i>🚩 комплаенс-флаг (пропускаем: обучение)</i>
+      <i>⚖️ открытый спор</i>
+    </div>
+
+    <div id="callsBlock">
+      <div class="sec-t" id="callsTitle">Звонки · выборка</div>
+      <div class="fchips" id="fchips" style="margin:0 0 10px"></div>
+      <div class="tblwrap" style="margin-top:0">
+        <table style="min-width:760px">
+          <thead><tr><th>Время</th><th>Менеджер</th><th>Лид</th><th>Итог звонка</th><th>Оценка</th><th>Флаги</th><th>Спор</th><th></th></tr></thead>
+          <tbody id="callsBody"></tbody>
+        </table>
+      </div>
+      <p class="note">Любая цифра наверху — это фильтр: клик по KPI, по строке менеджера или по риску открывает эту выборку. Клик по звонку — разбор с записью. Так РОП идёт от числа к причине за два клика.</p>
+    </div>
+    <p class="note">Пороги — канон свода v2: 65 = нижняя граница без штрафа, 90 = идеал/цель (США для комплаенс-ниш: passing = 90%). Колонки этапов — те же оси, что менеджер видит в своём окне: строка = слабый менеджер, столбец = слабый навык всей команды. «Серия &lt;90» — прогресс к снятию с линии (5 подряд). Оценки со спором в среднее не входят до разбора. Когда включат комплаенс ×0 (решение с датой): звонок с нарушением будет показан как <s style="color:var(--faint)">92</s> <b style="color:var(--red)">0 · ×0</b> — балл перечёркнут, причина кликом. Drill-down: команда → менеджер (тренд + слабейший этап) → его звонки → разбор звонка.</p>
+  </section>
+
+  <!-- ================= ВЬЮ 3. РАЗБОР ЗВОНКА ================= -->
+  <section class="view" id="v-call">
+    <div class="why-tool"><b>Зачем этот экран:</b> понять за 3 минуты, что чинить, не слушая все 18 минут. Цветная полоса — этапы звонка; маркеры — ключевые моменты (цена, возражение, флаг); клик по реплике транскрипта — перемотка. Справа — та же скоркарта с цитатами-доказательствами: каждый незачёт подтверждён фразой из записи.</div>
+
+    <div class="call-h">
+      <div class="ava" style="background:var(--amber);width:38px;height:38px;font-size:15px">П</div>
+      <div class="who"><b>Петрова Дарья × Иван С.</b><span>долг 740 000 ₽ · 6 кредиторов · просрочка 2 мес</span></div>
+      <div class="facts">
+        <div>Когда<b>сегодня 14:32</b></div>
+        <div>Длительность<b>18:24</b></div>
+        <div>Итог<b>частичка 2 000 ₽</b></div>
+        <div>След. шаг<b style="color:var(--amber)">договор сегодня</b></div>
+        <div>Гейт 12<b style="color:var(--green)">10/12 ✓</b></div>
+      </div>
+      <div class="sc"><div class="v">78</div><div class="l">цель 90 · спор открыт ⚖️</div></div>
+    </div>
+    <div class="call-actions">
+      <button class="mini-btn">📌 Назначить разбор с менеджером</button>
+      <button class="mini-btn">⭐ Фрагмент в библиотеку эталонов</button>
+      <button class="mini-btn">📤 Поделиться таймкодом</button>
+      <button class="mini-btn">Открыть сделку в amoCRM</button>
+    </div>
+
+    <div class="panel" style="background:var(--card);margin-top:14px">
+      <div class="ph">ИИ-саммари звонка — читается за 20 секунд, вместо прослушивания 18 минут</div>
+      <p style="font-size:13.5px;line-height:1.6"><b>Клиент:</b> 6 кредитов, долг 740 000 ₽, платёж 41 000/мес (35 500 — проценты), просрочка 2 мес, зарплата 10-го. <b>Ход:</b> диагностика полная (гейт 10/12), боль оцифрована, цена-канон 13 500 названа с «потянете?». <b>Возражения:</b> «дорого» — отработано цифрами; «подумаю» (15:50) — сдалась после первого «нет». <b>Итог:</b> частичка 2 000 ₽ в зачёт, добор 10-го. <b>Хвост:</b> договор и подпись НЕ проговорены (стр. 5–6 презентации) — деньги без договора. <b>Следующий шаг:</b> договор + СМС-подпись сегодня.</p>
+    </div>
+
+    <div class="player">
+      <div class="pl-top">
+        <button class="play" id="playBtn" title="демо-плеер">▶</button>
+        <div class="pl-time"><span id="curTime">09:38</span> / 18:24</div>
+        <div class="speeds"><button class="spd" id="back15" title="назад 15 сек">−15с</button><button class="spd" id="fwd15" title="вперёд 15 сек">+15с</button><button class="spd">1×</button><button class="spd on">1.5×</button><button class="spd">2×</button><button class="spd" title="пропуск тишины">⏭ тишина</button></div>
+        <div class="talk">говорил менеджер / клиент: <b>58% / 42%</b> (цель ≤45%) · монолог: <b>2:50</b> (норма ≤1:30)<br>вопросов задано: <b>9</b> · перебиваний: <b>2</b> · пауза перед ответом: <b>0.4 с</b> (норма 0.6–1)</div>
+      </div>
+      <div class="tline">
+        <div class="tl-track" id="track">
+          <div class="tl-seg seg-1" style="width:6%"  title="Контакт 0:00–1:10"></div>
+          <div class="tl-seg seg-2" style="width:36%" title="Диагностика 1:10–7:40"></div>
+          <div class="tl-seg seg-3" style="width:9%"  title="Оцифровка боли 7:40–9:20"></div>
+          <div class="tl-seg seg-4" style="width:25%" title="Презентация 9:20–14:00"></div>
+          <div class="tl-seg seg-5" style="width:14%" title="Возражения 14:00–16:30"></div>
+          <div class="tl-seg seg-6" style="width:10%" title="Закрытие 16:30–18:24"></div>
+        </div>
+        <div class="spk-lanes" style="margin-top:5px">
+          <div style="display:flex;align-items:center;gap:6px"><span style="font-size:9.5px;font-weight:700;color:var(--muted);width:12px">М</span><div style="flex:1;height:7px;border-radius:3px;background:repeating-linear-gradient(90deg, var(--green) 0 5%, transparent 5% 7%, var(--green) 7% 15%, transparent 15% 16%, var(--green) 16% 44%, transparent 44% 52%, var(--green) 52% 74%, transparent 74% 79%, var(--green) 79% 100%)"></div></div>
+          <div style="display:flex;align-items:center;gap:6px;margin-top:3px"><span style="font-size:9.5px;font-weight:700;color:var(--muted);width:12px">К</span><div style="flex:1;height:7px;border-radius:3px;background:repeating-linear-gradient(90deg, transparent 0 5%, #7C756A 5% 7%, transparent 7% 15%, #7C756A 15% 16%, transparent 16% 44%, #7C756A 44% 52%, transparent 52% 74%, #7C756A 74% 79%, transparent 79% 100%)"></div></div>
+        </div>
+        <div class="cursor" id="cursor"></div>
+        <div class="marks">
+          <span class="mark" style="left:49%" title="9:05 — цена 13 500 названа" data-seek="49">💰</span>
+          <span class="mark" style="left:69%" title="12:40 — комплаенс-флаг: «точно спишут»" data-seek="69">🚩</span>
+          <span class="mark" style="left:78%" title="14:10 — возражение «дорого»" data-seek="78">⚠️</span>
+          <span class="mark" style="left:93%" title="17:05 — частичка 2 000 ₽, договор не проговорён" data-seek="93">✂️</span>
+        </div>
+        <div class="tl-legend">
+          <i><span class="sw seg-1"></span>Контакт</i><i><span class="sw seg-2"></span>Диагностика</i><i><span class="sw seg-3"></span>Боль</i><i><span class="sw seg-4"></span>Презентация</i><i><span class="sw seg-5"></span>Возражения</i><i><span class="sw seg-6"></span>Закрытие</i>
+          <i>💰 цена · 🚩 флаг · ⚠️ возражение · ✂️ обрыв шага</i>
+        </div>
+      </div>
+    </div>
+
+    <div class="call-grid">
+      <div class="transcript">
+        <div class="tr-h">Транскрипт <span class="chip c-gray">клик по реплике = перемотка</span><input placeholder="поиск по звонку…"></div>
+        <div class="rep" data-seek="2"><span class="tc">0:04</span><span class="sp m">М</span><div>Добрый день, Иван Иванович! Меня зовут Дарья, старший специалист компании ДоНуля. Моя задача — полностью разобрать вашу ситуацию и дать пошаговое решение. Расскажите, что у вас за история с кредитами?</div></div>
+        <div class="rep" data-seek="8"><span class="tc">1:22</span><span class="sp k">К</span><div>Да шесть кредитов уже, плачу-плачу, а долг не уменьшается. Двух месяцев как просрочка пошла…</div></div>
+        <div class="rep" data-seek="20"><span class="tc">3:47</span><span class="sp m">М</span><div>Не переживайте, вашей вины тут нет — кредиты дорогие, зарплаты не растут. Скажите, какой ежемесячный платёж по всем обязательствам выходит?</div></div>
+        <div class="rep" data-seek="26"><span class="tc">4:52</span><span class="sp k">К</span><div>Where-то сорок одна тысяча в месяц уходит, если всё платить.</div></div>
+        <div class="rep hl-price" data-seek="45"><span class="tc">8:21</span><span class="sp m">М</span><div>Смотрите: вы платите 41 000 в месяц — и 35 500 из них это проценты. Так из долга не выбраться, это целое состояние.<span class="tag t-price">оцифровка боли ✓</span></div></div>
+        <div class="rep hl-price" data-seek="49"><span class="tc">9:05</span><span class="sp m">М</span><div>Наша услуга — 13 500 в месяц. Потянете?<span class="tag t-price">цена-канон ✓</span></div></div>
+        <div class="rep" data-seek="52"><span class="tc">9:40</span><span class="sp k">К</span><div>Ну… наверное потяну, но только с зарплаты, 10-го числа.</div></div>
+        <div class="rep hl-flag" data-seek="69"><span class="tc">12:40</span><span class="sp m">М</span><div>Вы не переживайте, после суда вам точно всё спишут, у нас без вариантов.<span class="tag t-flag">🚩 гарантия результата</span></div></div>
+        <div class="rep hl-obj" data-seek="78"><span class="tc">14:10</span><span class="sp k">К</span><div>Слушайте, ну 13 500 — это всё равно дорого для меня сейчас…<span class="tag t-obj">возражение «дорого»</span></div></div>
+        <div class="rep" data-seek="80"><span class="tc">14:25</span><span class="sp m">М</span><div>Понимаю вас. Но смотрите: сейчас вы отдаёте 41 000 и большая часть — проценты. Здесь 13 500 — и платежи по кредитам вы уже не вносите. Вам с первого месяца станет легче.</div></div>
+        <div class="rep" data-seek="88"><span class="tc">16:12</span><span class="sp m">М</span><div>Давайте так: фиксирую доплату на 10-е, а чтобы начать уже сегодня — внесите сколько есть, 1 000–3 000, пойдёт в зачёт, и я сразу начну работу.</div></div>
+        <div class="rep" data-seek="91"><span class="tc">16:48</span><span class="sp k">К</span><div>Двe тысячи сейчас смогу перевести, давайте.</div></div>
+        <div class="rep hl-flag" data-seek="93"><span class="tc">17:05</span><span class="sp m">М</span><div>Отлично, отправляю ссылку на оплату! …Всё, вижу платёж. Тогда до связи 10-го, хорошего вечера!<span class="tag t-flag">✂️ договор не проговорён</span></div></div>
+      </div>
+
+      <div class="scorecol">
+        <div class="panel">
+          <div class="ph">Скоркарта канона — с доказательствами</div>
+          <div class="crit"><span class="pts" style="color:var(--green)">16/20</span><b>Эмпатия.</b> Выслушал, снял вину («вашей вины тут нет»). Минус: два перебивания на 5-й минуте.<span class="cq">0:04 · 3:47</span></div>
+          <div class="crit"><span class="pts" style="color:var(--amber)">15/25</span><b>Возражения.</b> «Дорого» отработано цифрами ✓. «Подумаю» на 15:50 — сдалась после первого «нет», квал-вопрос не задан.<span class="cq">14:25 · 15:50</span></div>
+          <div class="crit"><span class="pts" style="color:var(--amber)">34/40</span><b>Лестница денег.</b> Оцифровка ✓ · цена+«потянете?» ✓ · дата+минималка ✓ (2 000) · закрыл на действие ✕ — договор не проговорён.<span class="cq">8:21 · 9:05 · 16:12 · 17:05</span></div>
+          <div class="crit"><span class="pts" style="color:var(--green)">13/15</span><b>Шаг с датой.</b> Добор 10-го зафиксирован. Минус: без времени звонка.<span class="cq">16:12</span></div>
+        </div>
+
+        <div class="panel">
+          <div class="ph">Презентация по страницам (шаг 7 скрипта)</div>
+          <div class="pages">
+            <div class="pg done"><b>0</b>Гейт ✓</div>
+            <div class="pg done"><b>1</b>Выжимка ✓</div>
+            <div class="pg done"><b>2</b>КД ✓</div>
+            <div class="pg done"><b>3</b>SIM ✓</div>
+            <div class="pg done"><b>4</b>Оформл. ✓</div>
+            <div class="pg miss"><b>5</b>Договор ✕</div>
+            <div class="pg miss"><b>6</b>Подпись ✕</div>
+            <div class="pg done"><b>7</b>СБП ✓</div>
+          </div>
+          <p style="font-size:12px;color:var(--muted);margin-top:8px;line-height:1.5">SIM проговорена корректно: деньги сегодня были (2 000) — «акция зафиксирована, SIM с полным платежом 13 500». Страницы 5–6 пропущены → главная ошибка звонка.</p>
+        </div>
+
+        <div class="panel">
+          <div class="ph">Lead check · замок закрытия</div>
+          <p style="font-size:12.5px;line-height:1.55">normal_lead = <b style="color:var(--green)">true</b> (живой, платит, дата есть). Основания закрыть — нет. Закрыть этого лида нельзя: закрытие без основания = авто-возврат другому менеджеру + разбор.</p>
+        </div>
+
+        <div class="dispute-box">
+          <b>⚖️ Спор менеджера:</b> «Закрытие 84 занижено — клиент сам прервал звонок, договор собиралась отправить следом».<br>
+          <span style="color:var(--muted);font-size:12px">Статус: ждёт разбора · SLA 24 ч · оценка не в рейтинге</span>
+          <div class="coach">
+            <textarea placeholder="Комментарий РОПа к таймкоду 17:05… (виден менеджеру)"></textarea>
+            <div class="row" style="flex-wrap:wrap">
+              <button class="btn pri" style="flex:0 0 auto;padding:9px 14px;font-size:12.5px">Принять спор — балл меняется</button>
+              <button class="btn gho" style="flex:0 0 auto;padding:9px 14px;font-size:12.5px">Частично принять</button>
+              <button class="btn gho" style="flex:0 0 auto;padding:9px 14px;font-size:12.5px">Отклонить с объяснением</button>
+            </div>
+            <p style="font-size:11.5px;color:var(--muted);margin-top:7px;line-height:1.5">Статусы спора (мировой стандарт): открыт → принят / принят частично / отклонён → закрыт. Любой исход — с комментарием, менеджер его видит. Систематические споры по одному пункту = сигнал калибровать промт.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <p class="note">Мировой стандарт разбора: цветной таймлайн этапов + маркеры моментов + клик-перемотка по транскрипту + скоркарта с цитатами. Плеер здесь — демо (записи в проде тянутся из телефонии, транскрибация уже работает). Всё, что видит РОП, видит и менеджер — прозрачность из канона рейтинга.</p>
+  </section>
+
+  <!-- ================= ВЬЮ 4. НАСТРОЙКИ ИИ ================= -->
+  <section class="view" id="v-settings">
+    <div class="why-tool"><b>Зачем этот экран:</b> вся оценка управляется отсюда, без программиста. Пороги, комплаенс-фразы, канон цен и сам промт — в одном месте, с версиями. Правило безопасности: любое изменение промта сначала гоняется «в песочнице» на последних 50 звонках (старая и новая оценка рядом), и только потом публикуется — так настройка не ломает рейтинг задним числом.</div>
+
+    <!-- Пороги -->
+    <div class="panel" style="background:var(--card);margin-bottom:14px">
+      <div class="ph">Пороги и правила линии <span class="chip c-amber" style="margin-left:8px">калибруются на данных</span></div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));gap:10px">
+        <label style="font-size:12.5px;color:var(--muted)">Цель звонка<br><input type="number" value="90" style="width:100%;margin-top:4px;border:1px solid var(--line);border-radius:9px;padding:8px 10px;font-family:'Unbounded';font-size:15px;font-weight:700"></label>
+        <label style="font-size:12.5px;color:var(--muted)">Нижняя граница (без штрафа)<br><input type="number" value="65" style="width:100%;margin-top:4px;border:1px solid var(--line);border-radius:9px;padding:8px 10px;font-family:'Unbounded';font-size:15px;font-weight:700"></label>
+        <label style="font-size:12.5px;color:var(--muted)">Серия до снятия с линии<br><input type="number" value="5" style="width:100%;margin-top:4px;border:1px solid var(--line);border-radius:9px;padding:8px 10px;font-family:'Unbounded';font-size:15px;font-weight:700"></label>
+        <label style="font-size:12.5px;color:var(--muted)">Гейт диагностики (из 12)<br><input type="number" value="9" style="width:100%;margin-top:4px;border:1px solid var(--line);border-radius:9px;padding:8px 10px;font-family:'Unbounded';font-size:15px;font-weight:700"></label>
+        <label style="font-size:12.5px;color:var(--muted)">SLA разбора спора, часов<br><input type="number" value="24" style="width:100%;margin-top:4px;border:1px solid var(--line);border-radius:9px;padding:8px 10px;font-family:'Unbounded';font-size:15px;font-weight:700"></label>
+        <label style="font-size:12.5px;color:var(--muted)">Окно рейтинга, звонков<br><input type="number" value="5" style="width:100%;margin-top:4px;border:1px solid var(--line);border-radius:9px;padding:8px 10px;font-family:'Unbounded';font-size:15px;font-weight:700"></label>
+      </div>
+      <p style="font-size:12px;color:var(--muted);margin-top:10px;line-height:1.5">Снятие с линии = пауза + тренировка с РОПом, не денежный штраф. Не оцениваются: недозвоны, сервисные звонки (документы/сопровождение), оборванные (partial — вне средних), дубли записей (pbx+оператор склеиваются до оценки).</p>
+    </div>
+
+    <!-- Веса рубрики -->
+    <div class="panel" style="background:var(--card);margin-bottom:14px">
+      <div class="ph">Веса рубрики — сумма всегда 100</div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <span class="chip c-green" style="font-size:13px;padding:8px 14px">Эмпатия · 20</span>
+        <span class="chip c-green" style="font-size:13px;padding:8px 14px">Возражения · 25</span>
+        <span class="chip c-green" style="font-size:13px;padding:8px 14px">Лестница денег · 40</span>
+        <span class="chip c-green" style="font-size:13px;padding:8px 14px">Шаг с датой · 15</span>
+        <span class="chip c-red" style="font-size:13px;padding:8px 14px">Комплаенс · ×0 (поверх)</span>
+      </div>
+      <p style="font-size:12px;color:var(--muted);margin-top:10px;line-height:1.5">«Этапы звонка» в окне менеджера (Контакт → Диагностика → Боль → Презентация → Возражения → Закрытие) — те же пункты рубрики, разложенные по хронологии. Меняются веса — меняются и этапы, второй системы оценки нет.</p>
+    </div>
+
+    <!-- Комплаенс -->
+    <div class="panel" style="background:var(--card);margin-bottom:14px">
+      <div class="ph">Комплаенс: 9 красных линий · режим
+        <span class="chip c-amber" style="margin-left:6px">СЕЙЧАС: «пропускаем» — детект и флаги, ×0 выключен</span>
+        <span class="chip c-gray" style="margin-left:6px">боевой ×0 — включается решением с объявленной датой</span>
+      </div>
+      <div style="font-size:12.5px;line-height:1.6">
+        <div class="crit"><b>1.</b> «100% спишем / вернём в двойном» → <span style="color:var(--green)">«Гарантия возврата — в договоре; решение принимает суд»</span></div>
+        <div class="crit"><b>2.</b> «ЦБ/государство платит проценты» → <span style="color:var(--green)">«Проценты и пени приостанавливаются по закону с началом процедуры»</span></div>
+        <div class="crit"><b>3.</b> «Аккредитованы государством / госпрограмма» → <span style="color:var(--green)">«Работаем по 127-ФЗ; бренд в Роспатенте, дела проверяемы на сайте суда»</span></div>
+        <div class="crit"><b>4.</b> Займ/докредитование на оплату услуг → <span style="color:var(--green)">не предлагаем: новый кредит перед подачей вредит делу («внесите сколько есть — 1 000 в зачёт»)</span></div>
+        <div class="crit"><b>5.</b> Фиктивный доход / чеки «как будто» → <span style="color:var(--green)">«что реально защитить из дохода — разберёт юрист, легально»</span></div>
+        <div class="crit"><b>6.</b> Переписать/спрятать имущество → <span style="color:var(--green)">«сделки за 3 года суд видит — разберём честно, что защищаемо»</span></div>
+        <div class="crit"><b>7.</b> «В БКИ не видно — скроем» (+синонимы «не отобразится», «кредиторы не узнают») → <span style="color:var(--green)">«кредитная история восстанавливается после процедуры»</span></div>
+        <div class="crit"><b>8.</b> Запугивание 159 УК ради закрытия → <span style="color:var(--green)">«чем раньше начать, тем спокойнее пройдёт процедура»</span></div>
+        <div class="crit"><b>9.</b> «Поздравляю с началом процедуры» до оплаты → <span style="color:var(--green)">поздравление — только после прихода денег</span></div>
+      </div>
+      <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap">
+        <button class="mini-btn">+ Добавить фразу-детект</button>
+        <button class="mini-btn">Редактировать замены</button>
+      </div>
+      <p style="font-size:12px;color:var(--muted);margin-top:8px;line-height:1.5">Анти-ложняк: флаг только на утвердительную фразу самого менеджера; отрицания («займы брать НЕ нужно») и пересказ слов клиента не флагуются. До калибровки каждый флаг подтверждает человек.</p>
+    </div>
+
+    <!-- Канон цен -->
+    <div class="panel" style="background:var(--card);margin-bottom:14px">
+      <div class="ph">Канон цен — источник флага «не канон» (устно ≠ договор)</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;font-size:12.5px">
+        <span class="chip c-gray" style="padding:7px 12px">Услуга: 13 500 ₽/мес × 14 = 189 000 ₽</span>
+        <span class="chip c-gray" style="padding:7px 12px">VIP разово: 169 000 ₽ (скидка 20 000)</span>
+        <span class="chip c-gray" style="padding:7px 12px">Госплатежи: 50 000 ₽ отдельно</span>
+        <span class="chip c-gray" style="padding:7px 12px">Кредитный доктор: +1 438 ₽/мес</span>
+        <span class="chip c-gray" style="padding:7px 12px">Сохранение имущества: 39 990 ₽ (4 × 9 975)</span>
+        <span class="chip c-gray" style="padding:7px 12px">Сопровождение РДГ: 5 000 ₽/мес (после плана)</span>
+        <span class="chip c-gray" style="padding:7px 12px">SIM: подарок, 0 ₽ (выдача при 13 500)</span>
+      </div>
+      <p style="font-size:12px;color:var(--muted);margin-top:10px;line-height:1.5">Другая цифра в звонке = флаг РОПу (балл не режет). Поле <b>canon_enforced_from</b> — дата, с которой не-канон начнёт резать балл: <input type="date" style="border:1px solid var(--line);border-radius:8px;padding:5px 8px;font-family:'Golos Text'"> (пусто = только флаг).</p>
+    </div>
+
+    <!-- Промт -->
+    <div class="panel" style="background:var(--card);margin-bottom:14px">
+      <div class="ph">Промт оценки консультации — v1.1 (бэктест на 141 звонке пройден)
+        <span style="float:right;display:flex;gap:8px">
+          <button class="mini-btn">Редактировать</button>
+          <button class="mini-btn">Песочница: прогнать на 50 звонках</button>
+        </span>
+      </div>
+      <pre style="background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:14px 16px;font-size:11.5px;line-height:1.55;max-height:480px;overflow:auto;white-space:pre-wrap;font-family:ui-monospace,Menlo,monospace">Ты — контролёр качества ПЕРВЫХ консультаций компании «ДоНуля» (списание долгов физлиц по 127-ФЗ).
+Тебе дают транскрипт разговора менеджера с клиентом, который оставил заявку на списание долга.
+
+ВАЖНО ПРО ТРАНСКРИПТ. Автодиаризация часто путает говорящих: метки «Менеджер:» и «Speaker N:»
+перепутаны и меняются от файла к файлу. Определяй, кто менеджер, ТОЛЬКО по содержанию
+(представляется компанией, ведёт диагностику, называет цену). Укажи, какая метка = менеджер.
+
+СНАЧАЛА определи тип звонка:
+- "no_contact" — недозвон/автоответчик/обрыв (&lt;3 содержательных реплик клиента) → не оценивай;
+- "dozhim" — повторный звонок уже проконсультированному (дожим/добор) → не оценивай, другая рубрика;
+- "consultation" — первый содержательный разговор: диагностика + презентация. Оценивай по 4 блокам.
+- "partial" — консультация ОБОРВАЛАСЬ (обрыв связи, продолжение в другом файле, клиент отошёл):
+  оцени только состоявшиеся блоки, поставь partial=true — движок исключает такие из средних и полос.
+
+Каждый вердикт — с ДОСЛОВНОЙ цитатой из транскрипта (или null). Сомневаешься — false, отметь в summary.
+
+════════ БЛОК 1. ЭМПАТИЯ — 20 баллов ════════
+Эталон: менеджер говорит «как со своим близким», не как с должником. Ищи сигналы (каждый +4, максимум 20):
+(а) тёплое человеческое начало, по имени, спросил разрешения на разговор;
+(б) выслушал историю клиента, не перебивая и не гоня к цене;
+(в) снял вину/принял эмоцию («в вашей вине нет — зарплаты не растут, кредиты дорогие»,
+    «не переживайте, проблемы скидываем на нас»);
+(г) человеческие вопросы, не анкета («а как же вы справлялись, на что жили?»);
+(д) без давления, канцелярита и чтения по бумажке; клиент к концу говорит свободно и доверяет.
+АНТИ-сигналы (−4 каждый): перебивает; обесценивает («сами набрали — сами разбирайтесь»);
+торопит; сухой допрос без реакции на эмоции.
+
+════════ БЛОК 2. ДИАГНОСТИКА — гейт «консультация состоялась» ════════
+Отметь по каждому из 12 пунктов: спрошено/выяснено ли (true/false) + значение, если названо:
+1 причина обращения/боль · 2 общий долг (₽) · 3 кредиторы: банки/МФО, сколько · 4 просрочка есть/нет ·
+5 платёж в месяц (₽) · 6 доход/занятость · 7 имущество/залоги · 8 семья/иждивенцы ·
+9 сделки с имуществом за 3 года · 10 судимость/поручительство/159 · 11 желаемый исход
+(«списать или платить?») · 12 следующий шаг с датой.
+Гейт: collected_count ≥ 9 → consultation_happened = true (ответственность за лид наступает).
+Пункты 7 и 9 — критичные для суда: если не спрошены, отметь в next_best_action первыми.
+
+════════ БЛОК 3. ВОЗРАЖЕНИЯ — 25 баллов ════════
+Вопрос заказчика: «менеджер ВООБЩЕ ПЫТАЛСЯ?»
+- Клиент возразил («дорого», «подумаю», «страшно», «не верю», «нет денег») → менеджер НЕ сдался
+  с первого «нет»: принял эмоцию + дал контраргумент/цифры/дробление/встречный вопрос. Каждое
+  отработанное возражение — зачёт; «понял, хорошо» в ответ на возражение — незачёт.
+- Возражений не было → менеджер сам прощупал сомнения («что смущает?», «что останавливает?») — зачёт.
+Балл: все возражения отработаны = 25; частично = пропорционально; сдался с первого «нет» = 0.
+
+════════ БЛОК 4. ЛЕСТНИЦА ДЕНЕГ — 40 баллов (по 10 за ступень) ════════
+ЭТАЛОН (образец заказчика, дословный):
+«Иван Иванович, вы сейчас платите 40 000 в месяц — и 35 000 из них проценты. Так из долга
+не выбраться. Наша услуга — 13 500 в месяц. Потянете?» — «Потяну, но деньги будут 10-го,
+с зарплаты.» — «Хорошо, фиксирую оплату на 10-е. Но договор подпишем сегодня и внесём
+минимальный платёж — от 1 000 ₽, он пойдёт в зачёт, и мы сразу начнём работу и будем вам помогать.»
+
+Ступени (каждая true/false + цитата):
+4.1 ОЦИФРОВАЛ БОЛЬ: назвал текущий платёж клиента И сколько из него уходит в проценты
+    («платите 40 000, из них 35 000 — проценты»); просто «у вас большая переплата» — незачёт.
+4.2 ЦЕНА + «ПОТЯНЕТЕ?»: засчитывается, если названа ЛЮБАЯ конкретная цена услуги и спрошено,
+    потянет ли клиент. Каноничность цены — ОТДЕЛЬНЫЙ флаг canon_price (канон: 13 500 ₽/мес ·
+    189 000 · разово 169 000 · госплатежи 50 000): не-канон = флаг РОПу, балл НЕ режет
+    (движок применяет вычет только к звонкам после даты canon_enforced_from).
+    Допуслуги канона — эти суммы НЕ флаговать: Кредитный доктор +1 438 ₽/мес (50 000, +2 мес) ·
+    «Сохранение имущества» 39 990 ₽ (рассрочка 4 × 9 975) · сопровождение РДГ 5 000 ₽/мес
+    (только ПОСЛЕ утверждения плана судом, «остаётесь с нами — ведём за 5 000/мес») · SIM — подарок, 0 ₽.
+    5 000/мес, названная как цена ОСНОВНОЙ услуги вместо 13 500, — это не-канон, флаговать.
+4.3 ДАТА + МИНИМАЛКА: клиент «деньги позже/с зарплаты» → зафиксировал дату ЗП, НО предложил
+    договор сегодня + минимальный платёж от 1 000 ₽ в зачёт («и мы сразу начнём работу»).
+4.4 ЗАКРЫЛ НА ДЕЙСТВИЕ СЕЙЧАС: договор/оплата/подписание сегодня, либо следующий шаг
+    с датой И временем. «Созвонимся на днях» — незачёт.
+
+════════ БЛОК 5. НОРМАЛЬНЫЙ ЛИД — замок на закрытии (главная функция оценки) ════════
+Независимо от баллов определи по записи:
+- normal_lead (true/false): клиент живой и наш — говорит о своём долге, отвечает на вопросы,
+  есть боль/интерес (вопросы «а сколько будет платёж?», «а машину не заберут?» = интерес).
+- interest_signals: цитаты интереса клиента (до 3).
+- stop_factors: реальные основания закрыть, если прозвучали, с цитатой: жёсткий отказ
+  («не звоните больше»), уже банкрот / уже в процедуре, спам/мошенник/не тот человек,
+  явный стоп-фактор процедуры, названный клиентом.
+- valid_close_reason (true/false): есть ли в записи фраза, дающая право закрыть лид, + цитата.
+Это поле — не оценка менеджера, а факт о клиенте: движок использует его как замок —
+НОРМАЛЬНОГО ЛИДА ЗАКРЫТЬ НЕЛЬЗЯ.
+
+════════ КОМПЛАЕНС (поверх всего, ×0) ════════
+Флаг с цитатой на любую из 9 красных линий: (1) «100% спишем/утвердим, иначе вернём»;
+(2) «ЦБ/государство платит проценты»; (3) «аккредитованы государством/госпрограмма»;
+(4) займ/докредитование, чтобы оплатить услуги; (5) фиктивный доход/чеки «как будто»;
+(6) переписать/спрятать имущество или деньги; (7) «в БКИ не видно — скроем»;
+(8) запугивание 159 УК ради закрытия; (9) «поздравляю с началом процедуры» до оплаты.
+ФОРМАТ ФЛАГА — СТРОГО: class_id (число 1–9) + каноническое имя класса (дословно из списка выше) + цитата.
+АНТИ-ЛОЖНЯК: флаг ставится ТОЛЬКО если фраза — утвердительное предложение/совет самого МЕНЕДЖЕРА.
+НЕ флагуй: отрицания и предостережения («займы брать НЕ нужно», «прятать ничего НЕ надо»),
+пересказ слов клиента, объяснение почему так делать нельзя.
+Класс 7 — синонимы: «в БКИ/КИ не видно», «не отобразится», «скроем от банков», «кредиторы не узнают».
+Любой подтверждённый флаг = звонок ×0 (до калибровки ИИ подтверждает человек).
+
+ПРАВИЛА: доказательство = дословная цитата; жёсткий отказ клиента → менеджер должен корректно
+закрыть, не дожимать (refusal=true, блоки 3–4 не требуются); score_total = эмпатия + возражения +
+лестница + (шаг с датой из п.12 диагностики: есть = +15); максимум 100.
+
+ОТВЕТ — строго JSON: call_type · partial · manager_label · refusal · empathy{score, signals,
+anti_signals, quotes} · diagnostics{items 1–12, collected_count, consultation_happened} ·
+objections{score, items[{objection, handled, quote}], probed_if_none} · money_ladder{digitized_pain,
+price_and_ask{+canon_price}, date_plus_minimum, closed_now, score} · next_step_bonus · score_total ·
+lead_check{normal_lead, interest_signals, stop_factors, valid_close_reason, close_reason_quote} ·
+compliance_flags[{class_id, class, quote}] · client_state · next_best_action · summary</pre>
+      <p style="font-size:12px;color:var(--muted);margin-top:10px;line-height:1.55">Боевой файл: docs/ai-qa-consultation-prompt.md (+ отдельный промт дожима — 3 вопроса повторного звонка: пытался закрыть / отработал возражение / шаг с датой). Версии: v1 (2026-07-02) → v1.1 (2026-07-03, правки бэктеста: enum классов, partial-звонки, сервис-подтип, анти-ложняк отрицаний, БКИ-синонимы, дедуп записей). Систематические споры менеджеров по одному пункту = кандидат на следующую правку.</p>
+    </div>
+
+    <!-- ОДОБРЕННЫЕ НАСТРОЙКИ КОНТУРА (заказчик 2026-07-04: «это все делаем») -->
+    <div class="sec-t">Настройки контура <span class="chip c-green" style="margin-left:8px;vertical-align:3px">одобрено заказчиком — все шесть в работу</span></div>
+
+    <!-- 1. Калибровка -->
+    <div class="panel" style="background:var(--card);margin-bottom:14px">
+      <div class="ph">1 · Калибровка ИИ ↔ РОП — чтобы оценке верили</div>
+      <div style="display:flex;gap:14px;flex-wrap:wrap;align-items:center">
+        <div style="text-align:center;background:var(--amber-soft);border:1px solid rgba(194,121,15,.3);border-radius:13px;padding:12px 18px">
+          <div style="font-family:'Unbounded';font-weight:800;font-size:26px;color:var(--amber)">7%</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:2px">текущее расхождение<br>цель &lt;5% · порог правки &gt;10%</div>
+        </div>
+        <div style="flex:1;min-width:260px;font-size:12.5px;line-height:1.6">
+          <div class="crit"><b>28.06</b> · расхождение 11% → правка промта: анти-ложняк отрицаний (займы «НЕ нужно» флаговался)</div>
+          <div class="crit"><b>03.07</b> · бэктест 141 звонок → v1.1: partial-звонки, сервис-подтип, БКИ-синонимы</div>
+          <div class="crit"><b>след. сессия: пн 10:00</b> · РОП вслепую оценивает 5 случайных звонков, система сверяет с ИИ</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:8px;margin-top:10px"><button class="mini-btn">Начать сессию: 5 звонков вслепую</button><button class="mini-btn">История сессий</button></div>
+      <p style="font-size:12px;color:var(--muted);margin-top:8px">Зачем: менеджеры принимают оценку, только если РОП и ИИ судят одинаково. Калибровочные оценки в средние не входят. Систематические споры по одному пункту рубрики — автоматический кандидат в повестку сессии.</p>
+    </div>
+
+    <!-- 2. Видимость -->
+    <div class="panel" style="background:var(--card);margin-bottom:14px">
+      <div class="ph">2 · Видимость и роли — прозрачность без чужих зарплат</div>
+      <div class="tblwrap" style="margin:0;border-radius:12px"><table style="min-width:560px;font-size:12.5px">
+        <thead><tr><th>Роль</th><th>Свои звонки и оценки</th><th>Чужие звонки</th><th>Дашборд команды</th><th>Настройки ИИ</th></tr></thead>
+        <tbody>
+          <tr><td><b>Менеджер</b></td><td style="color:var(--green);font-weight:700">✓ + споры</td><td style="color:var(--faint)">— (эталоны из библиотеки — да)</td><td style="color:var(--faint)">свой рейтинг и место, без чужих цифр</td><td style="color:var(--faint)">—</td></tr>
+          <tr><td><b>РОП</b></td><td style="color:var(--green);font-weight:700">✓</td><td style="color:var(--green);font-weight:700">✓ все + записи</td><td style="color:var(--green);font-weight:700">✓ полностью</td><td style="color:var(--green);font-weight:700">✓ пороги, комплаенс, дайджест</td></tr>
+          <tr><td><b>Админ (заказчик)</b></td><td style="color:var(--green);font-weight:700">✓</td><td style="color:var(--green);font-weight:700">✓</td><td style="color:var(--green);font-weight:700">✓</td><td style="color:var(--green);font-weight:700">✓ + промт, канон цен, режим ×0</td></tr>
+        </tbody>
+      </table></div>
+      <p style="font-size:12px;color:var(--muted);margin-top:8px">Зачем: рейтинг прозрачен (канон свода), но менеджер не копается в чужих звонках; промт и режим ×0 меняет только админ — с песочницей и датой.</p>
+    </div>
+
+    <!-- 3. Дайджест -->
+    <div class="panel" style="background:var(--card);margin-bottom:14px">
+      <div class="ph">3 · Дайджест РОПу — утро начинается с трёх чисел</div>
+      <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center;font-size:12.5px">
+        <label>Время <input type="time" value="08:30" style="border:1px solid var(--line);border-radius:8px;padding:5px 8px;font-family:'Golos Text'"></label>
+        <label>Канал <select style="border:1px solid var(--line);border-radius:8px;padding:6px 8px;font-family:'Golos Text'"><option>Telegram</option><option>Email</option></select></label>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:6px;margin-top:10px;font-size:12.5px">
+        <label class="citem" style="display:flex;gap:8px;align-items:center"><input type="checkbox" checked> Средняя за вчера + тренд</label>
+        <label style="display:flex;gap:8px;align-items:center"><input type="checkbox" checked> Кто в серии &lt;90 (и на каком шаге)</label>
+        <label style="display:flex;gap:8px;align-items:center"><input type="checkbox" checked> Открытые споры (SLA-таймер)</label>
+        <label style="display:flex;gap:8px;align-items:center"><input type="checkbox" checked> Комплаенс-паттерны (3+ одного класса)</label>
+        <label style="display:flex;gap:8px;align-items:center"><input type="checkbox" checked> Не открыли оценку (игнор фидбека)</label>
+        <label style="display:flex;gap:8px;align-items:center"><input type="checkbox"> Лучший звонок дня → в библиотеку</label>
+      </div>
+      <p style="font-size:12px;color:var(--muted);margin-top:8px">Зачем: РОП не заходит «посмотреть всё», а получает 5 строк с кликами прямо в выборку. Каждая строка дайджеста = фильтр этого дашборда.</p>
+    </div>
+
+    <!-- 4. Автозаполнение -->
+    <div class="panel" style="background:var(--card);margin-bottom:14px">
+      <div class="ph">4 · Автозаполнение карточки из записи <span class="chip c-green" style="margin-left:6px">вкл</span></div>
+      <div style="font-size:12.5px;line-height:1.6">
+        <div class="crit">Из диагностики в поля amo: <b>общий долг · платёж/мес · доход · кредиторы (банки/МФО) · просрочка · имущество</b> — сразу после оценки звонка.</div>
+        <div class="crit">Правило: <b>пустое поле — заполняем</b>, заполненное руками — НЕ перезаписываем, показываем менеджеру расхождение («в записи долг 740 000, в карточке 500 000 — поправить?»).</div>
+        <div class="crit">Расхождение запись ↔ карточка без реакции менеджера = флаг РОПу (кормит калькулятор, договор и канон цены).</div>
+      </div>
+      <p style="font-size:12px;color:var(--muted);margin-top:8px">Зачем: карточка перестаёт зависеть от дисциплины ручного ввода; договор и калькулятор считают от реальных цифр из разговора.</p>
+    </div>
+
+    <!-- 5. Библиотека эталонов -->
+    <div class="panel" style="background:var(--card);margin-bottom:14px">
+      <div class="ph">5 · Библиотека эталонов — «как надо» голосом лучших</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:8px;font-size:12.5px">
+        <div style="border:1px solid var(--line);border-radius:11px;padding:10px 12px">▶ <b>Оцифровка боли</b> · Марченко · 0:42<br><span style="color:var(--faint)">«платите 40 000 — 35 000 проценты…»</span></div>
+        <div style="border:1px solid var(--line);border-radius:11px;padding:10px 12px">▶ <b>«Дорого» → цифры</b> · Бубнова · 0:58<br><span style="color:var(--faint)">не спорит с ценой, переключает на потери</span></div>
+        <div style="border:1px solid var(--line);border-radius:11px;padding:10px 12px">▶ <b>Дата + минималка</b> · Марченко · 0:37<br><span style="color:var(--faint)">«внесите 1 000 — я уже начну работу»</span></div>
+        <div style="border:1px solid var(--line);border-radius:11px;padding:10px 12px">▶ <b>SIM в презентации</b> · Алиев · 0:33<br><span style="color:var(--faint)">официальность + фиксация акции + Ozon</span></div>
+      </div>
+      <p style="font-size:12px;color:var(--muted);margin-top:8px">Зачем: клип попадает сюда кнопкой «⭐ в библиотеку» из разбора. У менеджера слабый этап — окно после звонка предлагает 2 клипа именно по нему. Новичок в первую неделю слушает подборку целиком.</p>
+    </div>
+
+    <!-- 6. Исключения -->
+    <div class="panel" style="background:var(--card)">
+      <div class="ph">6 · Исключения из оценки — «почему не оценён» не магия</div>
+      <div style="font-size:12.5px;line-height:1.6">
+        <div class="crit"><label style="display:flex;gap:8px;align-items:flex-start"><input type="checkbox" checked style="margin-top:3px"><span><b>Недозвон / автоответчик / обрыв</b> (&lt;3 содержательных реплик клиента) → не оценивается, бейдж «недозвон»</span></label></div>
+        <div class="crit"><label style="display:flex;gap:8px;align-items:flex-start"><input type="checkbox" checked style="margin-top:3px"><span><b>Сервисный звонок</b> (документы, вопросы по сопровождению, входящий после оплаты) → вне рубрик консультации и дожима, бейдж «сервис»</span></label></div>
+        <div class="crit"><label style="display:flex;gap:8px;align-items:flex-start"><input type="checkbox" checked style="margin-top:3px"><span><b>Оборванная консультация (partial)</b> → оценивается по состоявшимся блокам, но НЕ входит в средние и серию &lt;90</span></label></div>
+        <div class="crit"><label style="display:flex;gap:8px;align-items:flex-start"><input type="checkbox" checked style="margin-top:3px"><span><b>Дубль записи</b> (pbx + оператор, lead_id + время ±2 мин) → склейка ДО оценки, оценивается один раз</span></label></div>
+      </div>
+      <p style="font-size:12px;color:var(--muted);margin-top:8px">Зачем: доверие к среднему. Каждый неоценённый звонок несёт бейдж причины в выборке — менеджер и РОП всегда видят, почему ИИ его пропустил (правила из бэктеста на 141 звонке).</p>
+    </div>
+  </section>
+
+  <footer>
+    <b>SALE 100.0</b> · Контур AI-QA: окно после звонка → дашборд команды → разбор звонка. Оценка одна: рубрика канона v2 (эмпатия 20 · возражения 25 · лестница 40 · шаг 15, гейт 9/12, комплаенс «пропускаем»), этапы = та же рубрика по хронологии. Пороги 65/90 из свода; серия «5 ниже 90 → тренировка» — калибруется.
+  </footer>
+</div>
+
+<script>
+  /* табы */
+  function showView(v){
+    document.querySelectorAll('.view').forEach(s=>s.classList.remove('on'));
+    document.getElementById('v-'+v).classList.add('on');
+    document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('on',t.dataset.v===v));
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+  document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>showView(t.dataset.v)));
+
+  /* попап: согласен / не согласен */
+  document.getElementById('agreeBtn').addEventListener('click',()=>{
+    document.getElementById('agreedYes').classList.add('show');
+    document.getElementById('agreedNo').classList.remove('show');
+  });
+  document.getElementById('disputeBtn').addEventListener('click',()=>{
+    document.getElementById('agreedNo').classList.add('show');
+    document.getElementById('agreedYes').classList.remove('show');
+  });
+  document.getElementById('dispSend').addEventListener('click',()=>{
+    const t=document.getElementById('dispText');
+    if(!t.value.trim()){t.style.borderColor='var(--red)';t.focus();return}
+    t.style.display='none';document.getElementById('dispSend').style.display='none';
+    document.getElementById('dispDone').style.display='block';
+  });
+
+  /* дашборд: данные менеджеров (демо) */
+  const MGRS=[
+    {n:'Бубнова Алена',   c:'#C2790F', calls:2, total:93.5, tr:+1.2, ax:[98,98,88,96,95,83], ser:0, risk:''},
+    {n:'Алиев Камран',    c:'#3D7A5E', calls:4, total:87.7, tr:+3.4, ax:[92,92,90,87,88,80], ser:1, risk:'🚩1'},
+    {n:'Марченко Светлана',c:'#C99A33',calls:5, total:87.0, tr:-0.8, ax:[89,88,72,83,93,97], ser:1, risk:''},
+    {n:'Скоробогатый Пётр',c:'#365C8C',calls:1, total:85.0, tr:+5.0, ax:[100,90,85,85,80,75],ser:1, risk:'🚩1'},
+    {n:'Петрова Дарья',   c:'#9A2D22', calls:3, total:75.7, tr:-4.1, ax:[88,90,65,78,88,48], ser:2, risk:'⚖️1 🚩1'},
+    {n:'Кудельков Егор',  c:'#7C756A', calls:1, total:71.0, tr:+0.5, ax:[100,80,40,0,60,75], ser:2, risk:''},
+    {n:'Ляшенко Андрей',  c:'#0E5C46', calls:2, total:65.5, tr:-2.3, ax:[73,65,25,40,45,60], ser:4, risk:'⚖️1'},
+    {n:'Мифтахов Раф',    c:'#615B50', calls:1, total:53.0, tr:-6.7, ax:[80,40,0,0,0,0],     ser:3, risk:'🚩3'}
+  ];
+  const cls=v=>v>=90?'g':(v>=65?'a':'r');
+  const tb=document.getElementById('tbody');
+  MGRS.forEach((m,i)=>{
+    const tr=document.createElement('tr'); tr.className='row';
+    tr.innerHTML=`<td style="color:var(--faint)">${i+1}</td>
+      <td><span class="mgr"><span class="ava" style="background:${m.c}">${m.n[0]}</span>${m.n}</span></td>
+      <td>${m.calls}</td>
+      <td><span class="cell-score s-${cls(m.total)}">${m.total.toFixed(1)}</span> <small style="font-size:10px;font-weight:700;color:${m.tr>=0?'var(--green)':'var(--red)'}">${m.tr>=0?'▲':'▼'}${Math.abs(m.tr).toFixed(1)}</small></td>
+      ${m.ax.map(v=>`<td><span class="ax ${cls(v)}">${v}</span></td>`).join('')}
+      <td>${m.ser>0?`<span class="chip ${m.ser>=4?'c-red':'c-amber'}">${m.ser} / 5</span>`:'<span style="color:var(--faint)">—</span>'}</td>
+      <td>${m.risk||'<span style="color:var(--faint)">—</span>'}</td>
+      <td style="color:var(--faint)">›</td>`;
+    tr.addEventListener('click',()=>applyFilter({type:'mgr',mgr:m.n}));
+    tb.appendChild(tr);
+  });
+
+  /* звонки (демо): любой показатель — это фильтр этой выборки */
+  const CALLS=[
+    {t:'09:12',m:'Бубнова Алена',l:'Ольга М.',o:'13 500 оплачено → сопровождение',s:96,f:0,d:false},
+    {t:'11:40',m:'Бубнова Алена',l:'Сергей К.',o:'договор подписан + дата платежа',s:91,f:0,d:false},
+    {t:'09:35',m:'Алиев Камран',l:'Наталья П.',o:'990 + дата добора',s:92,f:0,d:false},
+    {t:'10:22',m:'Алиев Камран',l:'Виктор Д.',o:'частичка 1 000 ₽ в зачёт',s:90,f:1,d:false},
+    {t:'13:05',m:'Алиев Камран',l:'Ирина С.',o:'дата добора зафиксирована',s:90,f:0,d:false},
+    {t:'16:20',m:'Алиев Камран',l:'Павел Т.',o:'договор на подписи',s:85,f:0,d:false},
+    {t:'09:58',m:'Марченко Светлана',l:'Анна Л.',o:'13 500 оплачено → сопровождение',s:95,f:0,d:false},
+    {t:'11:15',m:'Марченко Светлана',l:'Дмитрий В.',o:'990 + заказ КИ',s:90,f:0,d:false},
+    {t:'12:44',m:'Марченко Светлана',l:'Елена Ж.',o:'дата ЗП + минималка озвучена',s:87,f:0,d:false},
+    {t:'14:30',m:'Марченко Светлана',l:'Игорь Н.',o:'принимает решение, шаг с датой',s:82,f:0,d:false},
+    {t:'17:02',m:'Марченко Светлана',l:'Светлана Б.',o:'договор отправлен, подпись сегодня',s:81,f:0,d:false},
+    {t:'10:47',m:'Скоробогатый Пётр',l:'Роман Е.',o:'990 сегодня',s:85,f:1,d:false},
+    {t:'14:51',m:'Петрова Дарья',l:'Иван С.',o:'частичка 2 000 ₽, договор не проговорён',s:78,f:1,d:true},
+    {t:'12:10',m:'Петрова Дарья',l:'Мария Г.',o:'дата добора',s:84,f:0,d:false},
+    {t:'15:33',m:'Петрова Дарья',l:'Олег Ф.',o:'консультация, шаг с датой',s:65,f:0,d:false},
+    {t:'11:52',m:'Кудельков Егор',l:'Тамара Х.',o:'принимает решение, дата есть',s:71,f:0,d:false},
+    {t:'10:05',m:'Ляшенко Андрей',l:'Юрий А.',o:'консультация БЕЗ шага с датой',s:68,f:0,d:true},
+    {t:'15:47',m:'Ляшенко Андрей',l:'Ксения В.',o:'дата без времени звонка',s:63,f:0,d:false},
+    {t:'13:28',m:'Мифтахов Раф',l:'Николай Р.',o:'обрыв, без следующего шага',s:53,f:2,d:false}
+  ];
+  const FLT={
+    all:{label:'Все звонки за сегодня',fn:c=>true},
+    sorted:{label:'Все звонки — от слабых к сильным',fn:c=>true,sort:(a,b)=>a.s-b.s},
+    below90:{label:'Ниже цели 90',fn:c=>c.s<90},
+    dispute:{label:'Открытые споры',fn:c=>c.d},
+    flag:{label:'С комплаенс-флагами',fn:c=>c.f>0}
+  };
+  function applyFilter(f){
+    let list, label;
+    if(f.type==='mgr'){ list=CALLS.filter(c=>c.m===f.mgr); label='Менеджер: '+f.mgr; }
+    else { const d=FLT[f.type]||FLT.all; list=CALLS.filter(d.fn); if(d.sort) list=[...list].sort(d.sort); label=d.label; }
+    document.getElementById('callsTitle').textContent='Звонки · '+label.toLowerCase()+' · '+list.length;
+    document.getElementById('fchips').innerHTML=
+      `<span class="fchip">${label} · ${list.length} <span class="x" onclick="applyFilter({type:'all'})" title="сбросить">✕</span></span>`+
+      (f.type!=='all'?'<span style="font-size:12px;color:var(--faint)">клик по звонку — разбор с записью</span>':'');
+    document.querySelectorAll('.kpi').forEach(k=>k.classList.toggle('active',k.dataset.filter===f.type));
+    const body=document.getElementById('callsBody'); body.innerHTML='';
+    list.forEach(c=>{
+      const tr=document.createElement('tr'); tr.className='row';
+      tr.innerHTML=`<td style="color:var(--muted)">${c.t}</td><td style="font-weight:600">${c.m}</td><td>${c.l}</td>
+        <td style="color:var(--muted)">${c.o}</td>
+        <td><span class="cell-score s-${cls(c.s)}">${c.s}</span></td>
+        <td>${c.f?'🚩'+c.f:'<span style="color:var(--faint)">—</span>'}</td>
+        <td>${c.d?'⚖️':'<span style="color:var(--faint)">—</span>'}</td>
+        <td style="color:var(--faint)">▶ разбор</td>`;
+      tr.addEventListener('click',()=>showView('call'));
+      body.appendChild(tr);
+    });
+    document.getElementById('callsBlock').scrollIntoView({behavior:'smooth',block:'start'});
+  }
+  window.applyFilter=applyFilter;
+  document.querySelectorAll('.kpi').forEach(k=>k.addEventListener('click',()=>applyFilter({type:k.dataset.filter})));
+  /* стартовое состояние списка — все звонки, без скролла */
+  (function(){ const sv=Element.prototype.scrollIntoView; Element.prototype.scrollIntoView=function(){}; applyFilter({type:'all'}); Element.prototype.scrollIntoView=sv; })();
+
+  /* демо-плеер: курсор + перемотка кликом */
+  let pos=52, playing=false, timer=null;
+  const cursor=document.getElementById('cursor'), curTime=document.getElementById('curTime'), TOTAL=18*60+24;
+  function fmt(s){s=Math.round(s);return Math.floor(s/60)+':'+String(s%60).padStart(2,'0')}
+  function setPos(p){pos=Math.max(0,Math.min(100,p));cursor.style.left=pos+'%';curTime.textContent=fmt(TOTAL*pos/100)}
+  setPos(pos);
+  document.getElementById('playBtn').addEventListener('click',function(){
+    playing=!playing; this.textContent=playing?'⏸':'▶';
+    if(playing){timer=setInterval(()=>{setPos(pos+.22); if(pos>=100){clearInterval(timer);playing=false;document.getElementById('playBtn').textContent='▶'}},250)}
+    else clearInterval(timer);
+  });
+  document.getElementById('track').addEventListener('click',e=>{
+    const r=e.currentTarget.getBoundingClientRect(); setPos((e.clientX-r.left)/r.width*100);
+  });
+  document.querySelectorAll('.mark,.rep').forEach(el=>el.addEventListener('click',()=>{ if(el.dataset.seek) setPos(+el.dataset.seek) }));
+  document.querySelectorAll('.speeds .spd').forEach(b=>{
+    if(b.id==='back15'||b.id==='fwd15') return;
+    b.addEventListener('click',()=>{document.querySelectorAll('.speeds .spd').forEach(x=>{if(x.id!=='back15'&&x.id!=='fwd15')x.classList.remove('on')});b.classList.add('on')});
+  });
+  document.querySelectorAll('#periodChips .spd').forEach(b=>b.addEventListener('click',()=>{
+    document.querySelectorAll('#periodChips .spd').forEach(x=>x.classList.remove('on'));b.classList.add('on');
+  }));
+  const STEP15=15/TOTAL*100;
+  document.getElementById('back15').addEventListener('click',()=>setPos(pos-STEP15));
+  document.getElementById('fwd15').addEventListener('click',()=>setPos(pos+STEP15));
+</script>
+</body>
+</html>
