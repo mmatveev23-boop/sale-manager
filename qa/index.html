@@ -63,7 +63,7 @@
   .outcome .ic{font-size:17px}
   .outcome b.next{color:var(--amber)}
   .score-row{display:flex;gap:14px;align-items:center;margin:14px 0 4px}
-  .score-big{font-family:"Unbounded";font-weight:800;font-size:40px;line-height:1;color:var(--amber)}
+  .score-big{font-family:"Unbounded";font-weight:800;font-size:40px;line-height:1;color:var(--amber);white-space:nowrap}
   .score-big small{font-size:15px;color:var(--faint);font-weight:500}
   .score-meta{font-size:12px;color:var(--muted);line-height:1.5}
   .series{margin-left:auto;text-align:right}
@@ -256,15 +256,16 @@
           <div class="score-row">
             <div>
               <div class="score-big">78<small> /100</small></div>
-              <div style="display:flex;gap:6px;margin-top:8px;flex-wrap:wrap">
-                <span class="chip c-amber">цель 90</span>
-                <span class="chip c-green">гейт 10/12 ✓</span>
-              </div>
+              <div style="font-size:12.5px;color:var(--muted);margin-top:6px">цель — <b style="color:var(--amber)">90</b></div>
             </div>
             <div class="series">
               <div class="dots"><span class="d ok" title="92"></span><span class="d low" title="81"></span><span class="d low" title="78 — этот звонок"></span><span class="d"></span><span class="d"></span></div>
               <div class="sl">серия: <b>2 из 5</b> ниже 90 → на 5-м подряд — тренировка с РОПом (с линии не снимаем)</div>
             </div>
+          </div>
+
+          <div style="margin-top:12px;background:var(--green-soft);border:1px solid rgba(14,92,70,.22);border-radius:11px;padding:9px 13px;font-size:12.5px;line-height:1.5;color:var(--green-deep)">
+            <b>✓ Диагностика: 10 из 12</b> обязательных вопросов выяснено (порог — 9) → консультация засчитана, лид закреплён за тобой.
           </div>
 
           <div class="grid2">
@@ -280,7 +281,7 @@
               <div class="stagebar g"><div class="sn"><span>1 · Контакт</span><b>90</b></div><div class="tr"><div class="fl" style="width:90%"></div></div></div>
               <div class="stagebar g"><div class="sn"><span>2 · Диагностика</span><b>82</b></div><div class="tr"><div class="fl" style="width:82%"></div></div></div>
               <div class="stagebar a"><div class="sn"><span>3 · Оцифровка боли</span><b>71</b></div><div class="tr"><div class="fl" style="width:71%"></div></div></div>
-              <div class="stagebar r"><div class="sn"><span>4 · Презентация <span style="font-size:9.5px;font-weight:700;color:var(--red);background:var(--red-soft);border-radius:5px;padding:1px 6px;vertical-align:1px">слабый этап недели</span></span><b>60</b></div><div class="tr"><div class="fl" style="width:60%"></div></div></div>
+              <div class="stagebar r"><div class="sn"><span>4 · Презентация <span style="font-size:9.5px;font-weight:700;color:var(--red);background:var(--red-soft);border-radius:5px;padding:1px 6px;vertical-align:1px;white-space:nowrap">слабый этап</span></span><b>60</b></div><div class="tr"><div class="fl" style="width:60%"></div></div></div>
               <div class="stagebar a"><div class="sn"><span>5 · Возражения</span><b>66</b></div><div class="tr"><div class="fl" style="width:66%"></div></div></div>
               <div class="stagebar g"><div class="sn"><span>6 · Закрытие</span><b>84</b></div><div class="tr"><div class="fl" style="width:84%"></div></div></div>
             </div>
@@ -358,7 +359,7 @@
 → push в окно менеджера (виджет amo: websocket или поллинг ≤10 сек)
 
 МАППИНГ JSON → ЭЛЕМЕНТЫ ОКНА
-score_total → балл 78/100 · diagnostics.collected_count → «гейт 10/12» ·
+score_total → балл 78/100 · diagnostics.collected_count → плашка «Диагностика: 10 из 12 — консультация засчитана» ·
 consultation_happened → ответственность наступила, лид занял слот
 money_ladder.{digitized_pain · price_and_ask · date_plus_minimum · closed_now} → «Деньги в звонке» (4 строки)
 empathy / objections / next_step → «Этапы звонка» (фиксированный маппинг пунктов на 6 этапов)
@@ -471,7 +472,7 @@ eval_created · eval_acknowledged · eval_disputed · dispute_resolved · coachi
 
     <div class="panel" style="background:var(--card);margin-top:14px">
       <div class="ph">ИИ-саммари звонка — читается за 20 секунд, вместо прослушивания 18 минут</div>
-      <p style="font-size:13.5px;line-height:1.6"><b>Клиент:</b> 6 кредитов, долг 740 000 ₽, платёж 41 000/мес (35 500 — проценты), просрочка 2 мес, зарплата 10-го. <b>Ход:</b> диагностика полная (гейт 10/12), боль оцифрована, цена-канон 13 500 названа с «потянете?». <b>Возражения:</b> «дорого» — отработано цифрами; «подумаю» (15:50) — сдалась после первого «нет». <b>Итог:</b> частичка 2 000 ₽ в зачёт, добор 10-го. <b>Хвост:</b> договор и подпись НЕ проговорены (стр. 5–6 презентации) — деньги без договора. <b>Следующий шаг:</b> договор + СМС-подпись сегодня.</p>
+      <p style="font-size:13.5px;line-height:1.6"><b>Клиент:</b> 6 кредитов, долг 740 000 ₽, платёж 41 000/мес (35 500 — проценты), просрочка 2 мес, зарплата 10-го. <b>Ход:</b> диагностика полная (10 из 12 вопросов), боль оцифрована, цена-канон 13 500 названа с «потянете?». <b>Возражения:</b> «дорого» — отработано цифрами; «подумаю» (15:50) — сдалась после первого «нет». <b>Итог:</b> частичка 2 000 ₽ в зачёт, добор 10-го. <b>Хвост:</b> договор и подпись НЕ проговорены (стр. 5–6 презентации) — деньги без договора. <b>Следующий шаг:</b> договор + СМС-подпись сегодня.</p>
     </div>
 
     <div class="player">
