@@ -280,7 +280,7 @@
               <div class="stagebar g"><div class="sn"><span>1 · Контакт</span><b>90</b></div><div class="tr"><div class="fl" style="width:90%"></div></div></div>
               <div class="stagebar g"><div class="sn"><span>2 · Диагностика</span><b>82</b></div><div class="tr"><div class="fl" style="width:82%"></div></div></div>
               <div class="stagebar a"><div class="sn"><span>3 · Оцифровка боли</span><b>71</b></div><div class="tr"><div class="fl" style="width:71%"></div></div></div>
-              <div class="stagebar r"><div class="sn"><span>4 · Презентация</span><b>60</b></div><div class="tr"><div class="fl" style="width:60%"></div></div></div>
+              <div class="stagebar r"><div class="sn"><span>4 · Презентация <span style="font-size:9.5px;font-weight:700;color:var(--red);background:var(--red-soft);border-radius:5px;padding:1px 6px;vertical-align:1px">слабый этап недели</span></span><b>60</b></div><div class="tr"><div class="fl" style="width:60%"></div></div></div>
               <div class="stagebar a"><div class="sn"><span>5 · Возражения</span><b>66</b></div><div class="tr"><div class="fl" style="width:66%"></div></div></div>
               <div class="stagebar g"><div class="sn"><span>6 · Закрытие</span><b>84</b></div><div class="tr"><div class="fl" style="width:84%"></div></div></div>
             </div>
@@ -301,6 +301,15 @@
           <div class="compl">
             <div class="mh">🚩 Комплаенс: 1 фраза на замену (обучение, балл не режет)</div>
             «После суда вам точно всё спишут» — обещание результата за суд. <span class="swap">Говори: «Решение принимает суд — наша работа подготовить дело так, чтобы рисков не осталось».</span>
+          </div>
+
+          <div style="margin-top:10px;border:1px solid rgba(14,92,70,.25);border-radius:13px;padding:12px 14px;background:var(--green-soft)">
+            <div style="font-size:12px;font-weight:700;color:var(--green-deep);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px">Послушай, как делают лучшие — твой слабый этап: Презентация</div>
+            <div style="display:flex;flex-direction:column;gap:7px;font-size:12.5px">
+              <div style="display:flex;align-items:center;gap:9px;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:8px 11px"><button class="play" style="width:26px;height:26px;font-size:10px;flex-shrink:0">▶</button><div><b>«Договор: читаем вместе ключевые пункты»</b> · Марченко · 0:58</div></div>
+              <div style="display:flex;align-items:center;gap:9px;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:8px 11px"><button class="play" style="width:26px;height:26px;font-size:10px;flex-shrink:0">▶</button><div><b>«Подпись по СМС — без паузы после денег»</b> · Бубнова · 0:44</div></div>
+            </div>
+            <div style="font-size:11px;color:var(--muted);margin-top:7px">2 клипа подбираются автоматически из библиотеки эталонов — по этапу с самым низким баллом за последние 5 звонков.</div>
           </div>
 
           <div class="pp-btns">
@@ -333,7 +342,7 @@
         <div class="st"><span class="n">3</span><div><b>«Этапы звонка» — те же пункты по хронологии</b>, второй системы оценки нет. Блок «Деньги в звонке — 4 шага» (оцифровал → цена+«потянете?» → дата+минималка → закрыл) в промте называется money_ladder — не путать со старой лестницей цен 13 500 → 990.</div></div>
         <div class="st"><span class="n">4</span><div><b>Главная ошибка — всегда ОДНА:</b> самый дорогой проваленный пункт (по весу и влиянию на деньги). Не список из десяти — чинится одно, закрепляется, дальше следующее.</div></div>
         <div class="st"><span class="n">5</span><div><b>«Что сделать сейчас»</b> = совет ИИ (next_best_action) + хвосты, которые видит система (деньги взяты, договора нет → «договор сегодня»). Жмёшь «Согласен» — задачи создаются в карточке сделки сами.</div></div>
-        <div class="st"><span class="n">6</span><div><b>Серия — сигнал, не наказание:</b> последние 5 закрытых оценок (обрывы partial и звонки со спором не считаются). 5 подряд ниже 90 → менеджер остаётся на линии, но автоматически назначается тренировка с РОПом, а паттерн копится в статистику — дальше решает РОП, не автомат.</div></div>
+        <div class="st"><span class="n">6</span><div><b>Серия — сигнал, не наказание:</b> последние 5 закрытых оценок (обрывы partial и звонки со спором не считаются). 5 подряд ниже 90 → менеджер остаётся на линии, но автоматически назначается тренировка с РОПом, а паттерн копится в статистику — дальше решает РОП, не автомат. Слабейший этап за эти 5 звонков подсвечивается бейджем, и к окну подшиваются <b>2 клипа лучших</b> именно по нему (автоподбор из библиотеки эталонов).</div></div>
       </div>
     </div>
 
@@ -356,6 +365,8 @@ empathy / objections / next_step → «Этапы звонка» (фиксиро
 главная ошибка = самый весомый проваленный пункт: closed_now → objections.не_отработано → date_plus_minimum → …
 next_best_action + хвосты движка (payment_received && !contract_signed → задача «договор сегодня») → «Что сделать сейчас»
 compliance_flags[] → плашка «фраза на замену» (режим «пропускаем»: балл НЕ трогаем, тренд копим на дашборд)
+weakest_stage = этап с минимальным средним за последние 5 закрытых оценок → бейдж «слабый этап недели»
+клипы: top-2 из etalon_library WHERE stage = weakest_stage ORDER BY rating → блок «как делают лучшие»
 confidence: в шапке НЕ показывать; если &lt;0.7 → бейдж «оценка предварительная», звонок вне серии и вне средних
 
 СТАТУСЫ ОЦЕНКИ (обязательный ответ менеджера = постобработка ACW)
@@ -366,7 +377,8 @@ API: POST /evals/{id}/ack · POST /evals/{id}/dispute {comment} · PATCH /evals/
 
 СЕРИЯ — СИГНАЛ, НЕ БЛОКИРОВКА (решение заказчика 2026-07-05: с линии НЕ снимаем)
 окно серии = последние 5 закрытых оценок (исключая partial, confidence&lt;0.7, открытые споры)
-все 5 &lt; 90 → событие coaching_required: задача РОПу «тренировка + разбор», менеджер В ОЧЕРЕДИ ОСТАЁТСЯ,
+все 5 &lt; 90 → событие coaching_required {manager_id, weakest_stage, серия из 5 eval_id}:
+задача РОПу «тренировка + разбор по слабому этапу», менеджер В ОЧЕРЕДИ ОСТАЁТСЯ,
 кран задач НЕ закрывается; паттерн пишется в статистику менеджера (серии, слабейший этап, динамика)
 → решения по человеку принимает РОП по накопленной статистике, не автомат
 пороги 90/65 и окно 5 — конфиг из «Настроек ИИ», не хардкод
@@ -396,7 +408,7 @@ eval_created · eval_acknowledged · eval_disputed · dispute_resolved · coachi
     <div class="attn">
       <div class="ah">Требуют внимания сегодня</div>
       <div class="ai">⚖️ <div><b>Спор по оценке:</b> Петрова Дарья не согласна с «Закрытие 48» (звонок 14:51, Иван С.) — «клиент сам прервал звонок». Оценка заморожена.</div><span class="go" onclick="showView('call')">Разобрать →</span></div>
-      <div class="ai">🔻 <div><b>Серия ниже цели:</b> Ляшенко Андрей — 4 из 5 звонков ниже 90. Ещё один — автозапись на тренировку с РОПом (с линии не снимаем, работает дальше).</div><span class="go" onclick="applyFilter({type:'mgr',mgr:'Ляшенко Андрей'})">К звонкам →</span></div>
+      <div class="ai">🔻 <div><b>Серия ниже цели:</b> Ляшенко Андрей — 4 из 5 звонков ниже 90, слабый этап — «Оцифровка боли» (25). Ещё один — автозапись на тренировку с РОПом по этому этапу (с линии не снимаем, работает дальше).</div><span class="go" onclick="applyFilter({type:'mgr',mgr:'Ляшенко Андрей'})">К звонкам →</span></div>
       <div class="ai">🚩 <div><b>Комплаенс-паттерн:</b> Мифтахов Раф — 3-й флаг «гарантия результата» за неделю (режим «пропускаем»: балл не режем, но паттерн = разбор).</div><span class="go" onclick="applyFilter({type:'mgr',mgr:'Мифтахов Раф'})">К звонкам →</span></div>
       <div class="ai">📏 <div><b>Калибровка недели готова:</b> система отобрала 10 звонков (стратификация по баллу) — оцени вслепую, ~8 мин на звонок по маркерам (~1,5 часа), сверимся с ИИ. Текущее расхождение 7%, цель &lt;5%. Оценки в рейтинг не идут.</div><span class="go" onclick="goCalib()">Начать →</span></div>
     </div>
