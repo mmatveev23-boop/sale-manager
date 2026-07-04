@@ -925,6 +925,7 @@ tasks_created · note_posted · clip_of_day · weekly_patterns · self_review_as
         <span class="chip c-gray" style="padding:7px 12px">Сохранение имущества: 39 990 ₽ (4 × 9 975)</span>
         <span class="chip c-gray" style="padding:7px 12px">Сопровождение РДГ: 5 000 ₽/мес (после плана)</span>
         <span class="chip c-gray" style="padding:7px 12px">SIM: подарок, 0 ₽ (выдача при 13 500)</span>
+        <span class="chip c-gray" style="padding:7px 12px">Реферальная скидка: 10 000 ₽ (приведённый заключил договор)</span>
       </div>
       <p style="font-size:12px;color:var(--muted);margin-top:10px;line-height:1.5">Другая цифра в звонке = флаг РОПу (балл не режет). Поле <b>ai_responsibility_enforced_from</b> — дата, с которой consultation_happened начинает закреплять лид (до неё — железные события, свод §3): <input type="date" style="border:1px solid var(--line);border-radius:8px;padding:5px 8px;font-family:'Golos Text'"> · Поле <b>canon_enforced_from</b> — дата, с которой не-канон начнёт резать балл: <input type="date" style="border:1px solid var(--line);border-radius:8px;padding:5px 8px;font-family:'Golos Text'"> (пусто = только флаг).</p>
     </div>
@@ -997,7 +998,9 @@ tasks_created · note_posted · clip_of_day · weekly_patterns · self_review_as
     (движок применяет вычет только к звонкам после даты canon_enforced_from).
     Допуслуги канона — эти суммы НЕ флаговать: Кредитный доктор +1 438 ₽/мес (50 000, +2 мес) ·
     «Сохранение имущества» 39 990 ₽ (рассрочка 4 × 9 975) · сопровождение РДГ 5 000 ₽/мес
-    (только ПОСЛЕ утверждения плана судом, «остаётесь с нами — ведём за 5 000/мес») · SIM — подарок, 0 ₽.
+    (только ПОСЛЕ утверждения плана судом, «остаётесь с нами — ведём за 5 000/мес») · SIM — подарок, 0 ₽ ·
+    реферальная скидка 10 000 ₽ — ТОЛЬКО за приведённого клиента, заключившего договор.
+    Скидка 10 000 БЕЗ реферала (просто чтобы закрыть) = не-канон, флаговать.
     5 000/мес, названная как цена ОСНОВНОЙ услуги вместо 13 500, — это не-канон, флаговать.
 4.3 ДАТА + МИНИМАЛКА: клиент «деньги позже/с зарплаты» → зафиксировал дату ЗП, НО предложил
     договор сегодня + минимальный платёж от 1 000 ₽ в зачёт («и мы сразу начнём работу»).
