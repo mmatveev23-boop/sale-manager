@@ -326,14 +326,6 @@
             «После суда вам точно всё спишут» — обещание результата за суд. <span class="swap">Говори: «Решение принимает суд — наша работа подготовить дело так, чтобы рисков не осталось».</span>
           </div>
 
-          <div style="margin-top:10px;border:1px solid rgba(14,92,70,.25);border-radius:13px;padding:12px 14px;background:var(--green-soft)">
-            <div style="font-size:12px;font-weight:700;color:var(--green-deep);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px">Послушай, как делают лучшие — твой слабый этап: Презентация</div>
-            <div style="display:flex;flex-direction:column;gap:7px;font-size:12.5px">
-              <div style="display:flex;align-items:center;gap:9px;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:8px 11px"><button class="play" style="width:26px;height:26px;font-size:10px;flex-shrink:0">▶</button><div><b>«Договор: читаем вместе ключевые пункты»</b> · Марченко · 0:58</div></div>
-              <div style="display:flex;align-items:center;gap:9px;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:8px 11px"><button class="play" style="width:26px;height:26px;font-size:10px;flex-shrink:0">▶</button><div><b>«Подпись по СМС — без паузы после денег»</b> · Бубнова · 0:44</div></div>
-            </div>
-            <div style="font-size:11px;color:var(--muted);margin-top:7px">2 клипа подбираются автоматически из библиотеки эталонов — по этапу с самым низким баллом за последние 5 звонков.</div>
-          </div>
 
           <div class="pp-btns">
             <button class="btn pri" id="agreeBtn">Согласен — беру в работу</button>
@@ -365,7 +357,7 @@
         <div class="st"><span class="n">3</span><div><b>«Этапы звонка» — те же пункты по хронологии</b>, второй системы оценки нет. Блок «Деньги в звонке — 4 шага» (оцифровал → цена+«потянете?» → дата+минималка → закрыл) в промте называется money_ladder — не путать со старой лестницей цен 13 500 → 990.</div></div>
         <div class="st"><span class="n">4</span><div><b>Главная ошибка — всегда ОДНА:</b> самый дорогой проваленный пункт (по весу и влиянию на деньги). Не список из десяти — чинится одно, закрепляется, дальше следующее.</div></div>
         <div class="st"><span class="n">5</span><div><b>«Что сделать сейчас»</b> = совет ИИ (next_best_action) + хвосты, которые видит система (деньги взяты, договора нет → «договор сегодня»). Жмёшь «Согласен» — задачи создаются в карточке сделки сами.</div></div>
-        <div class="st"><span class="n">6</span><div><b>Серия — сигнал, не наказание:</b> последние 5 закрытых оценок (обрывы partial и звонки со спором не считаются). 5 подряд ниже 90 → менеджер остаётся на линии, но автоматически назначается тренировка с РОПом, а паттерн копится в статистику — дальше решает РОП, не автомат. Слабейший этап за эти 5 звонков подсвечивается бейджем, и к окну подшиваются <b>2 клипа лучших</b> именно по нему (автоподбор из библиотеки эталонов).</div></div>
+        <div class="st"><span class="n">6</span><div><b>Серия — сигнал, не наказание:</b> последние 5 закрытых оценок (обрывы partial и звонки со спором не считаются). 5 подряд ниже 90 → менеджер остаётся на линии, но автоматически назначается тренировка с РОПом, а паттерн копится в статистику — дальше решает РОП, не автомат. Слабейший этап за эти 5 звонков подсвечивается бейджем в окне, а <b>2 клипа лучших</b> по нему ждут на личной странице «Мои звонки» (автоподбор из библиотеки эталонов).</div></div>
         <div class="st"><span class="n">7</span><div><b>Примечание в amo пишет ИИ, не менеджер.</b> Черновик собирается из оценки (итог, суммы, возражения, следующий шаг, хвосты) и показывается в окне: прочитай, поправь при необходимости, нажми «Записать» — примечание уходит в карточку. «Согласен» без правок = примечание записывается как есть. Балл и комплаенс-флаги в примечание не пишутся.</div></div>
       </div>
     </div>
@@ -390,7 +382,7 @@ empathy / objections / next_step → «Этапы звонка» (фиксиро
 next_best_action + хвосты движка (payment_received && !contract_signed → задача «договор сегодня») → «Что сделать сейчас»
 compliance_flags[] → плашка «фраза на замену» (режим «пропускаем»: балл НЕ трогаем, тренд копим на дашборд)
 weakest_stage = этап с минимальным средним за последние 5 закрытых оценок → бейдж «слабый этап недели»
-клипы: top-2 из etalon_library WHERE stage = weakest_stage ORDER BY rating → блок «как делают лучшие»
+клипы: top-2 из etalon_library WHERE stage = weakest_stage ORDER BY rating → страница менеджера «Мои звонки» (в попап не кладём — постобработка короткая)
 confidence: в шапке НЕ показывать; если &lt;0.7 → бейдж «оценка предварительная», звонок вне серии и вне средних
 
 СТАТУСЫ ОЦЕНКИ (обязательный ответ менеджера = постобработка ACW)
@@ -816,13 +808,22 @@ tasks_created · note_posted · clip_of_day · weekly_patterns · self_review_as
     <div class="kpis">
       <div class="kpi" style="cursor:default"><div class="kl">Моя средняя · неделя</div><div class="kv" style="color:var(--amber)">75.7 <small style="font-size:12px;color:var(--red)">▼ 4.1</small></div><div class="ks">цель 90</div></div>
       <div class="kpi" style="cursor:default"><div class="kl">Серия</div><div class="kv" style="color:var(--amber)">2 / 5</div><div class="ks">ниже 90 · на 5-м — тренировка с РОПом</div></div>
-      <div class="kpi" style="cursor:default"><div class="kl">Слабый этап</div><div class="kv" style="font-size:17px;color:var(--red);padding-top:5px">Презентация</div><div class="ks">60 средняя · 2 клипа ждут в окне</div></div>
+      <div class="kpi" style="cursor:default"><div class="kl">Слабый этап</div><div class="kv" style="font-size:17px;color:var(--red);padding-top:5px">Презентация</div><div class="ks">60 средняя · 2 клипа ниже</div></div>
       <div class="kpi" style="cursor:default"><div class="kl">Споры</div><div class="kv">1</div><div class="ks">открыт · ответ РОПа ≤ 24 ч</div></div>
     </div>
 
     <div class="attn" style="margin-top:14px">
       <div class="ah">Задание недели: самооценка</div>
       <div class="ai">🪞 <div><b>Оцени 2 своих звонка сам — до того, как увидишь оценку ИИ.</b> Те же 8 фактов «было/не было», что и у ИИ. Система покажет, где твоё самовосприятие расходится с записью — это учит быстрее любого разбора. В рейтинг не идёт.</div><span class="go" onclick="showView('calib')">Начать (2 звонка) →</span></div>
+    </div>
+
+    <div class="panel" style="background:var(--card);margin-top:14px">
+      <div class="ph">Как делают лучшие — твой слабый этап: Презентация</div>
+      <div style="display:flex;flex-direction:column;gap:7px;font-size:12.5px">
+        <div style="display:flex;align-items:center;gap:9px;background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:8px 11px"><button class="play" style="width:26px;height:26px;font-size:10px;flex-shrink:0">▶</button><div><b>«Договор: читаем вместе ключевые пункты»</b> · Марченко · 0:58</div></div>
+        <div style="display:flex;align-items:center;gap:9px;background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:8px 11px"><button class="play" style="width:26px;height:26px;font-size:10px;flex-shrink:0">▶</button><div><b>«Подпись по СМС — без паузы после денег»</b> · Бубнова · 0:44</div></div>
+      </div>
+      <p style="font-size:12px;color:var(--muted);margin-top:8px">2 клипа подбираются автоматически из библиотеки эталонов — по этапу с самым низким средним за твои последние 5 звонков. Слабый этап сменится — сменятся и клипы.</p>
     </div>
 
     <div class="sec-t">Мои звонки · сегодня</div>
