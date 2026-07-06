@@ -260,22 +260,17 @@
         <div class="pp-h">
           <div>
             <div class="t">ИИ-разбор звонка</div>
-            <div class="s">Иван С. · долг 740 000 ₽ · завершён 14:51 · ⏱ <b style="color:var(--amber)">18:24</b> <span style="color:var(--faint)">(норма 25–40)</span></div>
+            <div class="s">Иван С. · долг 740 000 ₽ · 14:51 · ⏱ <b style="color:var(--amber)">18:24</b> <span style="color:var(--faint)">(норма 25–40)</span> · итог: <b>частичка 2 000 ₽</b>, добор 10-го</div>
           </div>
         </div>
         <div class="pp-b">
-
-          <div class="outcome">
-            <span class="ic">⚠️</span>
-            <div><b>Итог звонка: частичка 2 000 ₽ в зачёт.</b> Дата добора: 10-е (зарплата).<br>Следующий шаг: <b class="next">договор + подпись СМС — сегодня</b>. Деньги взяты, договор не проговорён — закрой хвост. Гейт 10/17 → лид не закреплён, добери диагностику.</div>
-          </div>
 
           <div style="margin-top:10px;background:var(--card);border:1px solid rgba(194,121,15,.4);border-radius:11px;padding:10px 13px;font-size:12px">
             <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
               <span style="font-size:17px;letter-spacing:2px;flex:none">❤️❤️❤️<span style="filter:grayscale(1);opacity:.4">❤️❤️</span></span>
               <span style="font-family:'Unbounded';font-weight:800;font-size:13px;color:var(--amber)">жизни: 3 из 5</span>
             </div>
-            <div style="margin-top:6px;line-height:1.55">Плохой звонок — гейт не собран или ниже 90 — сжигает жизнь. Этот сжёг: гейт 10/17 и балл 76. <b>Вернуть все 5 сразу — один хороший звонок:</b> гейт 17/17 и балл 90+. <b style="color:var(--red)">Сгорели все 5</b> → стоп новых лидов + экзамен у РОПа; сдал → 5 жизней и кран открыт.</div>
+            <div style="margin-top:6px;line-height:1.55">Этот звонок сжёг жизнь (гейт 10/17, балл 76). <b>Вернуть все 5 — один хороший звонок:</b> гейт 17/17 и 90+. <b style="color:var(--red)">Ноль жизней</b> → стоп новых + экзамен у РОПа.</div>
           </div>
 
           <details class="scard" style="margin-top:12px;background:var(--red-soft);border-color:rgba(154,45,34,.3)">
@@ -345,11 +340,14 @@
             <p>После частички 2 000 ₽ <b>не проговорён договор</b> (страница 5 презентации пропущена). Деньги без договора = риск «устно ≠ договор» и расторжения. Сначала договор — он защищает клиента, потом деньги.</p>
           </div>
 
-          <div style="margin-top:10px;border:1px solid var(--line);border-radius:13px;padding:12px 14px">
-            <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
-              <span style="font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em">Примечание в amo — ИИ уже написал</span>
-              <span class="chip c-green" id="noteState" style="margin-left:auto">черновик · проверь</span>
-            </div>
+          <details class="scard" style="margin-top:10px">
+            <summary>
+              <div style="display:flex;align-items:center;gap:8px">
+                <span style="font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em">Примечание в amo — ИИ написал</span>
+                <span class="chip c-green" id="noteState" style="margin-left:auto">черновик · проверь</span>
+              </div>
+            </summary>
+            <div class="sc-body">
             <textarea id="amoNote" style="width:100%;border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-family:'Golos Text';font-size:12.5px;line-height:1.55;min-height:118px;resize:vertical;background:var(--paper)">Звонок 18:24. Долг 740 000 ₽, 6 кредиторов, платёж 41 000/мес (35 500 — проценты), просрочка 2 мес, ЗП 10-го.
 Итог: частичка 2 000 ₽ в зачёт. Добор до 13 500 — 10-го.
 Возражения: «дорого» (снято цифрами), «подумаю» (не дожато).
@@ -359,7 +357,8 @@
               <button class="mini-btn" id="noteSend" style="border-color:var(--green);color:var(--green);font-weight:700">✓ Записать в карточку</button>
               <span style="font-size:11px;color:var(--faint)">поправь текст, если что-то не так — правки учат шаблон. Руками писать не нужно.</span>
             </div>
-          </div>
+            </div>
+          </details>
 
           <div class="compl">
             <div class="mh">🚩 Комплаенс: 1 фраза на замену (обучение, балл не режет)</div>
@@ -435,7 +434,8 @@ money_ladder.digitized_pain → компонента «Оцифровка бол
   6 Возражения         качество: objections /25 — сквозной этап, показывается по таймкодам
   7 Закрытие           гейт: п.17 шаг с датой · качество: 4.3 дата+минималка · 4.4 закрыл
 Этап «провален» = провален его гейт-пункт ИЛИ его качество (бинарно, без процентов).
-МЕНЕДЖЕРУ (решение директора + заказчика 2026-07-06): ДВЕ ШКАЛЫ-КАРТОЧКИ ДРУГ ПОД ДРУГОМ (рядом узко),
+МЕНЕДЖЕРУ (финал 2026-07-06): ШАПКА с итогом строкой (лид · длительность · «частичка 2 000, добор 10-го»;
+отдельного блока «итог звонка» НЕТ) → ЖИЗНИ (❤️ 5, наверху) → ДВЕ ШКАЛЫ-КАРТОЧКИ ДРУГ ПОД ДРУГОМ,
 каждая — раскрывающаяся (details): свёрнуто = заголовок + число + шкала + статус-строка; раскрыто = детали:
 (1) ГЕЙТ x/17 с прогресс-баром — 17/17 = зелёная, «лид закреплён»; недобор = красная + список недобранных ПОИМЁННО
 (номер + название пункта, из diagnostics.items where asked=false) + следствие «лид не закреплён → добери»; (2) ПРОДАЖА x/100 со шкалой и рисками 65/90; ПОД НЕЙ — 5 КОМПОНЕНТ-ШКАЛ (решение заказчика: «видеть
@@ -447,7 +447,8 @@ money_ladder.digitized_pain → компонента «Оцифровка бол
   перебивал → «слушай не перебивая»; сдался на «подумаю» → «домашка + дата + вопрос намерения»;
   не закрыл → «стр. 5 Договор → подпись СМС сегодня»; боль без цифр → «назови платёж и проценты»).
   Цвет шкалы компоненты: 100% зелёный · ≥60% янтарный · <60% красный. Ниже — арифметика, пороги, серия.
-Ниже: главная ошибка (одна) · примечание amo · комплаенс · согласен/спор. Задач в попапе НЕТ.
+Ниже: главная ошибка (одна) · примечание amo (СВЁРНУТО, раскрывается для правки) · комплаенс ·
+согласен/спор. Задач и блока «итог звонка» в попапе НЕТ.
 ЭТАПОВ В ПОПАПЕ НЕТ. Этапы-контейнеры — инструмент РОПа: колонки дашборда, слабый этап недели,
 скоркарта разбора (там же полная раскладка слагаемых x/20, x/25, x/40, +15 с цитатами).
 ГЛАВНАЯ ОШИБКА — полный приоритет (первый проваленный сверху вниз, tie-break — больший вес):
