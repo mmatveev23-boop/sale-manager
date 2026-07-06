@@ -269,7 +269,14 @@
               <div style="font-family:'Unbounded';font-weight:800;font-size:28px;color:var(--green);margin-top:4px">17<small style="font-size:14px;color:var(--muted);font-weight:500"> /17</small></div>
               <div style="height:8px;border-radius:4px;background:#DCE8E1;margin-top:7px;overflow:hidden"><div style="width:100%;height:100%;background:var(--green)"></div></div>
               <div style="font-size:11.5px;color:var(--green-deep);margin-top:6px;font-weight:600">консультация состоялась — лид закреплён за тобой</div>
-              <div style="font-size:10.5px;color:var(--muted);margin-top:3px">недобор = красная шкала + список «добери» (закрепление по ИИ — после калибровки, свод §3)</div>
+              <div style="margin-top:10px;border-top:1px dashed rgba(14,92,70,.3);padding-top:8px">
+                <div style="font-size:10px;font-family:'Unbounded';font-weight:700;letter-spacing:.05em;color:var(--red);text-transform:uppercase">А так — если недобрал</div>
+                <div style="font-family:'Unbounded';font-weight:800;font-size:20px;color:var(--red);margin-top:3px">14<small style="font-size:12px;color:var(--muted);font-weight:500"> /17</small></div>
+                <div style="height:8px;border-radius:4px;background:#F0DBD8;margin-top:5px;overflow:hidden"><div style="width:82%;height:100%;background:var(--red)"></div></div>
+                <div style="font-size:11px;color:var(--ink);margin-top:5px;line-height:1.6">не проговорил: <b>10 · сделки за 3 года</b> · <b>11 · супруг в курсе</b> · <b>15 · госплатежи</b></div>
+                <div style="font-size:10.5px;color:var(--red);margin-top:2px;font-weight:600">лид НЕ закреплён → задача «добери диагностику» повторным звонком</div>
+              </div>
+              <div style="font-size:10px;color:var(--muted);margin-top:6px">закрепление по ИИ — после калибровки, до этого железные события (свод §3)</div>
             </div>
             <div style="background:var(--card);border:1px solid var(--line);border-radius:13px;padding:12px 14px">
               <div style="font-size:10.5px;font-family:'Unbounded';font-weight:700;letter-spacing:.06em;color:var(--muted);text-transform:uppercase">Продажа — как продал</div>
@@ -413,8 +420,8 @@ money_ladder.{digitized_pain · price_and_ask · date_plus_minimum · closed_now
   7 Закрытие           гейт: п.17 шаг с датой · качество: 4.3 дата+минималка · 4.4 закрыл
 Этап «провален» = провален его гейт-пункт ИЛИ его качество (бинарно, без процентов).
 МЕНЕДЖЕРУ (решение директора 2026-07-06 — максимально просто, ничего не скрыто): ДВЕ ШКАЛЫ рядом:
-(1) ГЕЙТ x/17 с прогресс-баром — 17/17 = зелёная, «лид закреплён»; недобор = красная + список
-«добери» из next_best_action; (2) ПРОДАЖА x/100 со шкалой и рисками 65/90; ПОД НЕЙ — 5 КОМПОНЕНТ-ШКАЛ (решение заказчика: «видеть
+(1) ГЕЙТ x/17 с прогресс-баром — 17/17 = зелёная, «лид закреплён»; недобор = красная + список недобранных ПОИМЁННО
+(номер + название пункта, из diagnostics.items where asked=false) + следствие «лид не закреплён → добери»; (2) ПРОДАЖА x/100 со шкалой и рисками 65/90; ПОД НЕЙ — 5 КОМПОНЕНТ-ШКАЛ (решение заказчика: «видеть
 каждый пункт и где косяк»; МОДЕЛЬ НЕ МЕНЯЛАСЬ — перегруппировка отображения лестницы):
   Эмпатия x/20 = empathy.score · Оцифровка боли x/10 = digitized_pain (ступень 4.1) ·
   Возражения x/25 = objections.score · Презентация цены x/30 = ступени 4.2+4.3+4.4 ·
