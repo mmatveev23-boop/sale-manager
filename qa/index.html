@@ -92,6 +92,8 @@
   .pass .pn2{font-weight:700;font-size:12.5px;line-height:1.35}
   .pass .pd{font-size:12px;color:var(--muted);line-height:1.5;margin-top:1px}
   .pass .pd b{color:var(--red)}
+  .pass .mn{font-family:"Unbounded";font-weight:800;font-size:11px;color:var(--red);margin-left:5px;vertical-align:1px}
+  .pass .mn.a{color:var(--amber)}
   .g .fl{background:var(--green)} .g .sn b{color:var(--green)}
   .a .fl{background:var(--amber)} .a .sn b{color:var(--amber)}
   .r .fl{background:var(--red)} .r .sn b{color:var(--red)}
@@ -273,13 +275,6 @@
           </div>
 
 
-          <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:10px">
-            <span class="chip c-green">Эмпатия 16/20</span>
-            <span class="chip c-amber">Возражения 15/25</span>
-            <span class="chip c-amber">Лестница денег 34/40</span>
-            <span class="chip c-green">Шаг с датой +15</span>
-          </div>
-
           <div style="margin-top:12px;background:var(--green-soft);border:1px solid rgba(14,92,70,.22);border-radius:11px;padding:9px 13px;font-size:12.5px;line-height:1.5;color:var(--green-deep)">
             <b>✓ Гейт: 17 из 17</b> — все пункты проговорены → консультация засчитана, лид закреплён за тобой. <span style="color:var(--muted);font-size:11.5px">(закрепление по ИИ — после калибровки, до этого железные события — свод §3; дата включения в настройках)</span>
           </div>
@@ -337,13 +332,14 @@
             <div style="margin-top:10px">
           <div class="panel pass">
             <div class="ph">Один проход по звонку — красное чини первым</div>
-            <div class="pr2"><span class="pi g">✓</span><div><div class="pn2">1 · Контакт</div><div class="pd">выслушал историю, снял вину <span style="color:var(--amber)">· минус за перебивания</span></div></div></div>
+            <div class="pr2"><span class="pi g">✓</span><div><div class="pn2">1 · Контакт <span class="mn a">−4</span></div><div class="pd">выслушал историю, снял вину · минус за перебивания</div></div></div>
             <div class="pr2"><span class="pi g">✓</span><div><div class="pn2">2 · Диагностика — гейт 11/11</div><div class="pd">долг · продукты · просрочка · платёж · доход · ИП · семья · имущество · сделки · супруг · исход</div></div></div>
             <div class="pr2"><span class="pi g">✓</span><div><div class="pn2">3 · Оцифровка боли + резюме</div><div class="pd">«платите 41 000, из них 35 500 — проценты» · резюме словами клиента</div></div></div>
             <div class="pr2"><span class="pi g">✓</span><div><div class="pn2">4 · Продукт и условия</div><div class="pd">конкуренты · деньги на жизнь · госплатежи · цена-канон 13 500 + «потянете?»</div></div></div>
             <div class="pr2 bad"><span class="pi r">✕</span><div><div class="pn2">5 · Презентация условий</div><div class="pd">вёл по страницам ✓, но <b>стр. 5–6 «Договор» и «Подпись» пропущены</b></div></div></div>
-            <div class="pr2 bad"><span class="pi r">✕</span><div><div class="pn2">6 · Возражения</div><div class="pd">«дорого» отработано ✓ · <b>«подумаю» — сдалась без дожима (15:50)</b></div></div></div>
-            <div class="pr2 bad"><span class="pi r">✕</span><div><div class="pn2">7 · Закрытие</div><div class="pd">шаг с датой ✓ · минималка 2 000 ✓ · <b>не закрыл на действие — договор не проговорён</b></div></div></div>
+            <div class="pr2 bad"><span class="pi r">✕</span><div><div class="pn2">6 · Возражения <span class="mn">−10</span></div><div class="pd">«дорого» отработано ✓ · <b>«подумаю» — сдалась без дожима (15:50)</b></div></div></div>
+            <div class="pr2 bad"><span class="pi r">✕</span><div><div class="pn2">7 · Закрытие <span class="mn">−6</span></div><div class="pd">шаг с датой ✓ · минималка 2 000 ✓ · <b>не закрыл на действие — договор не проговорён</b></div></div></div>
+            <div style="margin-top:8px;padding-top:9px;border-top:1px dashed var(--line);font-size:12.5px;color:var(--muted);text-align:right">итого: 100 − 4 − 10 − 6 = <b style="font-family:'Unbounded';color:var(--ink);font-size:14px">80</b></div>
           </div>
           <div style="margin-top:10px;display:flex;gap:6px 18px;flex-wrap:wrap;background:var(--paper);border:1px solid var(--line);border-radius:11px;padding:9px 13px;font-size:12px;color:var(--muted)">
             <span>⏱ длительность: <b style="color:var(--amber)">18:24</b> <span style="color:var(--faint)">(норма 25–40 — коротко: диагностика галопом?)</span> · твоя средняя: <b>20 мин</b></span>
@@ -407,7 +403,10 @@ money_ladder.{digitized_pain · price_and_ask · date_plus_minimum · closed_now
   6 Возражения         качество: objections /25 — сквозной этап, показывается по таймкодам
   7 Закрытие           гейт: п.17 шаг с датой · качество: 4.3 дата+минималка · 4.4 закрыл
 Этап «провален» = провален его гейт-пункт ИЛИ его качество (бинарно, без процентов).
-МЕНЕДЖЕРУ В ШАПКЕ: гейт x/17 · балл /100 · слагаемые балла (эмпатия/возражения/лестница/шаг) · один фокус (next_best_action)
+МЕНЕДЖЕРУ В ШАПКЕ: балл /100 · гейт x/17 · главная ошибка (одна) · один фокус (next_best_action).
+Чипов слагаемых НЕТ: потери показываются МИНУСАМИ на строках «Одного прохода» (минус этапа = потери
+его слагаемых из рубрики); инвариант: 100 − Σ минусов = score_total — если не сходится, ошибка рендера.
+Полная раскладка слагаемых (x/20, x/25, x/40, +15) — только в скоркарте РОПа (разбор) и на /score/.
 ГЛАВНАЯ ОШИБКА — полный приоритет (первый проваленный сверху вниз, tie-break — больший вес):
   1 closed_now=false → 2 необработанное возражение → 3 date_plus_minimum=false → 4 digitized_pain=false →
   5 price_and_ask=false → 6 гейт неполный (&lt;17/17) → 7 empathy&lt;12 → 8 шаг без даты/времени
