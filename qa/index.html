@@ -296,7 +296,7 @@
                 <span style="position:absolute;left:65%;top:-3px;width:2px;height:14px;background:var(--red);opacity:.55" title="65 — нижняя граница"></span>
                 <span style="position:absolute;left:90%;top:-3px;width:2px;height:14px;background:var(--green);opacity:.75" title="90 — цель"></span>
               </div>
-              <div style="font-size:11.5px;color:var(--muted);margin-top:6px">граница <b style="color:var(--red)">65</b> · цель <b style="color:var(--green)">90</b> · серия: <b>2 из 5</b> ниже 90 → на 5-м — тренировка</div>
+              <div style="font-size:11.5px;color:var(--muted);margin-top:6px">граница <b style="color:var(--red)">65</b> · цель <b style="color:var(--green)">90</b></div>
             </summary>
             <div class="sc-body">
               <div>
@@ -329,13 +329,14 @@
           </details>
 
 
+          <div style="margin-top:10px;display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--line);border-radius:11px;padding:9px 13px;font-size:12px">
+            <span style="font-family:'Unbounded';font-weight:800;font-size:15px;color:var(--amber);flex:none">2/5</span>
+            <span><b>Серия плохих звонков: 2 из 5</b> (плохой = гейт не собран или ниже 90; этот — 80). Пять подряд → <b style="color:var(--red)">стоп новых лидов + экзамен у РОПа</b>. Хороший звонок — гейт ✓ и 90+ — обнуляет серию.</span>
+          </div>
+
           <div class="mainerr">
             <div class="mh">Главная ошибка — одна</div>
             <p>После частички 2 000 ₽ <b>не проговорён договор</b> (страница 5 презентации пропущена). Деньги без договора = риск «устно ≠ договор» и расторжения. Сначала договор — он защищает клиента, потом деньги.</p>
-            <div style="margin-top:8px;display:flex;align-items:center;gap:8px;background:#fff;border:1px solid rgba(154,45,34,.3);border-radius:9px;padding:7px 11px;font-size:12px">
-              <span style="font-family:'Unbounded';font-weight:800;font-size:13px;color:var(--red)">2/3</span>
-              <span><b>Этот косяк — повтор 2 из 3.</b> Ещё один такой же → <b style="color:var(--red)">стоп новых лидов + экзамен у РОПа</b> по закрытию (сдал — кран открыт, активных ведёшь как обычно).</span>
-            </div>
           </div>
 
           <div class="donow">
@@ -455,16 +456,14 @@ money_ladder.{digitized_pain · price_and_ask · date_plus_minimum · closed_now
   5 price_and_ask=false → 6 гейт неполный (&lt;17/17) → 7 empathy&lt;12 → 8 шаг без даты/времени
 next_best_action + хвосты движка (payment_received && !contract_signed → задача «договор сегодня») → «Что сделать сейчас»
 compliance_flags[] → плашка «фраза на замену» (режим «пропускаем»: балл НЕ трогаем, тренд копим на дашборд)
-МЕХАНИКА ПОВТОРНОГО КОСЯКА (решение заказчика 2026-07-06 — «показали косяк, ещё 3 таких же → блок + экзамен»):
-  error_type = типизированный косяк из eval (enum: сдался_на_возражении · не_закрыл · перебивал · боль_без_цифр ·
-  пропущена_страница_N · гейт-пункт_N_не_спрошен · шаг_без_даты · не-канон_цены …);
-  счётчик per (manager, error_type) стартует с ПЕРВОГО показа косяка в попапе; каждый повтор → count++;
-  в попапе у главной ошибки бейдж «повтор N из 3»; count=3 → событие exam_required{manager, error_type}:
+СЕРИЯ ПЛОХИХ ЗВОНКОВ (решение заказчика 2026-07-06; вместо счётчиков по типам косяков — проще):
+  ПЛОХОЙ звонок = consultation_happened=false ИЛИ score_total < 90 (partial и оценки в споре не считаются);
+  streak на менеджера, только ПОДРЯД; хороший звонок (гейт ✓ И балл ≥90) → streak = 0;
+  в попапе полоска «серия: N из 5»; streak = 5 → событие exam_required{manager, слабейший элемент}:
   КРАН НОВЫХ ЛИДОВ ЗАКРЫТ (активных ведёт — окна ответственности не рушим, клиенты не страдают),
-  РОПу задача «экзамен: [элемент скрипта]» — пересдача элемента (эталон, ролевая); кнопка РОПа «сдал» →
-  счётчик 0, кран открыт. Авто-сброс: 10 звонков подряд без этого косяка. Уточнение канона «с линии
-  не снимаем»: активных ведёт всегда, новых не получает до сдачи. Серия 5 подряд <90 → тот же экзамен
-  (триггер общей просадки, не конкретного косяка).
+  РОПу задача «экзамен: пересдача элемента, где чаще всего терял» (эталон, ролевая);
+  кнопка РОПа «сдал» → streak 0, кран открыт. Включение блокировки — с даты (конфиг, аналог
+  ai_responsibility_enforced_from); до даты полоска показывается, кран не трогаем.
 weakest_stage = этап с наибольшей долей провалов (гейт-пункт или качество) за последние 5 закрытых оценок → бейдж «слабый этап недели»
 клипы: top-2 из etalon_library WHERE stage = weakest_stage ORDER BY rating → страница менеджера «Мои звонки» (в попап не кладём — постобработка короткая)
 confidence: в шапке НЕ показывать; если &lt;0.7 → бейдж «оценка предварительная», звонок вне серии и вне средних
