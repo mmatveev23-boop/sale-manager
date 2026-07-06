@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Структура оценки звонка — SALE 100.0</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="description" content="Из чего строится оценка первого звонка: гейт 17 (полный сбор) + балл 0–100 (эмпатия 20 · возражения 25 · лестница 40 · шаг 15) + сквозные проверки. Спецификация для менеджера и разработчика.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700;800&family=Golos+Text:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F6F2E9; --card:#FFFFFF; --ink:#191713; --muted:#615B50;
+    --green:#0E5C46; --green-deep:#0A3D2E; --amber:#C2790F; --red:#9A2D22;
+    --grey:#7C756A; --gold:#C99A33;
+    --line:rgba(25,23,19,.12);
+    --red-soft:#FBEDEB; --green-soft:#EAF3EE;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--paper);color:var(--ink);font-family:"Golos Text",sans-serif;line-height:1.55;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:980px;margin:0 auto;padding:0 22px}
+  h1,h2,h3,h4,.kicker,.num{font-family:"Unbounded",sans-serif}
+  a{color:inherit}
+
+  header{padding:56px 0 20px}
+  .kicker{font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:var(--green);font-weight:700}
+  h1{font-size:clamp(32px,6vw,54px);line-height:1.05;font-weight:800;letter-spacing:-.02em;margin:14px 0 0}
+  h1 .hl{color:var(--green)}
+  .lead{font-size:clamp(15px,2.2vw,19px);color:var(--muted);max-width:780px;margin:16px 0 0;font-weight:500}
+  .promise{margin:22px 0 0;padding:18px 22px;background:var(--green-deep);color:#F6F2E9;border-radius:16px;font-size:clamp(14px,2vw,17px);font-weight:500;line-height:1.5}
+  .promise b{color:#F4C775;font-weight:600}
+
+  .idx{display:flex;flex-wrap:wrap;gap:7px;margin:22px 0 6px}
+  .idx a{background:var(--card);border:1px solid var(--line);border-radius:9px;padding:6px 11px;font-size:12.5px;font-weight:500;text-decoration:none;color:var(--muted);transition:.15s}
+  .idx a:hover{border-color:var(--green);color:var(--green)}
+  .idx a b{font-family:"Unbounded";font-weight:700;color:var(--ink)}
+
+  h2.sec{font-size:clamp(21px,3.2vw,28px);font-weight:800;letter-spacing:-.01em;margin:48px 0 4px}
+  .sub{color:var(--muted);font-size:15px;margin-bottom:16px;max-width:800px}
+  .sub b{color:var(--ink)}
+
+  .panel{background:var(--card);border:1px solid var(--line);border-radius:15px;padding:16px 18px;margin-top:10px}
+  .panel h4{font-family:"Unbounded";font-weight:700;font-size:14px;color:var(--green);margin-bottom:8px}
+  .panel p{font-size:13.5px;color:var(--muted)}
+  .panel p b{color:var(--ink)}
+
+  table{width:100%;border-collapse:collapse;font-size:13px}
+  th{font-family:"Unbounded";font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);text-align:left;padding:6px 10px 6px 0;border-bottom:1px solid var(--line)}
+  td{padding:7px 10px 7px 0;border-bottom:1px solid var(--line);vertical-align:top}
+  td b{font-weight:600}
+  code{font-family:ui-monospace,Menlo,monospace;font-size:11.5px;background:var(--paper);border:1px solid var(--line);border-radius:5px;padding:1px 5px;white-space:nowrap}
+  .tblwrap{overflow-x:auto}
+  .crit{color:var(--red);font-weight:700}
+
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:10px}
+  @media (max-width:760px){.grid2{grid-template-columns:1fr}}
+
+  .flow{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:10px}
+  @media (max-width:760px){.flow{grid-template-columns:1fr 1fr}}
+  .fc{background:var(--card);border:1px solid var(--line);border-radius:13px;padding:13px 15px}
+  .fc .num{font-weight:800;font-size:16px;color:var(--gold)}
+  .fc b{font-family:"Unbounded";font-size:12.5px;display:block;margin-top:4px}
+  .fc p{font-size:12px;color:var(--muted);margin-top:5px;line-height:1.5}
+
+  .dev{background:#20241F;color:#E8E4D8;border-radius:16px;padding:18px 20px;margin-top:10px}
+  .dev h4{color:#8FD0B0;font-family:"Unbounded";font-size:13px;margin-bottom:8px}
+  .dev p, .dev li{font-size:13px;color:#C9C4B4;line-height:1.6}
+  .dev b{color:#F4C775}
+  .dev code{background:#2C312B;border-color:#3A403A;color:#A8E0C4}
+  .dev ul{margin:6px 0 0 18px}
+  pre{font-family:ui-monospace,Menlo,monospace;font-size:11.5px;line-height:1.55;background:#2C312B;border:1px solid #3A403A;border-radius:11px;padding:12px 14px;overflow-x:auto;color:#D8E6DC;margin-top:8px}
+
+  .flag{margin-top:10px;border-radius:12px;padding:11px 14px;background:var(--red-soft);border:1px solid rgba(154,45,34,.25);font-size:13px}
+  .flag b{color:var(--red)}
+  .okbox{margin-top:10px;border-radius:12px;padding:11px 14px;background:var(--green-soft);border:1px solid rgba(14,92,70,.22);font-size:13px}
+  .okbox b{color:var(--green-deep)}
+
+  footer{margin:56px 0 46px;padding-top:20px;border-top:1px solid var(--line);color:var(--muted);font-size:13px}
+  footer b{font-family:"Unbounded";color:var(--ink);font-weight:700}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="kicker">Оценка звонка · спецификация · канон v2.3</div>
+    <h1>Из чего строится <span class="hl">оценка</span></h1>
+    <p class="lead">Один прогон ИИ по записи каждого первого звонка → два вердикта разной валюты: <b>гейт</b> («узнал ли клиента» → лид твой или нет) и <b>балл</b> («как продавал» → рейтинг и деньги) + сквозные проверки. Страница — единый источник для менеджера, РОПа и разработчика. Боевой промт: v1.1.9 (полный текст — на <a href="../qa/" style="color:var(--green)">/qa/</a> в настройках).</p>
+    <div class="promise">Третьей оценки нет. «Этапы звонка» — это <b>контейнеры</b>: в каждом его гейт-пункты и его качество. Этап «провален» = провален его гейт-пункт ИЛИ его качество — бинарно, без обманчивых процентов.</div>
+    <div class="idx">
+      <a href="#flow"><b>◈</b> Схема</a>
+      <a href="#gate"><b>1</b> Гейт 17</a>
+      <a href="#score"><b>2</b> Балл 0–100</a>
+      <a href="#cross"><b>3</b> Сквозные</a>
+      <a href="#limits"><b>4</b> Пороги</a>
+      <a href="#stages"><b>5</b> Этапы-контейнеры</a>
+      <a href="#outcomes"><b>6</b> Исходы</a>
+      <a href="#dev"><b>⚙</b> Прогеру</a>
+    </div>
+  </header>
+
+  <h2 class="sec" id="flow">Схема: один прогон — четыре выхода</h2>
+  <div class="flow">
+    <div class="fc"><span class="num">0</span><b>Тип звонка</b><p><code>consultation</code> — оценивается всё · <code>partial</code> (обрыв) — только состоявшиеся блоки, вне средних · <code>dozhim</code> — другой промт · <code>no_contact</code> — пропуск.</p></div>
+    <div class="fc"><span class="num">1</span><b>Гейт — бинарный</b><p>«Консультация состоялась?» 17 пунктов, все обязательны. Выход: лид закреплён / задача «добери».</p></div>
+    <div class="fc"><span class="num">2</span><b>Балл 0–100</b><p>Эмпатия 20 + возражения 25 + лестница 40 + шаг 15. Выход: рейтинг, серии, тренировки.</p></div>
+    <div class="fc"><span class="num">3</span><b>Сквозные</b><p>Комплаенс (9 классов, «фиксируем и учим») · цена-канон · lead_check (замок закрытия).</p></div>
+  </div>
+
+  <h2 class="sec" id="gate">1 · Гейт: 17 пунктов в порядке скрипта</h2>
+  <p class="sub">Принцип заказчика: <b>«в гейте нет вещей, которые можно не проговорить»</b> — порога нет, гейт пройден = собраны ВСЕ 17 (или N/A). Пропущен хоть один → лид не закрепляется, недобранные пункты — первыми в <code>next_best_action</code>. Формулировки вопросов и «зачем каждый» — в чек-листе на <a href="../script/" style="color:var(--green)">/script/</a>.</p>
+  <div class="panel tblwrap">
+    <table>
+      <thead><tr><th>№</th><th>Пункт</th><th>Шаг скрипта</th><th>Ключ items (JSON)</th><th>Правила</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td><b>Причина и боль</b></td><td>1</td><td><code>1_reason</code></td><td></td></tr>
+        <tr><td>2</td><td><b>Общий долг (₽)</b></td><td>2</td><td><code>2_debt</code></td><td></td></tr>
+        <tr><td>3</td><td><b>Продукты долга</b> — потреб / МФО / карта / расписка</td><td>2</td><td><code>3_debt_products</code></td><td>тип, не имена банков</td></tr>
+        <tr><td>4</td><td><b>Просрочка</b> есть/нет, давность</td><td>2</td><td><code>4_overdue</code></td><td>развилка анкеты</td></tr>
+        <tr><td>5</td><td><b>Платёж в месяц (₽)</b></td><td>2</td><td><code>5_monthly_payment</code></td><td>сырьё оцифровки боли</td></tr>
+        <tr><td>6</td><td><b>Доход и занятость</b></td><td>2</td><td><code>6_income</code></td><td></td></tr>
+        <tr><td>7</td><td><b>Семья и иждивенцы</b></td><td>2</td><td><code>7_family</code></td><td></td></tr>
+        <tr><td>8</td><td><b>ИП / ООО</b> — сейчас или в прошлом, доли</td><td>2</td><td><code>8_ip_ooo</code></td><td></td></tr>
+        <tr><td>9</td><td><b>Имущество и залоги — клиента И супруга</b>, вкл. ипотеку</td><td>2</td><td><code>9_assets</code></td><td class="crit">критичный ⚠</td></tr>
+        <tr><td>10</td><td><b>Сделки с имуществом за 3 года</b></td><td>2</td><td><code>10_deals_3y</code></td><td class="crit">критичный ⚠</td></tr>
+        <tr><td>11</td><td><b>Супруг/близкие в курсе</b>, как относятся</td><td>2</td><td><code>11_family_aware</code></td><td>N/A: одинокий, близкие не звучат → авто-зачёт</td></tr>
+        <tr><td>12</td><td><b>Желаемый исход</b> — «списать или платить?»</td><td>2–3</td><td><code>12_desired_outcome</code></td><td></td></tr>
+        <tr><td>13</td><td><b>Конкуренты / прошлые консультации</b></td><td>3</td><td><code>13_competitors</code></td><td>«почему не заключили?»</td></tr>
+        <tr><td>14</td><td><b>Деньги на жизнь проговорены</b> — БФЛ: ПМ по закону · РДГ: 50 000 на руки, сверх копится и возвращается при утверждении плана</td><td>4</td><td><code>14_living_minimum</code></td><td>зачёт по презентуемому продукту</td></tr>
+        <tr><td>15</td><td><b>Госплатежи — отдельно</b> (50 000: суд 25 + оповещение 15 + почта 10)</td><td>6</td><td><code>15_state_fees</code></td><td></td></tr>
+        <tr><td>16</td><td><b>Презентация проведена по страницам В ЗВОНКЕ</b></td><td>7</td><td><code>16_presentation</code></td><td>бинарно «вёл/не вёл»; с промтом v1.2 — экраны 0–7 (x/8). Прервалась — не N/A: перезвонить и продолжить</td></tr>
+        <tr><td>17</td><td><b>Следующий шаг с датой</b> (и временем)</td><td>8</td><td><code>17_next_step</code></td><td>он же даёт +15 к баллу</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="okbox"><b>Гейт пройден</b> (все 17 или N/A) → <code>consultation_happened = true</code>: лид закреплён за менеджером, занимает слот из 20, идут окна ответственности.</div>
+  <div class="flag"><b>Гейт не пройден</b> → лид НЕ закрепляется, менеджеру задача «добери диагностику» повторным звонком. Обрыв связи = <code>partial</code>, гейт не фейлит. Не в гейте (сознательно): судимость/159 и исполнительные производства — проверяются в анкете передачи перед отдачей юристу (шаг 9).</div>
+
+  <h2 class="sec" id="score">2 · Балл 0–100: четыре слагаемых</h2>
+  <p class="sub">Триада заказчика, подтверждена бэктестом на звонках Марченко. Каждый вердикт ИИ — с дословной цитатой из записи.</p>
+  <div class="grid2">
+    <div class="panel"><h4>Эмпатия · 20</h4><p>6 сигналов по +4, <b>потолок 20</b> — полный балл при 5 из 6: (а) тёплое начало · (б) выслушал не перебивая · (в) снял вину · (г) человеческие вопросы · (д) без давления и канцелярита · (е) <b>резюме словами клиента перед презентацией</b> + картинка цены бездействия. Анти-сигналы по −4: перебивает · обесценивает · торопит · сухой допрос.</p></div>
+    <div class="panel"><h4>Возражения · 25</h4><p>Вопрос: «менеджер вообще пытался?» На возражение — принял эмоцию + цифры/дробление/встречный вопрос. Все отработаны = 25 · частично = пропорция · сдался с первого «нет» = 0 · возражений не было → сам прощупал («что смущает?») = зачёт.</p></div>
+    <div class="panel"><h4>Лестница денег · 40</h4><p>4 ступени по 10: <b>4.1</b> оцифровал боль (платёж + сколько из него проценты, цифрами) → <b>4.2</b> цена + «потянете?» (каноничность цены — отдельный флаг, балл не режет) → <b>4.3</b> дата ЗП + минималка от 1 000 в зачёт → <b>4.4</b> закрыл на действие сегодня (или шаг с датой И временем).</p></div>
+    <div class="panel"><h4>Шаг с датой · 15</h4><p>Тот же п.17 гейта: зафиксирован конкретный шаг с датой = <b>+15</b>, нет = 0. Градаций нет. «Созвонимся на днях» — незачёт.</p></div>
+  </div>
+
+  <h2 class="sec" id="cross">3 · Сквозные проверки — поверх обоих вердиктов</h2>
+  <div class="panel"><h4>Комплаенс — 9 классов · режим «фиксируем и учим»</h4><p>Каждый флаг = класс + дословная цитата. <b>×0 не применяется</b> — дата включения будет объявлена заранее (поле <code>compliance_mode</code>). Актуальные границы: <b>класс 1 сужен</b> — «100% спишем» РАЗРЕШЕНО (берём только проходные дела, возврат закреплён в договоре), флаг только на обещание возврата, которого нет в договоре («в двойном объёме») · <b>класс 9 сужен</b> — поздравить с решением до оплаты можно, флаг только на «процедура запущена» до денег. Классы 2–8 — без изменений. Анти-ложняк: флаг только на утверждение самого менеджера (не на отрицания и пересказ слов клиента).</p></div>
+  <div class="panel"><h4>Цена-канон — флаг <code>canon_price</code></h4><p>13 500/мес · 189 000 · VIP 169 000 · госплатежи 50 000 отдельно · Кредитный доктор +1 438/мес · Сохранение имущества <b>60 000 за объект</b> · сопровождение РДГ 5 000/мес (после утверждения плана) · реферальная скидка 10 000. Другая цифра = флаг РОПу «устно ≠ договор»; балл режется только после даты <code>canon_enforced_from</code>.</p></div>
+  <div class="panel"><h4>Lead check — замок закрытия (главная функция оценки)</h4><p>Независимо от баллов: <code>normal_lead</code> (клиент живой и наш?) + <code>valid_close_reason</code> (есть ли в записи основание закрыть, с цитатой). Менеджер закрыл лида при <code>normal_lead=true</code> без основания → <b>лид авто-возвращается в работу другому + флаг и разбор</b>. Проверяются все закрытия после консультаций.</p></div>
+
+  <h2 class="sec" id="limits">4 · Пороги и последствия</h2>
+  <div class="panel"><p><b>65+</b> — без штрафа, даже если клиент не купил · <b>ниже 65</b> — слабый звонок, рейтинг вниз · <b>90+</b> — идеал (стандарт финуслуг по телефону) · <b>5 подряд ниже 90</b> → автозапись на тренировку с РОПом, с линии не снимаем · рейтинг = средняя <b>~5 последних закрытых оценок</b> (не один звонок) · <code>partial</code> и оценки в споре — вне средних и серий · спор менеджера: комментарий обязателен, SLA РОПа 24 ч, до разбора оценка не в рейтинге · первые 8–12 недель — режим тренера (оценки видят РОП и сам менеджер).</p></div>
+
+  <h2 class="sec" id="stages">5 · Этапы звонка = контейнеры (не третья оценка)</h2>
+  <p class="sub">У этапов НЕТ своих баллов. Этап = его гейт-пункты (✓/✕) + его качество из рубрики. «Провален» = провален гейт-пункт ИЛИ качество. В попапе менеджера это блок «Один проход по звонку — красное чини первым».</p>
+  <div class="panel tblwrap">
+    <table>
+      <thead><tr><th>Этап</th><th>Гейт внутри</th><th>Качество внутри</th></tr></thead>
+      <tbody>
+        <tr><td><b>1 · Контакт</b></td><td>п.1 боль</td><td>эмпатия (а–в)</td></tr>
+        <tr><td><b>2 · Диагностика</b></td><td>п.2–12 · охват x/11</td><td>эмпатия (г) человеческие вопросы</td></tr>
+        <tr><td><b>3 · Оцифровка + резюме</b></td><td>—</td><td>лестница 4.1 + эмпатия (е) резюме</td></tr>
+        <tr><td><b>4 · Продукт и условия</b></td><td>п.13 конкуренты · п.14 деньги на жизнь · п.15 госплатежи</td><td>лестница 4.2 цена + «потянете?» (+canon_price)</td></tr>
+        <tr><td><b>5 · Презентация условий</b></td><td>п.16 вёл по страницам (v1.2: экраны x/8)</td><td>—</td></tr>
+        <tr><td><b>6 · Возражения</b></td><td>—</td><td>objections /25 — сквозной, по таймкодам</td></tr>
+        <tr><td><b>7 · Закрытие</b></td><td>п.17 шаг с датой</td><td>лестница 4.3 + 4.4</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="sub" style="margin-top:10px"><b>Менеджеру в шапке попапа:</b> итог звонка → балл + слагаемые чипами → гейт-плашка → главная ошибка (одна) → «что сделать сейчас» → примечание в amo → согласен/спор. <b>РОПу на дашборде:</b> колонки этапов = доля звонков без провала этапа; «слабый этап недели» = наибольшая доля провалов за последние 5 оценок.</p>
+
+  <h2 class="sec" id="outcomes">6 · Матрица исходов: гейт × деньги</h2>
+  <div class="grid2">
+    <div class="panel"><h4 style="color:var(--green)">✓ Собрал + продал</h4><p>Идеал: лид твой, балл высокий, анкета полная → передача в сопровождение сегодня. «Процедура запущена» — только после прихода денег.</p></div>
+    <div class="panel"><h4 style="color:var(--green)">→ Собрал, не продал</h4><p>Нормально: лид закреплён, 65+ без штрафа — дожим по карте касаний, ИИ подскажет следующий ход.</p></div>
+    <div class="panel"><h4 style="color:var(--grey)">✕ Не собрал, не продал</h4><p>Консультация не состоялась: лид не закреплён, лестница без диагностики не набирается. Добери повторным звонком.</p></div>
+    <div class="panel"><h4 style="color:var(--amber)">⚠ Не собрал, но продал</h4><p>Деньги засчитаны. Но «нет анкеты — нет передачи»: диагностику доделать до передачи юристу; несобранные риски — мина расторжения и второй половины выплаты.</p></div>
+  </div>
+
+  <h2 class="sec" id="dev">⚙ Прогеру: контракт, пайплайн, правила движка</h2>
+  <div class="dev">
+    <h4>Пайплайн</h4>
+    <p>Телефония (вебхук call-end, <code>agent_id + call_id</code>) → скачать запись (retry «ещё не готова») → RU STT → <b>дедуп до оценки</b> (один звонок приходит двумя файлами pbx+оператор: связка lead_id + timestamp ±2 мин) → LLM с промтом v1.1.9 → строгий JSON → движок. amoCRM — витрина, вся логика в своём бэкенде.</p>
+    <h4 style="margin-top:12px">Выходной JSON (ключевые поля)</h4>
+<pre>call_type: consultation | partial | dozhim | no_contact
+diagnostics: { items: {1_reason … 17_next_step: {asked, value}},   // value="N/A" — авто-зачёт
+               collected_count: 0–17, consultation_happened: bool } // true ⇔ все 17 собраны/N/A
+empathy:      { score: 0–20, signals[], anti_signals[], quotes[] }  // 6 сигналов ×4, потолок 20
+objections:   { score: 0–25, items[{objection, handled, quote}], probed_if_none }
+money_ladder: { digitized_pain, price_and_ask{+canon_price}, date_plus_minimum, closed_now, score: 0–40 }
+next_step_bonus: 0 | 15        // = items.17_next_step
+score_total: 0–100             // empathy + objections + money_ladder + next_step_bonus
+lead_check:  { normal_lead, interest_signals[], stop_factors[], valid_close_reason, close_reason_quote }
+compliance_flags: [{ class_id: 1–9, class, quote }]
+client_state · next_best_action · summary · manager_label · refusal · partial</pre>
+    <h4 style="margin-top:12px">Правила движка</h4>
+    <ul>
+      <li><b>Закрепление лида</b> по <code>consultation_happened</code> — только с даты <code>ai_responsibility_enforced_from</code>; до неё ответственность по железным событиям (договор/деньги/дозвон ≥N мин), оценки — тренировочные.</li>
+      <li><b>Гейт-фейл</b> → задача «добери диагностику» с перечнем из <code>next_best_action</code>; повторный добор-звонок домердживает items.</li>
+      <li><b>Замок закрытия:</b> закрытие лида при <code>normal_lead=true && !valid_close_reason</code> → авто-возврат лида в работу другому менеджеру + флаг + разбор.</li>
+      <li><b>Рейтинг:</b> средняя score_total последних ~5 закрытых оценок; <code>partial=true</code> и оценки в статусе «спор» исключаются из средних, серий и полос; серия 5 подряд &lt;90 → событие <code>coaching_required</code>.</li>
+      <li><b>Комплаенс:</b> флаги копятся всегда; вычет ×0 применяется движком только при <code>compliance_mode=enforce</code> (решение с объявленной датой). Не-канон цены режет балл только после <code>canon_enforced_from</code>.</li>
+      <li><b>Этапы НЕ считаются отдельно</b> — рендер из готовых полей по таблице §5. Ни одного нового расчёта, ни одного нового поля.</li>
+      <li><b>Версии несовместимы по номерам items:</b> до v1.1.3 гейт был 12/14 пунктов с порогом — старые оценки не сравнивать с новыми напрямую.</li>
+      <li>Оплата мимо вебхука = ручной ввод РОПом (иначе ложные пулы).</li>
+    </ul>
+  </div>
+
+  <footer>
+    <b>SALE 100.0</b> · Структура оценки звонка · канон v2.3, промт v1.1.9 (2026-07-06). Полный текст промта — <a href="../qa/">/qa/</a> (настройки) · формулировки гейта и правила игры — <a href="../script/">/script/</a> · правила работы — <a href="../rules/">/rules/</a>.<br>
+    Дожим-звонки (статусы «Думает» / добор) оцениваются отдельным промтом: 3 вопроса — пытался закрыть · отработал возражение · шаг с датой; «пустой дожим» не засчитывается.
+  </footer>
+
+</div>
+</body>
+</html>
