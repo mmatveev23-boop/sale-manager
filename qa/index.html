@@ -278,11 +278,11 @@
               <div style="font-size:11.5px;color:var(--green-deep);margin-top:6px;font-weight:600">консультация состоялась — лид закреплён за тобой</div>
             </summary>
             <div class="sc-body">
-              <div style="font-size:10px;font-family:'Unbounded';font-weight:700;letter-spacing:.05em;color:var(--red);text-transform:uppercase">А так — если недобрал</div>
-              <div style="font-family:'Unbounded';font-weight:800;font-size:20px;color:var(--red);margin-top:3px">14<small style="font-size:12px;color:var(--muted);font-weight:500"> /17</small></div>
-              <div style="height:8px;border-radius:4px;background:#F0DBD8;margin-top:5px;overflow:hidden"><div style="width:82%;height:100%;background:var(--red)"></div></div>
-              <div style="font-size:11px;color:var(--ink);margin-top:5px;line-height:1.6">не проговорил: <b>10 · сделки за 3 года</b> · <b>11 · супруг в курсе</b> · <b>15 · госплатежи</b></div>
-              <div style="font-size:10.5px;color:var(--red);margin-top:2px;font-weight:600">лид НЕ закреплён → задача «добери диагностику» повторным звонком</div>
+              <div style="font-size:10px;font-family:'Unbounded';font-weight:700;letter-spacing:.05em;color:var(--red);text-transform:uppercase">А так — если недобрал (демо гейт-фейла)</div>
+              <div style="font-family:'Unbounded';font-weight:800;font-size:20px;color:var(--red);margin-top:3px">10<small style="font-size:12px;color:var(--muted);font-weight:500"> /17</small></div>
+              <div style="height:8px;border-radius:4px;background:#F0DBD8;margin-top:5px;overflow:hidden"><div style="width:59%;height:100%;background:var(--red)"></div></div>
+              <div style="font-size:11px;color:var(--ink);margin-top:5px;line-height:1.7">не проговорил 7 пунктов: <b>3 · продукты долга</b> · <b>8 · ИП/ООО</b> · <b>10 · сделки за 3 года ⚠</b> · <b>11 · супруг в курсе</b> · <b>13 · конкуренты</b> · <b>14 · деньги на жизнь</b> · <b>15 · госплатежи</b></div>
+              <div style="font-size:10.5px;color:var(--red);margin-top:3px;font-weight:600">консультация НЕ состоялась → лид НЕ закреплён · звонок ПЛОХОЙ (жизнь сгорает) · задача «добери 7 пунктов» повторным звонком — добрал → гейт пересчитывается, лид твой</div>
               <div style="font-size:10px;color:var(--muted);margin-top:6px">закрепление по ИИ — после калибровки, до этого железные события (свод §3)</div>
             </div>
           </details>
@@ -329,9 +329,12 @@
           </details>
 
 
-          <div style="margin-top:10px;display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--line);border-radius:11px;padding:9px 13px;font-size:12px">
-            <span style="font-family:'Unbounded';font-weight:800;font-size:15px;color:var(--amber);flex:none">2/5</span>
-            <span><b>Серия плохих звонков: 2 из 5</b> (плохой = гейт не собран или ниже 90; этот — 76). Пять подряд → <b style="color:var(--red)">стоп новых лидов + экзамен у РОПа</b>. Хороший звонок — гейт ✓ и 90+ — обнуляет серию.</span>
+          <div style="margin-top:10px;background:var(--card);border:1px solid var(--line);border-radius:11px;padding:10px 13px;font-size:12px">
+            <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+              <span style="font-size:17px;letter-spacing:2px;flex:none">❤️❤️❤️<span style="filter:grayscale(1);opacity:.4">❤️❤️</span></span>
+              <span style="font-family:'Unbounded';font-weight:800;font-size:13px;color:var(--amber)">жизни: 3 из 5</span>
+            </div>
+            <div style="margin-top:6px;line-height:1.55">Плохой звонок — гейт не собран или ниже 90 — сжигает жизнь (этот сжёг: 76). <b>Вернуть все 5 сразу — один хороший звонок:</b> гейт 17/17 и балл 90+. <b style="color:var(--red)">Сгорели все 5</b> → стоп новых лидов + экзамен у РОПа; сдал → 5 жизней и кран открыт.</div>
           </div>
 
           <div class="mainerr">
@@ -452,10 +455,11 @@ compliance_flags[] → плашка «фраза на замену» (режим
 СЕРИЯ ПЛОХИХ ЗВОНКОВ (решение заказчика 2026-07-06; вместо счётчиков по типам косяков — проще):
   ПЛОХОЙ звонок = consultation_happened=false ИЛИ score_total < 90 (partial и оценки в споре не считаются);
   streak на менеджера, только ПОДРЯД; хороший звонок (гейт ✓ И балл ≥90) → streak = 0;
-  в попапе полоска «серия: N из 5»; streak = 5 → событие exam_required{manager, слабейший элемент}:
+  в попапе — геймификация «5 ЖИЗНЕЙ» (сердца): жизни = 5 − streak; плохой звонок сжигает жизнь,
+хороший (гейт ✓ И ≥90) восстанавливает все 5; streak = 5 (0 жизней) → событие exam_required{manager, слабейший элемент}:
   КРАН НОВЫХ ЛИДОВ ЗАКРЫТ (активных ведёт — окна ответственности не рушим, клиенты не страдают),
   РОПу задача «экзамен: пересдача элемента, где чаще всего терял» (эталон, ролевая);
-  кнопка РОПа «сдал» → streak 0, кран открыт. Включение блокировки — с даты (конфиг, аналог
+  кнопка РОПа «сдал» → streak 0 (5 жизней), кран открыт. Включение блокировки — с даты (конфиг, аналог
   ai_responsibility_enforced_from); до даты полоска показывается, кран не трогаем.
 weakest_stage = этап с наибольшей долей провалов (гейт-пункт или качество) за последние 5 закрытых оценок → бейдж «слабый этап недели»
 клипы: top-2 из etalon_library WHERE stage = weakest_stage ORDER BY rating → страница менеджера «Мои звонки» (в попап не кладём — постобработка короткая)
@@ -895,7 +899,7 @@ tasks_created · note_posted · clip_of_day · weekly_patterns · self_review_as
     <div class="kpis">
       <div class="kpi" style="cursor:default"><div class="kl">Моя средняя · неделя</div><div class="kv" style="color:var(--amber)"><span id="myAvg">—</span> <small style="font-size:12px;color:var(--red)">▼ 4.1</small></div><div class="ks">по закрытым · цель 90</div></div>
       <div class="kpi" style="cursor:default"><div class="kl">Мой средний разговор</div><div class="kv" id="myDur">—</div><div class="ks">норма 25–40 · короче 15 — гейт не наберёшь</div></div>
-      <div class="kpi" style="cursor:default"><div class="kl">Серия плохих</div><div class="kv" style="color:var(--amber)">2 / 5</div><div class="ks">гейт или ниже 90 · на 5-м — стоп новых + экзамен у РОПа</div></div>
+      <div class="kpi" style="cursor:default"><div class="kl">Жизни</div><div class="kv" style="color:var(--amber)">❤️ 3 / 5</div><div class="ks">плохой звонок сжигает · хороший (гейт ✓ и 90+) возвращает все 5</div></div>
       <div class="kpi" style="cursor:default"><div class="kl">Слабый этап</div><div class="kv" style="font-size:17px;color:var(--red);padding-top:5px">Презентация</div><div class="ks">провал в 3 из 5 звонков · 2 клипа ниже</div></div>
       <div class="kpi" style="cursor:default"><div class="kl">Споры</div><div class="kv">1</div><div class="ks">открыт · ответ РОПа ≤ 24 ч</div></div>
     </div>
