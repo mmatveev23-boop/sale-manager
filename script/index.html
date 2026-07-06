@@ -133,6 +133,7 @@
     <div class="idx">
       <a href="#howto"><b>◈</b> Как работать</a>
       <a href="#ai"><b>⚖</b> Оценка ИИ</a>
+      <a href="#checklist"><b>✓</b> Чек-лист гейта</a>
       <a href="#s1"><b>1</b> Приветствие</a>
       <a href="#s2"><b>2</b> Диагностика</a>
       <a href="#s3"><b>3</b> Развилка</a>
@@ -219,6 +220,56 @@
     <div class="prow"><span class="pn" style="background:var(--amber)">⚠</span><span class="pg">Не собрана, но продал</span><span class="ps">Деньги засчитаны — продажу никто не отменяет. Но: <i>«нет анкеты — нет передачи»</i> — юристам клиента не передать, диагностику доделываешь следующим звонком. Несобранные риски (сделки, залоги, 159) — мина: всплывут у юриста → расторжение, а это минус твой процент расторжений и вторая половина выплаты (она приходит со 2-го платежа клиента).</span></div>
   </div>
 
+  <!-- DIAGNOSTIC CHECKLIST -->
+  <h2 class="sec">Диагностический чек-лист</h2>
+  <p class="sub">Гейт в деталях — это вопросы шага 2 звонка (реплики и порядок — в шагах ниже). Жирный минимум — 14 пунктов гейта (ИИ проверяет по записи: 10 из 14 = «консультация состоялась»; «супруг в курсе» у одинокого клиента — авто-зачёт). Остальное — подсказка.</p>
+  <div class="checkgrid" id="checklist">
+    <div class="cgroup">
+      <h4>Открытие и повод</h4>
+      <label class="citem"><input type="checkbox"><span><b>Что за история с кредитами, почему решили обратиться?</b></span></label>
+      <label class="citem"><input type="checkbox"><span>Как оцениваете финансовую нагрузку? Справляетесь?</span></label>
+      <label class="citem"><input type="checkbox"><span>Знаете последствия, если ничего не делать?</span></label>
+      <label class="citem"><input type="checkbox"><span><b>Идеальный исход — списать или платить комфортно?</b></span></label>
+      <label class="citem"><input type="checkbox"><span><b>Уже консультировались где-то? Что предложили, почему не заключили?</b></span></label>
+    </div>
+    <div class="cgroup">
+      <h4>Долг и кредиторы</h4>
+      <label class="citem"><input type="checkbox"><span><b>Общая сумма долга?</b></span></label>
+      <label class="citem"><input type="checkbox"><span><b>Кредиторы: банки / МФО, сколько?</b></span></label>
+      <label class="citem"><input type="checkbox"><span>Как давно взяты кредиты/карты?</span></label>
+      <label class="citem"><input type="checkbox"><span><b>Просрочки есть? Как давно?</b></span></label>
+      <label class="citem"><input type="checkbox"><span>Ветка: банки требуют к выплате? / приставы арестовали ЗП, описывали имущество?</span></label>
+      <label class="citem"><input type="checkbox"><span>Коллекторы беспокоят?</span></label>
+    </div>
+    <div class="cgroup">
+      <h4>Платежи и деньги</h4>
+      <label class="citem"><input type="checkbox"><span><b>Ежемесячный платёж по всем обязательствам?</b></span></label>
+      <label class="citem"><input type="checkbox"><span>Когда ближайший платёж?</span></label>
+      <label class="citem"><input type="checkbox"><span>Оцифровка: платёж × месяцы = «целое состояние» — проговорена?</span></label>
+    </div>
+    <div class="cgroup">
+      <h4>Доход и занятость</h4>
+      <label class="citem"><input type="checkbox"><span><b>Официальный доход? Как справляетесь?</b></span></label>
+      <label class="citem"><input type="checkbox"><span>Неофициальные источники, подработка? (для картины — не для советов)</span></label>
+      <label class="citem"><input type="checkbox"><span>ИП сейчас или раньше? Гендиректор, учредитель ООО?</span></label>
+    </div>
+    <div class="cgroup">
+      <h4>Семья и имущество</h4>
+      <label class="citem"><input type="checkbox"><span><b>Официальный брак? Несовершеннолетние дети?</b></span></label>
+      <label class="citem"><input type="checkbox"><span><b>Супруг/близкие знают, что рассматриваете процедуру? Как относятся?</b> Кто может отговорить — подключить к разговору?</span></label>
+      <label class="citem"><input type="checkbox"><span><b>Имущество на вас</b> (вкл. оружие, лодки, технику)?</span></label>
+      <label class="citem"><input type="checkbox"><span>Имущество супруги, приобретённое в браке? Ипотека — на ком?</span></label>
+      <label class="citem"><input type="checkbox"><span><b>Сделки за последние 3 года?</b> На какую сумму, кому продавали?</span></label>
+    </div>
+    <div class="cgroup">
+      <h4>Риски и шаг</h4>
+      <label class="citem"><input type="checkbox"><span><b>Судимость / поручительство / заявления по 159?</b></span></label>
+      <label class="citem"><input type="checkbox"><span>Исполнительные производства, алименты?</span></label>
+      <label class="citem"><input type="checkbox"><span><b>Следующий шаг с датой зафиксирован?</b></span></label>
+    </div>
+  </div>
+  <div class="ccount" id="ccount">Отмечено <b>0</b> из <span id="ctotal">0</span></div>
+
   <h2 class="sec">Звонок по шагам</h2>
   <p class="sub">10 шагов. ИИ слышит каждый разговор: гейт «консультация состоялась» = 10 из 14 пунктов диагностики; оценку делают эмпатия (20) · возражения (25) · лестница денег (40) · шаг с датой (15).</p>
 
@@ -246,7 +297,7 @@
     <div class="sdot d-neu">2</div>
     <div class="sbody">
       <div class="st">Диагностика — анкета с ветвлением по просрочке <span style="font-family:'Golos Text';font-size:11px;font-weight:700;color:var(--muted);background:var(--paper);border:1px solid var(--line);border-radius:7px;padding:2px 8px;vertical-align:2px;white-space:nowrap">⏱ 8–10 мин</span></div>
-      <div class="goal">Цель: 14 пунктов гейта (полный чек-лист ниже). Ключевая развилка — просрочка: от неё зависят и вопросы, и оффер.</div>
+      <div class="goal">Цель: 14 пунктов гейта (полный чек-лист — в <a href="#checklist" style="color:var(--green)">«Правилах игры»</a> выше). Ключевая развилка — просрочка: от неё зависят и вопросы, и оффер.</div>
       <div class="say"><div class="lbl">База</div>
         <p>Какая общая сумма долга на текущий момент? Как давно взяты кредиты? Есть ли просрочки — и как давно начались?</p>
       </div>
@@ -440,56 +491,6 @@
       <div class="why"><b>Почему работает:</b> «чем больше клиент уже внёс, тем меньше риск, что уйдёт» — но ежедневное нянченье не твоя задача, твоя — эскалация в день сигнала.</div>
     </div>
   </div>
-
-  <!-- DIAGNOSTIC CHECKLIST -->
-  <h2 class="sec">Диагностический чек-лист</h2>
-  <p class="sub">Шаг 2 в деталях. Жирный минимум — 14 пунктов гейта (ИИ проверяет по записи: 10 из 14 = «консультация состоялась»; «супруг в курсе» у одинокого клиента — авто-зачёт). Остальное — подсказка.</p>
-  <div class="checkgrid" id="checklist">
-    <div class="cgroup">
-      <h4>Открытие и повод</h4>
-      <label class="citem"><input type="checkbox"><span><b>Что за история с кредитами, почему решили обратиться?</b></span></label>
-      <label class="citem"><input type="checkbox"><span>Как оцениваете финансовую нагрузку? Справляетесь?</span></label>
-      <label class="citem"><input type="checkbox"><span>Знаете последствия, если ничего не делать?</span></label>
-      <label class="citem"><input type="checkbox"><span><b>Идеальный исход — списать или платить комфортно?</b></span></label>
-      <label class="citem"><input type="checkbox"><span><b>Уже консультировались где-то? Что предложили, почему не заключили?</b></span></label>
-    </div>
-    <div class="cgroup">
-      <h4>Долг и кредиторы</h4>
-      <label class="citem"><input type="checkbox"><span><b>Общая сумма долга?</b></span></label>
-      <label class="citem"><input type="checkbox"><span><b>Кредиторы: банки / МФО, сколько?</b></span></label>
-      <label class="citem"><input type="checkbox"><span>Как давно взяты кредиты/карты?</span></label>
-      <label class="citem"><input type="checkbox"><span><b>Просрочки есть? Как давно?</b></span></label>
-      <label class="citem"><input type="checkbox"><span>Ветка: банки требуют к выплате? / приставы арестовали ЗП, описывали имущество?</span></label>
-      <label class="citem"><input type="checkbox"><span>Коллекторы беспокоят?</span></label>
-    </div>
-    <div class="cgroup">
-      <h4>Платежи и деньги</h4>
-      <label class="citem"><input type="checkbox"><span><b>Ежемесячный платёж по всем обязательствам?</b></span></label>
-      <label class="citem"><input type="checkbox"><span>Когда ближайший платёж?</span></label>
-      <label class="citem"><input type="checkbox"><span>Оцифровка: платёж × месяцы = «целое состояние» — проговорена?</span></label>
-    </div>
-    <div class="cgroup">
-      <h4>Доход и занятость</h4>
-      <label class="citem"><input type="checkbox"><span><b>Официальный доход? Как справляетесь?</b></span></label>
-      <label class="citem"><input type="checkbox"><span>Неофициальные источники, подработка? (для картины — не для советов)</span></label>
-      <label class="citem"><input type="checkbox"><span>ИП сейчас или раньше? Гендиректор, учредитель ООО?</span></label>
-    </div>
-    <div class="cgroup">
-      <h4>Семья и имущество</h4>
-      <label class="citem"><input type="checkbox"><span><b>Официальный брак? Несовершеннолетние дети?</b></span></label>
-      <label class="citem"><input type="checkbox"><span><b>Супруг/близкие знают, что рассматриваете процедуру? Как относятся?</b> Кто может отговорить — подключить к разговору?</span></label>
-      <label class="citem"><input type="checkbox"><span><b>Имущество на вас</b> (вкл. оружие, лодки, технику)?</span></label>
-      <label class="citem"><input type="checkbox"><span>Имущество супруги, приобретённое в браке? Ипотека — на ком?</span></label>
-      <label class="citem"><input type="checkbox"><span><b>Сделки за последние 3 года?</b> На какую сумму, кому продавали?</span></label>
-    </div>
-    <div class="cgroup">
-      <h4>Риски и шаг</h4>
-      <label class="citem"><input type="checkbox"><span><b>Судимость / поручительство / заявления по 159?</b></span></label>
-      <label class="citem"><input type="checkbox"><span>Исполнительные производства, алименты?</span></label>
-      <label class="citem"><input type="checkbox"><span><b>Следующий шаг с датой зафиксирован?</b></span></label>
-    </div>
-  </div>
-  <div class="ccount" id="ccount">Отмечено <b>0</b> из <span id="ctotal">0</span></div>
 
   <!-- OBJECTIONS -->
   <h2 class="sec">Отработка возражений</h2>
