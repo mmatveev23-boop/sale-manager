@@ -279,7 +279,12 @@
                 <span style="position:absolute;left:65%;top:-3px;width:2px;height:14px;background:var(--red);opacity:.55" title="65 — нижняя граница"></span>
                 <span style="position:absolute;left:90%;top:-3px;width:2px;height:14px;background:var(--green);opacity:.75" title="90 — цель"></span>
               </div>
-              <div style="font-size:11.5px;color:var(--muted);margin-top:6px">граница <b style="color:var(--red)">65</b> · цель <b style="color:var(--green)">90</b> · серия: <b>2 из 5</b> ниже 90 → на 5-м — тренировка</div>
+              <div style="margin-top:8px;font-size:11.5px;line-height:1.7">
+                <div><b style="font-family:'Unbounded';font-size:10.5px;color:var(--red)">−10</b> возражение «подумаю» — сдалась без дожима</div>
+                <div><b style="font-family:'Unbounded';font-size:10.5px;color:var(--red)">−6</b> не закрыл на действие — договор не проговорён</div>
+                <div><b style="font-family:'Unbounded';font-size:10.5px;color:var(--amber)">−4</b> перебивал клиента</div>
+              </div>
+              <div style="font-size:10.5px;color:var(--muted);margin-top:5px;border-top:1px dashed var(--line);padding-top:5px">граница <b style="color:var(--red)">65</b> · цель <b style="color:var(--green)">90</b> · серия: <b>2 из 5</b> ниже 90 → на 5-м — тренировка</div>
             </div>
           </div>
           <style>@media (max-width:520px){.gg2{grid-template-columns:1fr !important}}</style>
@@ -389,7 +394,9 @@ money_ladder.{digitized_pain · price_and_ask · date_plus_minimum · closed_now
 Этап «провален» = провален его гейт-пункт ИЛИ его качество (бинарно, без процентов).
 МЕНЕДЖЕРУ (решение директора 2026-07-06 — максимально просто, ничего не скрыто): ДВЕ ШКАЛЫ рядом:
 (1) ГЕЙТ x/17 с прогресс-баром — 17/17 = зелёная, «лид закреплён»; недобор = красная + список
-«добери» из next_best_action; (2) ПРОДАЖА x/100 со шкалой и рисками порогов 65/90 + серия <90.
+«добери» из next_best_action; (2) ПРОДАЖА x/100 со шкалой и рисками порогов 65/90; ПОД ШКАЛОЙ — СПИСОК ПОТЕРЬ: только минусы,
+отсортированы по размеру («−N короткая причина» из рубрики; Σ минусов = 100 − score_total, не сходится =
+ошибка рендера; потерь нет → строка «без потерь»); ниже — пороги и серия <90.
 Ниже: главная ошибка (одна) · «что сделать сейчас» · примечание amo · комплаенс · согласен/спор.
 ЭТАПОВ В ПОПАПЕ НЕТ. Этапы-контейнеры — инструмент РОПа: колонки дашборда, слабый этап недели,
 скоркарта разбора (там же полная раскладка слагаемых x/20, x/25, x/40, +15 с цитатами).
