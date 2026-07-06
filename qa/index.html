@@ -266,7 +266,7 @@
         <div class="pp-b">
 
           <div style="margin-top:2px;background:var(--red-soft);border:1px solid rgba(154,45,34,.3);border-radius:12px;padding:12px 15px">
-            <div style="display:flex;align-items:center;gap:8px;font-size:15.5px;font-weight:700;color:var(--red)"><span style="font-size:17px">🔥</span>Плохой звонок · −1 жизнь</div>
+            <div style="display:flex;align-items:center;gap:8px;font-size:15.5px;font-weight:700;color:var(--red)"><span style="font-size:17px">🔥</span>Плохой звонок · −1 бакс</div>
             <div style="font-size:12px;color:var(--red);opacity:.8;margin-top:2px">гейт не собран (10/17) и балл ниже цели (76 &lt; 90)</div>
           </div>
 
@@ -280,11 +280,11 @@
               <div style="font-family:'Unbounded';font-weight:800;font-size:19px;color:var(--amber);margin-top:2px">76<small style="font-size:11px;color:var(--faint);font-weight:500">/100</small></div>
             </div>
             <div style="flex:1;padding:10px 14px">
-              <div style="font-size:11px;color:var(--muted)">жизни</div>
-              <div style="font-family:'Unbounded';font-weight:800;font-size:19px;margin-top:2px">3<small style="font-size:11px;color:var(--faint);font-weight:500">/5</small> <span style="font-size:12px;vertical-align:2px">❤️❤️❤️<span style="filter:grayscale(1);opacity:.4">❤️❤️</span></span></div>
+              <div style="font-size:11px;color:var(--muted)">баксы</div>
+              <div style="font-family:'Unbounded';font-weight:800;font-size:19px;margin-top:2px">3<small style="font-size:11px;color:var(--faint);font-weight:500">/5</small> <span style="font-size:12px;vertical-align:2px">💵💵💵<span style="filter:grayscale(1);opacity:.35">💵💵</span></span></div>
             </div>
           </div>
-          <div style="font-size:11.5px;color:var(--muted);margin-top:6px;line-height:1.5">Плохой звонок сжигает жизнь · один хороший (гейт 17/17 и 90+) возвращает все 5 · ноль жизней → стоп новых лидов + экзамен у РОПа.</div>
+          <div style="font-size:11.5px;color:var(--muted);margin-top:6px;line-height:1.5">Плохой звонок сжигает бакс 💵🔥 · один хороший (гейт 17/17 и 90+) возвращает все 5 · сгорели все баксы → стоп новых лидов + экзамен у РОПа.</div>
 
           <details class="scard" style="margin-top:10px">
             <summary>
@@ -438,11 +438,11 @@ money_ladder.digitized_pain → компонента «Оцифровка бол
 Этап «провален» = провален его гейт-пункт ИЛИ его качество (бинарно, без процентов).
 МЕНЕДЖЕРУ (финал 2026-07-06, стиль «вердикт + стат-ряд»): ШАПКА с итогом строкой (лид · длительность ·
 «частичка 2 000, добор 10-го»; отдельного блока «итог» НЕТ) →
-ВЕРДИКТ-ПЛАШКА (цвет = статус: красная «Плохой звонок · −1 жизнь» при гейт-фейле ИЛИ балле <90, причина
-строкой; зелёная «Отличный звонок · жизни восстановлены» при гейт ✓ и 90+; жёлтой не бывает — гейт ✓
+ВЕРДИКТ-ПЛАШКА (цвет = статус: красная «Плохой звонок · −1 бакс» при гейт-фейле ИЛИ балле <90, причина
+строкой; зелёная «Отличный звонок · все баксы на месте» при гейт ✓ и 90+; жёлтой не бывает — гейт ✓
 и <90 это тоже плохой звонок, плашка красная с причиной «балл ниже 90») →
 СТАТ-РЯД из 3 ячеек с разделителями: гейт x/17 (красный при фейле) · продажа x/100 (цвет по порогам) ·
-жизни N/5 с сердцами (жизни = 5 − streak) → строка правила жизней →
+баксы N/5 с купюрами 💵 (баксы = 5 − streak; сгоревшие — серые) → строка правила баксов →
 РАСКРЫТИЕ «Что исправить — добери N вопросов»: поимённый список недобранных (diagnostics.items where
 asked=false) С ГОТОВЫМИ ФОРМУЛИРОВКАМИ (статичный словарь = чек-лист скрипта) + ссылка /script/#checklist →
 РАСКРЫТИЕ «За что баллы — потерял N: [минусы по размеру]»: 5 компонент-шкал (эмпатия/20 = empathy.score ·
@@ -462,11 +462,12 @@ compliance_flags[] → ТОЛЬКО РОПу: дашборд (паттерны 3
 СЕРИЯ ПЛОХИХ ЗВОНКОВ (решение заказчика 2026-07-06; вместо счётчиков по типам косяков — проще):
   ПЛОХОЙ звонок = consultation_happened=false ИЛИ score_total < 90 (partial и оценки в споре не считаются);
   streak на менеджера, только ПОДРЯД; хороший звонок (гейт ✓ И балл ≥90) → streak = 0;
-  в попапе — геймификация «5 ЖИЗНЕЙ» (сердца): жизни = 5 − streak; плохой звонок сжигает жизнь,
-хороший (гейт ✓ И ≥90) восстанавливает все 5; streak = 5 (0 жизней) → событие exam_required{manager, слабейший элемент}:
+  в попапе — геймификация «5 БАКСОВ» (💵, решение заказчика: не жизни, а деньги — плохой звонок сжигает
+твой бакс): баксы = 5 − streak; плохой звонок сжигает бакс, хороший (гейт ✓ И ≥90) возвращает все 5;
+streak = 5 (0 баксов) → событие exam_required{manager, слабейший элемент}:
   КРАН НОВЫХ ЛИДОВ ЗАКРЫТ (активных ведёт — окна ответственности не рушим, клиенты не страдают),
   РОПу задача «экзамен: пересдача элемента, где чаще всего терял» (эталон, ролевая);
-  кнопка РОПа «сдал» → streak 0 (5 жизней), кран открыт. Включение блокировки — с даты (конфиг, аналог
+  кнопка РОПа «сдал» → streak 0 (5 баксов), кран открыт. Включение блокировки — с даты (конфиг, аналог
   ai_responsibility_enforced_from); до даты полоска показывается, кран не трогаем.
 weakest_stage = этап с наибольшей долей провалов (гейт-пункт или качество) за последние 5 закрытых оценок → бейдж «слабый этап недели»
 клипы: top-2 из etalon_library WHERE stage = weakest_stage ORDER BY rating → страница менеджера «Мои звонки» (в попап не кладём — постобработка короткая)
@@ -906,7 +907,7 @@ tasks_created · note_posted · clip_of_day · weekly_patterns · self_review_as
     <div class="kpis">
       <div class="kpi" style="cursor:default"><div class="kl">Моя средняя · неделя</div><div class="kv" style="color:var(--amber)"><span id="myAvg">—</span> <small style="font-size:12px;color:var(--red)">▼ 4.1</small></div><div class="ks">по закрытым · цель 90</div></div>
       <div class="kpi" style="cursor:default"><div class="kl">Мой средний разговор</div><div class="kv" id="myDur">—</div><div class="ks">норма 25–40 · короче 15 — гейт не наберёшь</div></div>
-      <div class="kpi" style="cursor:default"><div class="kl">Жизни</div><div class="kv" style="color:var(--amber)">❤️ 3 / 5</div><div class="ks">плохой звонок сжигает · хороший (гейт ✓ и 90+) возвращает все 5</div></div>
+      <div class="kpi" style="cursor:default"><div class="kl">Баксы</div><div class="kv" style="color:var(--amber)">💵 3 / 5</div><div class="ks">плохой звонок сжигает бакс · хороший (гейт ✓ и 90+) возвращает все 5</div></div>
       <div class="kpi" style="cursor:default"><div class="kl">Слабый этап</div><div class="kv" style="font-size:17px;color:var(--red);padding-top:5px">Презентация</div><div class="ks">провал в 3 из 5 звонков · 2 клипа ниже</div></div>
       <div class="kpi" style="cursor:default"><div class="kl">Споры</div><div class="kv">1</div><div class="ks">открыт · ответ РОПа ≤ 24 ч</div></div>
     </div>
