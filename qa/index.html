@@ -94,6 +94,13 @@
   .pass .pd b{color:var(--red)}
   .pass .mn{font-family:"Unbounded";font-weight:800;font-size:11px;color:var(--red);margin-left:5px;vertical-align:1px}
   .pass .mn.a{color:var(--amber)}
+  .scard{border:1px solid var(--line);border-radius:13px;margin-top:10px;background:var(--card)}
+  .scard.g{background:var(--green-soft);border-color:rgba(14,92,70,.25)}
+  .scard summary{list-style:none;cursor:pointer;padding:12px 40px 12px 14px;position:relative}
+  .scard summary::-webkit-details-marker{display:none}
+  .scard summary:after{content:"▸";position:absolute;right:14px;top:11px;color:var(--muted);font-size:13px;transition:.15s}
+  .scard[open] summary:after{transform:rotate(90deg)}
+  .scard .sc-body{padding:0 14px 12px;border-top:1px dashed var(--line);margin:0 0;padding-top:9px}
   .g .fl{background:var(--green)} .g .sn b{color:var(--green)}
   .a .fl{background:var(--amber)} .a .sn b{color:var(--amber)}
   .r .fl{background:var(--red)} .r .sn b{color:var(--red)}
@@ -263,30 +270,36 @@
             <div><b>Итог звонка: частичка 2 000 ₽ в зачёт.</b> Дата добора: 10-е (зарплата).<br>Следующий шаг: <b class="next">договор + подпись СМС — сегодня</b>. Деньги взяты, договор не проговорён — закрой хвост.</div>
           </div>
 
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px" class="gg2">
-            <div style="background:var(--green-soft);border:1px solid rgba(14,92,70,.25);border-radius:13px;padding:12px 14px">
-              <div style="font-size:10.5px;font-family:'Unbounded';font-weight:700;letter-spacing:.06em;color:var(--green-deep);text-transform:uppercase">Гейт — всё ли проговорил</div>
+          <details class="scard g" style="margin-top:14px">
+            <summary>
+              <div style="font-size:10.5px;font-family:'Unbounded';font-weight:700;letter-spacing:.06em;color:var(--green-deep);text-transform:uppercase">Гейт — всё ли проговорил <span style="float:right;font-family:'Golos Text';font-weight:500;text-transform:none;letter-spacing:0;color:var(--muted);font-size:10.5px">раскрыть</span></div>
               <div style="font-family:'Unbounded';font-weight:800;font-size:28px;color:var(--green);margin-top:4px">17<small style="font-size:14px;color:var(--muted);font-weight:500"> /17</small></div>
               <div style="height:8px;border-radius:4px;background:#DCE8E1;margin-top:7px;overflow:hidden"><div style="width:100%;height:100%;background:var(--green)"></div></div>
               <div style="font-size:11.5px;color:var(--green-deep);margin-top:6px;font-weight:600">консультация состоялась — лид закреплён за тобой</div>
-              <div style="margin-top:10px;border-top:1px dashed rgba(14,92,70,.3);padding-top:8px">
-                <div style="font-size:10px;font-family:'Unbounded';font-weight:700;letter-spacing:.05em;color:var(--red);text-transform:uppercase">А так — если недобрал</div>
-                <div style="font-family:'Unbounded';font-weight:800;font-size:20px;color:var(--red);margin-top:3px">14<small style="font-size:12px;color:var(--muted);font-weight:500"> /17</small></div>
-                <div style="height:8px;border-radius:4px;background:#F0DBD8;margin-top:5px;overflow:hidden"><div style="width:82%;height:100%;background:var(--red)"></div></div>
-                <div style="font-size:11px;color:var(--ink);margin-top:5px;line-height:1.6">не проговорил: <b>10 · сделки за 3 года</b> · <b>11 · супруг в курсе</b> · <b>15 · госплатежи</b></div>
-                <div style="font-size:10.5px;color:var(--red);margin-top:2px;font-weight:600">лид НЕ закреплён → задача «добери диагностику» повторным звонком</div>
-              </div>
+            </summary>
+            <div class="sc-body">
+              <div style="font-size:10px;font-family:'Unbounded';font-weight:700;letter-spacing:.05em;color:var(--red);text-transform:uppercase">А так — если недобрал</div>
+              <div style="font-family:'Unbounded';font-weight:800;font-size:20px;color:var(--red);margin-top:3px">14<small style="font-size:12px;color:var(--muted);font-weight:500"> /17</small></div>
+              <div style="height:8px;border-radius:4px;background:#F0DBD8;margin-top:5px;overflow:hidden"><div style="width:82%;height:100%;background:var(--red)"></div></div>
+              <div style="font-size:11px;color:var(--ink);margin-top:5px;line-height:1.6">не проговорил: <b>10 · сделки за 3 года</b> · <b>11 · супруг в курсе</b> · <b>15 · госплатежи</b></div>
+              <div style="font-size:10.5px;color:var(--red);margin-top:2px;font-weight:600">лид НЕ закреплён → задача «добери диагностику» повторным звонком</div>
               <div style="font-size:10px;color:var(--muted);margin-top:6px">закрепление по ИИ — после калибровки, до этого железные события (свод §3)</div>
             </div>
-            <div style="background:var(--card);border:1px solid var(--line);border-radius:13px;padding:12px 14px">
-              <div style="font-size:10.5px;font-family:'Unbounded';font-weight:700;letter-spacing:.06em;color:var(--muted);text-transform:uppercase">Продажа — как продал</div>
+          </details>
+
+          <details class="scard">
+            <summary>
+              <div style="font-size:10.5px;font-family:'Unbounded';font-weight:700;letter-spacing:.06em;color:var(--muted);text-transform:uppercase">Продажа — как продал <span style="float:right;font-family:'Golos Text';font-weight:500;text-transform:none;letter-spacing:0;color:var(--muted);font-size:10.5px">раскрыть: за что баллы</span></div>
               <div style="font-family:'Unbounded';font-weight:800;font-size:28px;color:var(--amber);margin-top:4px">80<small style="font-size:14px;color:var(--muted);font-weight:500"> /100</small></div>
               <div style="position:relative;height:8px;border-radius:4px;background:#EDE7D8;margin-top:7px">
                 <div style="width:80%;height:100%;border-radius:4px;background:var(--amber)"></div>
                 <span style="position:absolute;left:65%;top:-3px;width:2px;height:14px;background:var(--red);opacity:.55" title="65 — нижняя граница"></span>
                 <span style="position:absolute;left:90%;top:-3px;width:2px;height:14px;background:var(--green);opacity:.75" title="90 — цель"></span>
               </div>
-              <div style="margin-top:10px">
+              <div style="font-size:11.5px;color:var(--muted);margin-top:6px">граница <b style="color:var(--red)">65</b> · цель <b style="color:var(--green)">90</b> · серия: <b>2 из 5</b> ниже 90 → на 5-м — тренировка</div>
+            </summary>
+            <div class="sc-body">
+              <div>
                 <div style="display:flex;justify-content:space-between;font-size:11.5px;font-weight:600"><span>Эмпатия</span><b style="font-family:'Unbounded'">16<span style="color:var(--faint);font-weight:500">/20</span></b></div>
                 <div style="height:6px;border-radius:4px;background:#EDE7D8;margin-top:3px;overflow:hidden"><div style="width:80%;height:100%;background:var(--amber)"></div></div>
                 <div style="font-size:11px;color:var(--red);margin-top:2px;line-height:1.45"><b>−4</b> перебивал клиента → слушай не перебивая: клиент, рассказывая, сам продаёт себе решение</div>
@@ -311,10 +324,9 @@
                 <div style="height:6px;border-radius:4px;background:#EDE7D8;margin-top:3px;overflow:hidden"><div style="width:100%;height:100%;background:var(--green)"></div></div>
                 <div style="font-size:11px;color:var(--muted);margin-top:2px">✓ добор 10-го зафиксирован — дата и день названы</div>
               </div>
-              <div style="font-size:10.5px;color:var(--muted);margin-top:8px;border-top:1px dashed var(--line);padding-top:5px">16+10+15+24+15 = <b>80</b> · граница <b style="color:var(--red)">65</b> · цель <b style="color:var(--green)">90</b> · серия: <b>2 из 5</b> ниже 90 → на 5-м — тренировка</div>
+              <div style="font-size:10.5px;color:var(--muted);margin-top:8px;border-top:1px dashed var(--line);padding-top:5px">16+10+15+24+15 = <b>80</b></div>
             </div>
-          </div>
-          <style>@media (max-width:520px){.gg2{grid-template-columns:1fr !important}}</style>
+          </details>
 
 
           <div class="mainerr">
@@ -419,7 +431,8 @@ money_ladder.{digitized_pain · price_and_ask · date_plus_minimum · closed_now
   6 Возражения         качество: objections /25 — сквозной этап, показывается по таймкодам
   7 Закрытие           гейт: п.17 шаг с датой · качество: 4.3 дата+минималка · 4.4 закрыл
 Этап «провален» = провален его гейт-пункт ИЛИ его качество (бинарно, без процентов).
-МЕНЕДЖЕРУ (решение директора 2026-07-06 — максимально просто, ничего не скрыто): ДВЕ ШКАЛЫ рядом:
+МЕНЕДЖЕРУ (решение директора + заказчика 2026-07-06): ДВЕ ШКАЛЫ-КАРТОЧКИ ДРУГ ПОД ДРУГОМ (рядом узко),
+каждая — раскрывающаяся (details): свёрнуто = заголовок + число + шкала + статус-строка; раскрыто = детали:
 (1) ГЕЙТ x/17 с прогресс-баром — 17/17 = зелёная, «лид закреплён»; недобор = красная + список недобранных ПОИМЁННО
 (номер + название пункта, из diagnostics.items where asked=false) + следствие «лид не закреплён → добери»; (2) ПРОДАЖА x/100 со шкалой и рисками 65/90; ПОД НЕЙ — 5 КОМПОНЕНТ-ШКАЛ (решение заказчика: «видеть
 каждый пункт и где косяк»; МОДЕЛЬ НЕ МЕНЯЛАСЬ — перегруппировка отображения лестницы):
