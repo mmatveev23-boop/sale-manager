@@ -39,7 +39,7 @@
   .slots .sl-h b{font-family:"Unbounded";font-size:16px;color:var(--ink);text-transform:none;letter-spacing:0}
   .slotbar{display:flex;gap:3px;margin-top:8px;height:16px}
   .seg{border-radius:5px;position:relative}
-  .seg.s-think{background:#7C756A} .seg.s-sign{background:var(--red)} .seg.s-signed{background:var(--amber)} .seg.s-990{background:var(--gold)} .seg.s-free{background:#EDE7D8;border:1px dashed var(--line)}
+  .seg.s-think{background:#7C756A} .seg.s-sign{background:var(--red)} .seg.s-signed{background:var(--amber)} .seg.s-part{background:var(--gold)} .seg.s-free{background:#EDE7D8;border:1px dashed var(--line)}
   .sl-legend{display:flex;flex-wrap:wrap;gap:10px;margin-top:7px;font-size:12px;color:var(--muted)}
   .sl-legend i{font-style:normal;display:inline-flex;align-items:center;gap:5px}
   .sl-legend .sw{width:9px;height:9px;border-radius:3px;display:inline-block}
@@ -173,7 +173,7 @@
         <i><span class="sw" style="background:#7C756A"></span>думает <b id="lg-think">9</b></i>
         <i><span class="sw" style="background:var(--red)"></span>на подписи <b>1</b></i>
         <i><span class="sw" style="background:var(--amber)"></span>подписан <b>4</b></i>
-        <i><span class="sw" style="background:var(--gold)"></span>990 <b id="lg-990">3</b></i>
+        <i><span class="sw" style="background:var(--gold)"></span>частичка <b id="lg-part">3</b></i>
         <i style="color:var(--faint)"><span class="sw" style="background:#EDE7D8"></span>свободно <b id="lg-free">3</b></i>
       </div>
     </div>
@@ -217,7 +217,7 @@
       <div class="body">
         <div class="cand" id="cand1"><span><b>Игорь Г.</b> · думает</span><span class="why">6 дней · 2 пустых дожима</span>
           <span class="acts"><button onclick="unloadDone('cand1','финальный звонок-развилка')">Финальный звонок</button><button onclick="unloadDone('cand1','закрыт честно, без штрафа')">Закрыть честно</button><button onclick="unloadDone('cand1','отпущен в поток')">Отпустить в поток</button></span></div>
-        <div class="cand" id="cand2"><span><b>Пётр С.</b> · 990</span><span class="why">16 дней без добора · застрявшие деньги</span>
+        <div class="cand" id="cand2"><span><b>Пётр С.</b> · частичка</span><span class="why">16 дней без добора · застрявшие деньги</span>
           <span class="acts"><button onclick="unloadDone('cand2','финальный звонок-развилка')">Финальный звонок</button><button onclick="unloadDone('cand2','закрыт честно, без штрафа')">Закрыть честно</button><button onclick="unloadDone('cand2','отпущен в поток')">Отпустить в поток</button></span></div>
       </div>
     </div>
@@ -255,7 +255,7 @@
     {id:'alexey',name:'Алексей К.',chip:'горячее · открыл оплату',chipCls:'hot',deadline:272,small:'до эскалации РОПу',
      ai:'Открыл страницу оплаты и спросил бота «а можно частями?» — готов, предложи дробление.',
      outs:[['💰 Оплатил',''],['Частями — шаг с датой',''],['Недозвон','']]},
-    {id:'olga',name:'Ольга И.',chip:'990 · добор',chipCls:'money',deadline:9000,small:'попытка сегодня · день 3',
+    {id:'olga',name:'Ольга И.',chip:'частичка · добор',chipCls:'money',deadline:9000,small:'попытка сегодня · день 3',
      ai:'Заключение по КИ готово. Презентуй и бери 13 500 — вчера сказала «после аванса», аванс был.',
      outs:[['💰 Добрала 13 500',''],['Внесла часть',''],['Перезвон с датой','']]},
     {id:'natalia',name:'Наталья В.',chip:'по договорённости',chipCls:'',fixed:'18:00',small:'обещала решение · вопрос был в цене',
@@ -282,7 +282,7 @@
     document.getElementById('sumSlots').textContent=slots+'/20';
     var bar=document.getElementById('slotbar'); bar.innerHTML='';
     function add(n,cls){for(var i=0;i<n;i++){var d=document.createElement('div');d.className='seg '+cls;d.style.flex='1';bar.appendChild(d);}}
-    add(think,'s-think');add(1,'s-sign');add(4,'s-signed');add(3,'s-990');add(free,'s-free');
+    add(think,'s-think');add(1,'s-sign');add(4,'s-signed');add(3,'s-part');add(free,'s-free');
   }
 
   // фокус
