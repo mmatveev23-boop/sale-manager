@@ -92,6 +92,7 @@
   .citem.done span{color:var(--grey);text-decoration:line-through}
   .ccount{font-size:13px;color:var(--muted);margin-top:10px}
   .ccount b{font-family:"Unbounded";color:var(--green)}
+  .citem .gwhy{display:block;color:var(--muted);font-size:12.5px;font-weight:400;margin-top:2px}
 
   /* objections accordion */
   .obj{background:var(--card);border:1px solid var(--line);border-radius:13px;margin-top:10px;overflow:hidden}
@@ -198,7 +199,7 @@
     <div class="cgroup">
       <h4>① Гейт: узнал ли ты клиента</h4>
       <div style="font-size:13.5px;line-height:1.65">
-        14 фактов о клиенте — <b>жирные пункты чек-листа ниже</b>. Собрал <b>10 из 14</b> → консультация состоялась: лид закреплён за тобой, занимает слот, идут окна ответственности. Меньше 10 → лид НЕ твой: задача «доведи диагностику».<br>
+        14 фактов о клиенте — <b>чек-лист ниже, у каждого пункта написано, зачем он</b>. Собрал <b>10 из 14</b> → консультация состоялась: лид закреплён за тобой, занимает слот, идут окна ответственности. Меньше 10 → лид НЕ твой: задача «доведи диагностику».<br>
         <span style="color:var(--muted)">«Супруг в курсе?» у одинокого клиента — авто-зачёт. «Имущество» и «сделки за 3 года» — критичные для суда: не спросил — ИИ потребует их первыми.</span>
       </div>
     </div>
@@ -222,50 +223,27 @@
 
   <!-- DIAGNOSTIC CHECKLIST -->
   <h2 class="sec">Диагностический чек-лист</h2>
-  <p class="sub">Гейт в деталях — это вопросы шага 2 звонка (реплики и порядок — в шагах ниже). Жирный минимум — 14 пунктов гейта (ИИ проверяет по записи: 10 из 14 = «консультация состоялась»; «супруг в курсе» у одинокого клиента — авто-зачёт). Остальное — подсказка.</p>
+  <p class="sub">Все 14 пунктов гейта — и зачем каждый нужен. ИИ проверяет по записи: 10 из 14 = «консультация состоялась». ⚠ 7 и 9 — критичные для суда: не спрошены — ИИ требует их первыми. Реплики и порядок — в шагах ниже.</p>
   <div class="checkgrid" id="checklist">
     <div class="cgroup">
-      <h4>Открытие и повод</h4>
-      <label class="citem"><input type="checkbox"><span><b>Что за история с кредитами, почему решили обратиться?</b></span></label>
-      <label class="citem"><input type="checkbox"><span>Как оцениваете финансовую нагрузку? Справляетесь?</span></label>
-      <label class="citem"><input type="checkbox"><span>Знаете последствия, если ничего не делать?</span></label>
-      <label class="citem"><input type="checkbox"><span><b>Идеальный исход — списать или платить комфортно?</b></span></label>
-      <label class="citem"><input type="checkbox"><span><b>Уже консультировались где-то? Что предложили, почему не заключили?</b></span></label>
+      <h4>Ситуация и деньги · 1–7</h4>
+      <label class="citem"><input type="checkbox"><span><b>1 · Причина и боль.</b> «Что за история с кредитами, почему решили обратиться?»<span class="gwhy">Боль и мотивация — на них строятся резюме, картинка будущего и вся презентация.</span></span></label>
+      <label class="citem"><input type="checkbox"><span><b>2 · Общий долг.</b> «Какая общая сумма долга сейчас?»<span class="gwhy">Размер задачи: подходит ли процедура и какая — списание или реструктуризация.</span></span></label>
+      <label class="citem"><input type="checkbox"><span><b>3 · Кредиторы.</b> «Кому должны — банки, МФО? Скольким?»<span class="gwhy">Состав долга: МФО с их процентами — сильный аргумент за списание; список кредиторов нужен юристу для заявления.</span></span></label>
+      <label class="citem"><input type="checkbox"><span><b>4 · Просрочка.</b> «Просрочки есть? Как давно?»<span class="gwhy">Главная развилка анкеты: нет / 1–3 мес / 3+ — от неё зависят и вопросы, и оффер (у «чистого» болит платёж, у просроченного — приставы).</span></span></label>
+      <label class="citem"><input type="checkbox"><span><b>5 · Платёж в месяц.</b> «Сколько платите в месяц по всем обязательствам?»<span class="gwhy">Сырьё оцифровки боли: «платите 41 000, из них 35 500 — проценты» — без этой цифры лестница денег не начинается.</span></span></label>
+      <label class="citem"><input type="checkbox"><span><b>6 · Доход и занятость.</b> «Какой официальный доход? Как справляетесь?»<span class="gwhy">Квалификация + выбор продукта (стабильный доход — аргумент РДГ) + расчёт прожиточного минимума.</span></span></label>
+      <label class="citem"><input type="checkbox"><span><b>7 · Имущество и залоги ⚠</b> «Что оформлено на вас — включая оружие, лодки, технику? Ипотека — на ком?»<span class="gwhy">Критично для суда: что попадает в конкурсную массу и что защищаем. Пропустил — юрист найдёт позже, клиент испугается → расторжение.</span></span></label>
     </div>
     <div class="cgroup">
-      <h4>Долг и кредиторы</h4>
-      <label class="citem"><input type="checkbox"><span><b>Общая сумма долга?</b></span></label>
-      <label class="citem"><input type="checkbox"><span><b>Кредиторы: банки / МФО, сколько?</b></span></label>
-      <label class="citem"><input type="checkbox"><span>Как давно взяты кредиты/карты?</span></label>
-      <label class="citem"><input type="checkbox"><span><b>Просрочки есть? Как давно?</b></span></label>
-      <label class="citem"><input type="checkbox"><span>Ветка: банки требуют к выплате? / приставы арестовали ЗП, описывали имущество?</span></label>
-      <label class="citem"><input type="checkbox"><span>Коллекторы беспокоят?</span></label>
-    </div>
-    <div class="cgroup">
-      <h4>Платежи и деньги</h4>
-      <label class="citem"><input type="checkbox"><span><b>Ежемесячный платёж по всем обязательствам?</b></span></label>
-      <label class="citem"><input type="checkbox"><span>Когда ближайший платёж?</span></label>
-      <label class="citem"><input type="checkbox"><span>Оцифровка: платёж × месяцы = «целое состояние» — проговорена?</span></label>
-    </div>
-    <div class="cgroup">
-      <h4>Доход и занятость</h4>
-      <label class="citem"><input type="checkbox"><span><b>Официальный доход? Как справляетесь?</b></span></label>
-      <label class="citem"><input type="checkbox"><span>Неофициальные источники, подработка? (для картины — не для советов)</span></label>
-      <label class="citem"><input type="checkbox"><span>ИП сейчас или раньше? Гендиректор, учредитель ООО?</span></label>
-    </div>
-    <div class="cgroup">
-      <h4>Семья и имущество</h4>
-      <label class="citem"><input type="checkbox"><span><b>Официальный брак? Несовершеннолетние дети?</b></span></label>
-      <label class="citem"><input type="checkbox"><span><b>Супруг/близкие знают, что рассматриваете процедуру? Как относятся?</b> Кто может отговорить — подключить к разговору?</span></label>
-      <label class="citem"><input type="checkbox"><span><b>Имущество на вас</b> (вкл. оружие, лодки, технику)?</span></label>
-      <label class="citem"><input type="checkbox"><span>Имущество супруги, приобретённое в браке? Ипотека — на ком?</span></label>
-      <label class="citem"><input type="checkbox"><span><b>Сделки за последние 3 года?</b> На какую сумму, кому продавали?</span></label>
-    </div>
-    <div class="cgroup">
-      <h4>Риски и шаг</h4>
-      <label class="citem"><input type="checkbox"><span><b>Судимость / поручительство / заявления по 159?</b></span></label>
-      <label class="citem"><input type="checkbox"><span>Исполнительные производства, алименты?</span></label>
-      <label class="citem"><input type="checkbox"><span><b>Следующий шаг с датой зафиксирован?</b></span></label>
+      <h4>Семья, риски и сделка · 8–14</h4>
+      <label class="citem"><input type="checkbox"><span><b>8 · Семья и иждивенцы.</b> «Официальный брак? Несовершеннолетние дети?»<span class="gwhy">Дети увеличивают защищённый минимум; брак тянет имущество супруга в анализ дела.</span></span></label>
+      <label class="citem"><input type="checkbox"><span><b>9 · Сделки за 3 года ⚠</b> «Продавали, дарили имущество за последние 3 года? Кому, за сколько?»<span class="gwhy">Критично для суда: оспоримые сделки — главный юридический сюрприз и мина расторжения.</span></span></label>
+      <label class="citem"><input type="checkbox"><span><b>10 · Судимость / поручительство / 159.</b> «Судимости, поручительства, заявления по 159-й были?»<span class="gwhy">Стоп-факторы дела — выявить до денег, а не после оплаты.</span></span></label>
+      <label class="citem"><input type="checkbox"><span><b>11 · Желаемый исход.</b> «Вам списать полностью или платить комфортно?»<span class="gwhy">Клиент сам называет продукт — оффер шага 3 звучит его словами, и на него уже сказано «да».</span></span></label>
+      <label class="citem"><input type="checkbox"><span><b>12 · Следующий шаг с датой.</b> Договор, оплата или созвон — с датой и временем.<span class="gwhy">Без шага звонок не закончен («созвонимся на днях» — незачёт). Он же даёт +15 к оценке.</span></span></label>
+      <label class="citem"><input type="checkbox"><span><b>13 · Конкуренты.</b> «Уже слышали о процедуре? Где-то консультировались? Почему не заключили?»<span class="gwhy">Карта настоящего барьера и чужого оффера — отстройка сейчас, а не вслепую на дожиме.</span></span></label>
+      <label class="citem"><input type="checkbox"><span><b>14 · Супруг и близкие в курсе.</b> «Супруга знает, что рассматриваете процедуру? Как относится?»<span class="gwhy">Карта ЛПР: кто может сказать «нет» за спиной — подключить к разговору. Клиент одинокий — авто-зачёт.</span></span></label>
     </div>
   </div>
   <div class="ccount" id="ccount">Отмечено <b>0</b> из <span id="ctotal">0</span></div>
