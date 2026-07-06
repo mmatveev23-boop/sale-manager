@@ -279,12 +279,32 @@
                 <span style="position:absolute;left:65%;top:-3px;width:2px;height:14px;background:var(--red);opacity:.55" title="65 — нижняя граница"></span>
                 <span style="position:absolute;left:90%;top:-3px;width:2px;height:14px;background:var(--green);opacity:.75" title="90 — цель"></span>
               </div>
-              <div style="margin-top:8px;font-size:11.5px;line-height:1.7">
-                <div><b style="font-family:'Unbounded';font-size:10.5px;color:var(--red)">−10</b> возражение «подумаю» — сдалась без дожима</div>
-                <div><b style="font-family:'Unbounded';font-size:10.5px;color:var(--red)">−6</b> не закрыл на действие — договор не проговорён</div>
-                <div><b style="font-family:'Unbounded';font-size:10.5px;color:var(--amber)">−4</b> перебивал клиента</div>
+              <div style="margin-top:10px">
+                <div style="display:flex;justify-content:space-between;font-size:11.5px;font-weight:600"><span>Эмпатия</span><b style="font-family:'Unbounded'">16<span style="color:var(--faint);font-weight:500">/20</span></b></div>
+                <div style="height:6px;border-radius:4px;background:#EDE7D8;margin-top:3px;overflow:hidden"><div style="width:80%;height:100%;background:var(--amber)"></div></div>
+                <div style="font-size:11px;color:var(--red);margin-top:2px;line-height:1.45"><b>−4</b> перебивал клиента → слушай не перебивая: клиент, рассказывая, сам продаёт себе решение</div>
               </div>
-              <div style="font-size:10.5px;color:var(--muted);margin-top:5px;border-top:1px dashed var(--line);padding-top:5px">граница <b style="color:var(--red)">65</b> · цель <b style="color:var(--green)">90</b> · серия: <b>2 из 5</b> ниже 90 → на 5-м — тренировка</div>
+              <div style="margin-top:8px">
+                <div style="display:flex;justify-content:space-between;font-size:11.5px;font-weight:600"><span>Оцифровка боли</span><b style="font-family:'Unbounded'">10<span style="color:var(--faint);font-weight:500">/10</span></b></div>
+                <div style="height:6px;border-radius:4px;background:#EDE7D8;margin-top:3px;overflow:hidden"><div style="width:100%;height:100%;background:var(--green)"></div></div>
+                <div style="font-size:11px;color:var(--muted);margin-top:2px">✓ «платите 41 000, из них 35 500 — проценты»</div>
+              </div>
+              <div style="margin-top:8px">
+                <div style="display:flex;justify-content:space-between;font-size:11.5px;font-weight:600"><span>Возражения</span><b style="font-family:'Unbounded'">15<span style="color:var(--faint);font-weight:500">/25</span></b></div>
+                <div style="height:6px;border-radius:4px;background:#EDE7D8;margin-top:3px;overflow:hidden"><div style="width:60%;height:100%;background:var(--red)"></div></div>
+                <div style="font-size:11px;color:var(--red);margin-top:2px;line-height:1.45"><b>−10</b> «подумаю» — сдалась без дожима → домашка (расчёт + договор + кейсы) + дата созвона + вопрос намерения</div>
+              </div>
+              <div style="margin-top:8px">
+                <div style="display:flex;justify-content:space-between;font-size:11.5px;font-weight:600"><span>Презентация цены</span><b style="font-family:'Unbounded'">24<span style="color:var(--faint);font-weight:500">/30</span></b></div>
+                <div style="height:6px;border-radius:4px;background:#EDE7D8;margin-top:3px;overflow:hidden"><div style="width:80%;height:100%;background:var(--amber)"></div></div>
+                <div style="font-size:11px;color:var(--red);margin-top:2px;line-height:1.45"><b>−6</b> не закрыл на действие → стр. 5 «Договор» вместе → подпись СМС — сегодня</div>
+              </div>
+              <div style="margin-top:8px">
+                <div style="display:flex;justify-content:space-between;font-size:11.5px;font-weight:600"><span>Следующий шаг</span><b style="font-family:'Unbounded'">15<span style="color:var(--faint);font-weight:500">/15</span></b></div>
+                <div style="height:6px;border-radius:4px;background:#EDE7D8;margin-top:3px;overflow:hidden"><div style="width:100%;height:100%;background:var(--green)"></div></div>
+                <div style="font-size:11px;color:var(--muted);margin-top:2px">✓ добор 10-го зафиксирован — дата и день названы</div>
+              </div>
+              <div style="font-size:10.5px;color:var(--muted);margin-top:8px;border-top:1px dashed var(--line);padding-top:5px">16+10+15+24+15 = <b>80</b> · граница <b style="color:var(--red)">65</b> · цель <b style="color:var(--green)">90</b> · серия: <b>2 из 5</b> ниже 90 → на 5-м — тренировка</div>
             </div>
           </div>
           <style>@media (max-width:520px){.gg2{grid-template-columns:1fr !important}}</style>
@@ -394,9 +414,15 @@ money_ladder.{digitized_pain · price_and_ask · date_plus_minimum · closed_now
 Этап «провален» = провален его гейт-пункт ИЛИ его качество (бинарно, без процентов).
 МЕНЕДЖЕРУ (решение директора 2026-07-06 — максимально просто, ничего не скрыто): ДВЕ ШКАЛЫ рядом:
 (1) ГЕЙТ x/17 с прогресс-баром — 17/17 = зелёная, «лид закреплён»; недобор = красная + список
-«добери» из next_best_action; (2) ПРОДАЖА x/100 со шкалой и рисками порогов 65/90; ПОД ШКАЛОЙ — СПИСОК ПОТЕРЬ: только минусы,
-отсортированы по размеру («−N короткая причина» из рубрики; Σ минусов = 100 − score_total, не сходится =
-ошибка рендера; потерь нет → строка «без потерь»); ниже — пороги и серия <90.
+«добери» из next_best_action; (2) ПРОДАЖА x/100 со шкалой и рисками 65/90; ПОД НЕЙ — 5 КОМПОНЕНТ-ШКАЛ (решение заказчика: «видеть
+каждый пункт и где косяк»; МОДЕЛЬ НЕ МЕНЯЛАСЬ — перегруппировка отображения лестницы):
+  Эмпатия x/20 = empathy.score · Оцифровка боли x/10 = digitized_pain (ступень 4.1) ·
+  Возражения x/25 = objections.score · Презентация цены x/30 = ступени 4.2+4.3+4.4 ·
+  Следующий шаг x/15 = next_step_bonus. Инвариант: Σ компонентов = score_total.
+  У компоненты с потерей — красная строка «−N что случилось → КАК НАДО» (словарь эталонов рубрики:
+  перебивал → «слушай не перебивая»; сдался на «подумаю» → «домашка + дата + вопрос намерения»;
+  не закрыл → «стр. 5 Договор → подпись СМС сегодня»; боль без цифр → «назови платёж и проценты»).
+  Цвет шкалы компоненты: 100% зелёный · ≥60% янтарный · <60% красный. Ниже — арифметика, пороги, серия.
 Ниже: главная ошибка (одна) · «что сделать сейчас» · примечание amo · комплаенс · согласен/спор.
 ЭТАПОВ В ПОПАПЕ НЕТ. Этапы-контейнеры — инструмент РОПа: колонки дашборда, слабый этап недели,
 скоркарта разбора (там же полная раскладка слагаемых x/20, x/25, x/40, +15 с цитатами).
