@@ -84,6 +84,14 @@
   .stagebar .sn b{font-family:"Unbounded";font-size:12px}
   .stagebar .tr{height:6px;border-radius:4px;background:#EDE7D8;margin-top:4px;overflow:hidden}
   .stagebar .fl{height:100%;border-radius:4px}
+  .pass .pr2{display:grid;grid-template-columns:24px 1fr;gap:9px;padding:7px 9px;border-radius:10px;align-items:start}
+  .pass .pr2+.pr2{margin-top:3px}
+  .pass .pr2.bad{background:var(--red-soft)}
+  .pass .pi{width:18px;height:18px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#fff;margin-top:1px}
+  .pass .pi.g{background:var(--green)} .pass .pi.r{background:var(--red)}
+  .pass .pn2{font-weight:700;font-size:12.5px;line-height:1.35}
+  .pass .pd{font-size:12px;color:var(--muted);line-height:1.5;margin-top:1px}
+  .pass .pd b{color:var(--red)}
   .g .fl{background:var(--green)} .g .sn b{color:var(--green)}
   .a .fl{background:var(--amber)} .a .sn b{color:var(--amber)}
   .r .fl{background:var(--red)} .r .sn b{color:var(--red)}
@@ -327,17 +335,15 @@
           <details style="margin-top:12px;border:1px solid var(--line);border-radius:13px;padding:10px 14px">
             <summary style="cursor:pointer;font-size:12.5px;font-weight:700;color:var(--muted)">Разбор по пунктам: этапы · речь</summary>
             <div style="margin-top:10px">
-          <div class="panel">
-            <div class="ph">Один проход по звонку — в каждом этапе его гейт и его качество</div>
-            <div style="font-size:12.5px;line-height:2">
-              <div>1 · Контакт — боль ✓ · <span style="color:var(--green)">выслушал, снял вину ✓</span> <span style="color:var(--amber)">(−перебивания)</span></div>
-              <div>2 · Диагностика — <b style="color:var(--green)">гейт 11/11 ✓</b> (долг … желаемый исход)</div>
-              <div>3 · Оцифровка + резюме — <span style="color:var(--green)">оцифровал боль ✓</span> («платите 41 000, из них 35 500 — проценты») · <span style="color:var(--green)">резюме словами клиента ✓</span></div>
-              <div>4 · Продукт и условия — конкуренты ✓ · деньги на жизнь ✓ · госплатежи ✓ · <span style="color:var(--green)">цена-канон ✓</span> (13 500 + «потянете?»)</div>
-              <div>5 · Презентация условий <span style="font-size:9.5px;font-weight:700;color:var(--red);background:var(--red-soft);border-radius:5px;padding:1px 6px;white-space:nowrap">слабое место</span> — вёл ✓, но <b style="color:var(--red)">стр. 5–6 договор/подпись ✕</b></div>
-              <div>6 · Возражения — «дорого» ✓ · <b style="color:var(--red)">«подумаю» — сдалась ✕</b></div>
-              <div>7 · Закрытие — шаг с датой ✓ · минималка ✓ (2 000 в зачёт, добор 10-го) · <b style="color:var(--red)">закрыл на действие ✕ — договор не проговорён</b></div>
-            </div>
+          <div class="panel pass">
+            <div class="ph">Один проход по звонку — красное чини первым</div>
+            <div class="pr2"><span class="pi g">✓</span><div><div class="pn2">1 · Контакт</div><div class="pd">выслушал историю, снял вину <span style="color:var(--amber)">· минус за перебивания</span></div></div></div>
+            <div class="pr2"><span class="pi g">✓</span><div><div class="pn2">2 · Диагностика — гейт 11/11</div><div class="pd">долг · продукты · просрочка · платёж · доход · ИП · семья · имущество · сделки · супруг · исход</div></div></div>
+            <div class="pr2"><span class="pi g">✓</span><div><div class="pn2">3 · Оцифровка боли + резюме</div><div class="pd">«платите 41 000, из них 35 500 — проценты» · резюме словами клиента</div></div></div>
+            <div class="pr2"><span class="pi g">✓</span><div><div class="pn2">4 · Продукт и условия</div><div class="pd">конкуренты · деньги на жизнь · госплатежи · цена-канон 13 500 + «потянете?»</div></div></div>
+            <div class="pr2 bad"><span class="pi r">✕</span><div><div class="pn2">5 · Презентация условий</div><div class="pd">вёл по страницам ✓, но <b>стр. 5–6 «Договор» и «Подпись» пропущены</b></div></div></div>
+            <div class="pr2 bad"><span class="pi r">✕</span><div><div class="pn2">6 · Возражения</div><div class="pd">«дорого» отработано ✓ · <b>«подумаю» — сдалась без дожима (15:50)</b></div></div></div>
+            <div class="pr2 bad"><span class="pi r">✕</span><div><div class="pn2">7 · Закрытие</div><div class="pd">шаг с датой ✓ · минималка 2 000 ✓ · <b>не закрыл на действие — договор не проговорён</b></div></div></div>
           </div>
           <div style="margin-top:10px;display:flex;gap:6px 18px;flex-wrap:wrap;background:var(--paper);border:1px solid var(--line);border-radius:11px;padding:9px 13px;font-size:12px;color:var(--muted)">
             <span>⏱ длительность: <b style="color:var(--amber)">18:24</b> <span style="color:var(--faint)">(норма 25–40 — коротко: диагностика галопом?)</span> · твоя средняя: <b>20 мин</b></span>
