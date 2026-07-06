@@ -275,12 +275,10 @@
 
           <details class="scard" style="margin-top:12px;background:var(--red-soft);border-color:rgba(154,45,34,.3)">
             <summary>
-              <div style="font-size:10.5px;font-family:'Unbounded';font-weight:700;letter-spacing:.06em;color:var(--red);text-transform:uppercase">Гейт — всё ли проговорил <span style="float:right;font-family:'Golos Text';font-weight:500;text-transform:none;letter-spacing:0;color:var(--muted);font-size:10.5px">раскрыть: что спросить ▾</span></div>
+              <div style="font-size:10.5px;font-family:'Unbounded';font-weight:700;letter-spacing:.06em;color:var(--red);text-transform:uppercase">Гейт — всё ли проговорил <span style="float:right;font-family:'Golos Text';font-weight:500;text-transform:none;letter-spacing:0;color:var(--muted);font-size:10.5px">раскрыть: что исправить ▾</span></div>
               <div style="font-family:'Unbounded';font-weight:800;font-size:28px;color:var(--red);margin-top:4px">10<small style="font-size:14px;color:var(--muted);font-weight:500"> /17</small></div>
               <div style="height:8px;border-radius:4px;background:#F0DBD8;margin-top:7px;overflow:hidden"><div style="width:59%;height:100%;background:var(--red)"></div></div>
-              <div style="font-size:11.5px;color:var(--red);margin-top:7px;font-weight:700">консультация НЕ состоялась — лид не закреплён · добери 7 пунктов:</div>
-              <div style="font-size:11.5px;color:var(--ink);margin-top:4px;line-height:1.75">продукты долга · ИП/ООО · <b>сделки за 3 года ⚠</b> · супруг в курсе · конкуренты · деньги на жизнь · госплатежи</div>
-              <div style="font-size:10.5px;color:var(--muted);margin-top:5px">добери повторным звонком → гейт пересчитается, лид твой</div>
+              <div style="font-size:11.5px;color:var(--red);margin-top:7px;font-weight:700">консультация не состоялась — лид не закреплён · <span style="text-decoration:underline;text-underline-offset:2px">добери 7 пунктов</span></div>
             </summary>
             <div class="sc-body">
               <div style="font-size:11px;font-family:'Unbounded';font-weight:700;letter-spacing:.04em;color:var(--red);text-transform:uppercase">Что спросить в повторном звонке — 7 вопросов</div>
@@ -439,10 +437,11 @@ money_ladder.digitized_pain → компонента «Оцифровка бол
 МЕНЕДЖЕРУ (финал 2026-07-06): ШАПКА с итогом строкой (лид · длительность · «частичка 2 000, добор 10-го»;
 отдельного блока «итог звонка» НЕТ) → ЖИЗНИ (❤️ 5, наверху) → ДВЕ ШКАЛЫ-КАРТОЧКИ ДРУГ ПОД ДРУГОМ,
 каждая — раскрывающаяся (details): свёрнуто = заголовок + число + шкала + статус-строка; раскрыто = детали:
-(1) ГЕЙТ x/17 с прогресс-баром — 17/17 = зелёная, «лид закреплён»; недобор = красная + список недобранных ПОИМЁННО
-(номер + название пункта, из diagnostics.items where asked=false) + следствие «лид не закреплён → добери»;
-РАСКРЫТИЕ карточки гейта = ФОРМУЛИРОВКИ вопросов по каждому недобранному (статичный словарь = чек-лист
-скрипта) + ссылка на /script/#checklist — менеджер чинит ошибку, не ищет, что спросить; (2) ПРОДАЖА x/100 со шкалой и рисками 65/90; ПОД НЕЙ — 5 КОМПОНЕНТ-ШКАЛ (решение заказчика: «видеть
+(1) ГЕЙТ x/17 с прогресс-баром — 17/17 = зелёная, «лид закреплён»; недобор = красная + ОДНА строка статуса
+«лид не закреплён · добери N пунктов» (свёрнутый вид = как у карточки «Продажа»: заголовок + число +
+шкала + строка); РАСКРЫТИЕ = поимённый список недобранных (diagnostics.items where asked=false)
+С ГОТОВЫМИ ФОРМУЛИРОВКАМИ вопросов (статичный словарь = чек-лист скрипта) + ссылка /script/#checklist —
+менеджер чинит ошибку, не ищет, что спросить; (2) ПРОДАЖА x/100 со шкалой и рисками 65/90; ПОД НЕЙ — 5 КОМПОНЕНТ-ШКАЛ (решение заказчика: «видеть
 каждый пункт и где косяк»; МОДЕЛЬ НЕ МЕНЯЛАСЬ — перегруппировка отображения лестницы):
   Эмпатия x/20 = empathy.score · Оцифровка боли x/10 = digitized_pain (ступень 4.1) ·
   Возражения x/25 = objections.score · Презентация цены x/30 = ступени 4.2+4.3+4.4 ·
