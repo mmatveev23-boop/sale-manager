@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Воронка за 5 минут — памятка руководителя — SALE 100.0</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="description" content="Памятка руководителя: путь лида по 7 статусам, кто и что двигает, окна и потолки, как ИИ оценивает звонки, замки и лимиты против абьюза.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700;800&family=Golos+Text:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F6F2E9; --card:#FFFFFF; --ink:#191713; --muted:#615B50;
+    --green:#0E5C46; --green-deep:#0A3D2E; --amber:#C2790F; --red:#9A2D22;
+    --grey:#7C756A; --gold:#C99A33;
+    --line:rgba(25,23,19,.12);
+    --red-soft:#FBEDEB; --green-soft:#EAF3EE; --amber-soft:#FBF1D9;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--paper);color:var(--ink);font-family:"Golos Text",sans-serif;line-height:1.55;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:940px;margin:0 auto;padding:0 22px}
+  h1,h2,h3,h4,.kicker,.num{font-family:"Unbounded",sans-serif}
+  a{color:inherit}
+
+  header{padding:52px 0 16px}
+  .kicker{font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:var(--green);font-weight:700}
+  h1{font-size:clamp(30px,5.6vw,50px);line-height:1.05;font-weight:800;letter-spacing:-.02em;margin:14px 0 0}
+  h1 .hl{color:var(--green)}
+  .lead{font-size:clamp(15px,2.2vw,18px);color:var(--muted);max-width:760px;margin:14px 0 0;font-weight:500}
+  .promise{margin:20px 0 0;padding:17px 21px;background:var(--green-deep);color:#F6F2E9;border-radius:16px;font-size:clamp(14px,2vw,16.5px);font-weight:500;line-height:1.5}
+  .promise b{color:#F4C775;font-weight:600}
+
+  h2.sec{font-size:clamp(20px,3vw,26px);font-weight:800;letter-spacing:-.01em;margin:44px 0 4px}
+  .sub{color:var(--muted);font-size:14.5px;margin-bottom:14px;max-width:780px}
+  .sub b{color:var(--ink)}
+
+  /* путь лида */
+  .path{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;align-items:stretch}
+  .pnode{background:var(--card);border:1px solid var(--line);border-radius:11px;padding:9px 12px;font-size:12px;font-weight:600;display:flex;align-items:center;gap:7px}
+  .pnode .n{font-family:"Unbounded";font-weight:800;font-size:13px;width:22px;height:22px;border-radius:7px;display:flex;align-items:center;justify-content:center;color:#fff;flex:none}
+  .n-grey{background:var(--grey)} .n-amber{background:var(--amber)} .n-green{background:var(--green)} .n-deep{background:var(--green-deep)}
+  .parr{align-self:center;color:var(--gold);font-weight:800;font-family:"Unbounded";font-size:13px}
+  .paux{margin-top:8px;font-size:12.5px;color:var(--muted)}
+  .paux b{color:var(--ink)}
+
+  table{width:100%;border-collapse:collapse;font-size:12.8px}
+  th{font-family:"Unbounded";font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);text-align:left;padding:6px 10px 6px 0;border-bottom:1px solid var(--line)}
+  td{padding:8px 10px 8px 0;border-bottom:1px solid var(--line);vertical-align:top;line-height:1.5}
+  td b{font-weight:600}
+  td .st-n{font-family:"Unbounded";font-weight:800;color:#fff;border-radius:6px;padding:1px 7px;font-size:11.5px;white-space:nowrap}
+  .tblwrap{overflow-x:auto;background:var(--card);border:1px solid var(--line);border-radius:15px;padding:6px 16px 10px;margin-top:10px}
+  code{font-family:ui-monospace,Menlo,monospace;font-size:11px;background:var(--paper);border:1px solid var(--line);border-radius:5px;padding:1px 5px;white-space:nowrap}
+
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:10px}
+  @media (max-width:760px){.grid2{grid-template-columns:1fr}}
+  .panel{background:var(--card);border:1px solid var(--line);border-radius:15px;padding:15px 17px}
+  .panel h4{font-family:"Unbounded";font-weight:700;font-size:13.5px;color:var(--green);margin-bottom:7px}
+  .panel p, .panel li{font-size:13px;color:var(--muted);line-height:1.55}
+  .panel b{color:var(--ink)}
+  .panel ul{margin:4px 0 0 17px}
+
+  .okbox{margin-top:10px;border-radius:12px;padding:11px 14px;background:var(--green-soft);border:1px solid rgba(14,92,70,.22);font-size:13px}
+  .okbox b{color:var(--green-deep)}
+  .flag{margin-top:10px;border-radius:12px;padding:11px 14px;background:var(--red-soft);border:1px solid rgba(154,45,34,.25);font-size:13px}
+  .flag b{color:var(--red)}
+
+  footer{margin:52px 0 44px;padding-top:18px;border-top:1px solid var(--line);color:var(--muted);font-size:12.5px}
+  footer b{font-family:"Unbounded";color:var(--ink);font-weight:700}
+  footer a{color:var(--green)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="kicker">Памятка руководителя · 5 минут</div>
+    <h1>Воронка и оценка — <span class="hl">как это работает</span></h1>
+    <p class="lead">Одна страница вместо всех регламентов: путь лида, кто двигает статусы, окна и потолки, как ИИ оценивает звонки и какие замки защищают от абьюза. Детали — по ссылкам внизу.</p>
+    <div class="promise">Три закона: статусы двигают <b>только договор и деньги</b> (звонок легко изобразить, платёж — нет) · статусы ставит <b>система, не менеджер</b> (факты: подпись, вебхук оплаты; единственный «разговорный» переход 2→3 ставит ИИ по записи) · уход лида в пул — <b>не наказание</b> (лид не должен гнить); наказание — только за «забил», и это удар по рейтингу, а не отъём лида.</div>
+  </header>
+
+  <h2 class="sec">Путь лида</h2>
+  <div class="path">
+    <span class="pnode"><span class="n n-grey">1</span>Новый лид</span><span class="parr">→</span>
+    <span class="pnode"><span class="n n-grey">2</span>В работе</span><span class="parr">→</span>
+    <span class="pnode"><span class="n n-amber">3</span>Принимает решение</span><span class="parr">→</span>
+    <span class="pnode"><span class="n n-amber">4</span>Договор на подписи</span><span class="parr">→</span>
+    <span class="pnode"><span class="n n-amber">5</span>Подписан — платёж</span><span class="parr">→</span>
+    <span class="pnode"><span class="n n-green">6</span>Частичка — добор</span><span class="parr">→</span>
+    <span class="pnode"><span class="n n-deep">7</span>Сделка → сопровождение</span>
+  </div>
+  <p class="paux">Сквозные: <b>↩ Дозвонщики</b> (бот: 5 попыток / 3 дня → «Закрытые: недозвон») · <b>♻︎ Общий пул</b> («лид уходит другому»: раздаёт система — холодные по очереди, тёплые ротацией по тёплой конверсии, никогда прежнему владельцу; с лидом едут история, AI-резюме и собранная диагностика) · <b>✕ Закрытые</b> (только с причиной-артефактом: отказ с цитатой / не наш / недозвон / расторжение; возврат через 30–90 дней, кроме «не звоните» — DNC насовсем) · <b>⏸ Парковка</b> (клиент сам назвал дату → таймер паузится, автовозврат; перенос 1 раз, парковок ≤5).</p>
+
+  <h2 class="sec">Семь статусов — одна таблица</h2>
+  <div class="tblwrap">
+    <table>
+      <thead><tr><th>Статус</th><th>Что это</th><th>Окно / потолок</th><th>Что двигает дальше</th><th>Если провал</th></tr></thead>
+      <tbody>
+        <tr><td><span class="st-n" style="background:var(--grey)">1</span> <b>Новый лид</b></td><td>Консультации не было</td><td>первый набор ≤5 мин</td><td>дозвонился, начал консультацию</td><td>3 недозвона → дозвонщики (бот)</td></tr>
+        <tr><td><span class="st-n" style="background:var(--grey)">2</span> <b>В работе</b></td><td>Поговорили, но консультация не закончена (или ИИ показал недобранный гейт). Лид НЕ закреплён, слот не ест. Консультация может идти несколькими звонками — куски мержатся</td><td>попытка раз в 48 ч · сквозной потолок «контакт → договор» = 3 дня · недобранных одновременно ≤10</td><td>гейт 16/16 (ставит ИИ) → ст.3 · деньги/подпись → сразу 4–6</td><td>не добрал за 3 дня → общий пул без штрафа (лид уходит с собранным); живой клиент + несобранный гейт = −1 жизнь</td></tr>
+        <tr><td><span class="st-n" style="background:var(--amber)">3</span> <b>Принимает решение</b></td><td>Полная консультация проведена — лид ЗАКРЕПЛЁН, занимает слот из 20. Сюда «попадают сами» — ИИ слышит гейт в записи</td><td>до 3 дней (внутри общего потолка)</td><td>согласен → презентация → ст.4</td><td>не подписал → пул без штрафа; наказывает только слабый звонок (&lt;65)</td></tr>
+        <tr><td><span class="st-n" style="background:var(--amber)">4</span> <b>Договор на подписи</b></td><td>Ведёт клиента по презентации голосом, подпись по СМС (ОКИ ДОКИ)</td><td>горячий час · 30 мин тишины → перезвон</td><td>подпись → ст.5</td><td>час без попытки → «Завис» + пауза новых · 2 ч → пул + рейтинг вниз · работал, не созрел → назад в ст.3 без штрафа</td></tr>
+        <tr><td><span class="st-n" style="background:var(--amber)">5</span> <b>Подписан — платёж сегодня</b></td><td>Лид твой, №1 в очереди. Проси 13 500 первым; не готов — частичка от 1 000. Платёж сегодня = SIM-акция закреплена</td><td>попытка каждый день ×3, дальше раз в 48 ч · потолка нет — держат содержательные касания</td><td>13 500 или 169 000 (VIP) → ст.7 · частичка → ст.6</td><td>день без попытки → пул + рейтинг вниз · старался, клиент молчит → пул, рейтинг цел</td></tr>
+        <tr><td><span class="st-n" style="background:var(--green)">6</span> <b>Частичка — добор до 13 500</b></td><td>КИ через Госуслуги → заключение → презентация → добор. Каждый платёж/документ продлевает. Симка ждёт полной оплаты — рычаг</td><td>ежедневно ×5, дальше 48 ч · цель добора 7 дней · &gt;14 дней → «застрявшие деньги» у РОПа (разбор, не отбор)</td><td>13 500 → ст.7</td><td>день без попытки → пул с пометкой · пустые «как дела» владение не держат</td></tr>
+        <tr><td><span class="st-n" style="background:var(--green-deep)">7</span> <b>Сделка → сопровождение</b></td><td>Анкета (без неё amo передачу не пропустит) + декларация клиента → 50% комиссии сразу; вторые 50% — после 2-го платежа</td><td>срок на сбор документов</td><td>полный пакет → отдел сопровождения</td><td>расторжение до 2-го платежа → вторых 50% нет; бьёт % расторжений (норма 5–10%), не один случай</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2 class="sec">Как ИИ оценивает звонки</h2>
+  <p class="sub">Оценивается <b>каждый звонок сразу</b> (транскрибация → ИИ → JSON), но «судится» <b>консультация целиком, один раз</b>. Переписка официального бота — в том же контуре: факты клиента идут в диагностику, отказ в чате = отказ, красные фразы менеджера в чате = комплаенс. Балл качества — только по голосу.</p>
+  <div class="grid2">
+    <div class="panel"><h4>Гейт — «узнал ли клиента»</h4><p><b>16 разговорных пунктов</b>, все обязательны (принцип: «в гейте нет вещей, которые можно не проговорить»). Гейт = единственный разговорный переход 2→3 и судьба пустого лида. <b>Деньги сильнее гейта:</b> частичка/подпись двигают статусы и закрепляют лид независимо от гейта — ИИ никогда не блокирует движение вперёд. Консультация в несколько звонков — норма: куски мержатся, вердикт один.</p></div>
+    <div class="panel"><h4>Балл — «как продавал», 0–100</h4><p>Эмпатия 20 («как со своим близким») + возражения 25 («вообще пытался») + лестница денег 40 (оцифровал боль → «13 500, потянете?» → дата + частичка сегодня → закрыл) + шаг с датой 15. <b>65+ — без штрафа, даже если не купил · 90+ — идеал.</b> Каждый вердикт — с дословной цитатой, цитаты программно проверяются по транскрипту.</p></div>
+    <div class="panel"><h4>5 жизней ❤️</h4><p>Плохой звонок (гейт не собран ИЛИ балл &lt;90) сжигает жизнь, хороший (гейт ✓ и 90+) возвращает <b>одну</b> — один хороший всё не прощает. 0 жизней → стоп новых лидов + экзамен у РОПа (сдал → 5 жизней; активных ведёт всегда). Не трогают жизни: обрыв, спор, отказ клиента, кусок консультации.</p></div>
+    <div class="panel"><h4>Отказ — не вина менеджера</h4><p>Жёсткий отказ («не звоните больше») с цитатой → звонок вне рейтинга и жизней, попап «Отказ — право закрыть есть», лид в «Закрытые» без повторного обзвона (DNC). «Подумаю» / «дорого» / «не буду платить вперёд» — возражения, их дожимаем. Дисквал компанией («долг мал») — тоже основание закрыть, рейтинг цел. Дожим после отказа → флаг РОПу.</p></div>
+  </div>
+
+  <h2 class="sec">Замки и лимиты — защита от абьюза</h2>
+  <div class="grid2">
+    <div class="panel"><h4>Два замка</h4><ul>
+      <li><b>Нельзя закрыть нормального лида</b> — закрытие проверяется по последнему lead_check: живой клиент без основания в записи → авто-возврат другому + разбор. Основание (отказ/дисквал) → закрытие проходит, цитата = причина в карточке.</li>
+      <li><b>Нельзя передать юристам без анкеты</b> — механика amoCRM (обязательные поля на статусе 7), ИИ тут не нужен.</li>
+    </ul></div>
+    <div class="panel"><h4>Лимиты менеджера</h4><ul>
+      <li>10 новых в день ИЛИ 6 консультаций — что раньше;</li>
+      <li>портфель — 20 реальных активных (20/20 → новые следующему);</li>
+      <li>очередь добора — ≤10 недобранных в ст.2 (10/10 → новые не падают, причина именная);</li>
+      <li>кран новых также закрывают: просрочка денежного окна, «Завис», 0 жизней, золотой час (90 мин до конца смены).</li>
+    </ul></div>
+    <div class="panel"><h4>Прятать и сливать невыгодно</h4><ul>
+      <li>потолок 3 дня — недобранный лид сам уходит другому со всей собранной диагностикой;</li>
+      <li>уход по потолку = финальный вердикт: живой клиент + несобранный гейт = −1 жизнь;</li>
+      <li>слив-сигнал РОПу: доля гейт-фейлов, где лид позже закрыт в деньги другим;</li>
+      <li>«взял, но бросил» (ноль попыток в окно) → пул + рейтинг вниз + метка.</li>
+    </ul></div>
+    <div class="panel"><h4>Справедливость</h4><ul>
+      <li>«клиент не созрел» при звонке 65+ — без штрафа;</li>
+      <li>«звонил, а клиент молчит» — лид уйдёт, рейтинг цел;</li>
+      <li>обрыв связи и куски консультации — вне жизней;</li>
+      <li>комплаенс: 9 красных линий, сейчас режим «фиксируем и учим» (×0 — с объявленной даты); «100% спишем» разрешён — подкреплён договором возврата.</li>
+    </ul></div>
+  </div>
+
+  <div class="okbox"><b>Деньги менеджера:</b> 50% комиссии сразу по декларации клиента (подпись + вебхук, без чужих согласований) + 50% после 2-го платежа. До 2-го платежа менеджер «на радаре»: клиента ведёт сопровождение, менеджер — последняя линия при угрозе расторжения. Расторжения считаются процентом против команды (норма 5–10%), не поштучно.</div>
+  <div class="flag"><b>Режим запуска:</b> первые 8–12 недель ИИ — тренер (оценки видят РОП и сам менеджер, подсказка «что исправить» — сразу). Блокировки (жизни, ×0 за комплаенс) включаются с заранее объявленной даты; до неё всё видно, но кран не трогается. Пороги калибруются на данных после 4 недель.</div>
+
+  <footer>
+    <b>SALE 100.0</b> · Памятка руководителя · канон v2.11, промт v1.1.15 (2026-07-07).<br>
+    Подробности: <a href="../score/">структура оценки</a> · <a href="../script/">единый скрипт и правила игры</a> · <a href="../rules/">правила работы</a> · <a href="../qa/">контур AI-QA с полным промтом</a> · <a href="../555/">плакат 5·5·5</a>.
+  </footer>
+</div>
+</body>
+</html>
