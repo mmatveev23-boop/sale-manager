@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Старт внедрения — Фаза 0.5 — SALE 100.0</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="description" content="Фаза 0.5: новый скрипт + теневой ИИ-контроль поверх старой воронки. План по неделям и примеры экранов: дайджест РОПа, сообщение менеджеру.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700;800&family=Golos+Text:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F6F2E9; --card:#FFFFFF; --ink:#191713; --muted:#615B50; --faint:#8A938A;
+    --green:#0E5C46; --green-deep:#0A3D2E; --amber:#C2790F; --red:#9A2D22;
+    --grey:#7C756A; --gold:#C99A33;
+    --line:rgba(25,23,19,.12);
+    --red-soft:#FBEDEB; --green-soft:#EAF3EE; --amber-soft:#FBF1D9;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--paper);color:var(--ink);font-family:"Golos Text",sans-serif;line-height:1.55;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:940px;margin:0 auto;padding:0 22px}
+  h1,h2,h3,h4,.kicker{font-family:"Unbounded",sans-serif}
+  a{color:inherit}
+  .num{font-variant-numeric:tabular-nums}
+
+  header{padding:52px 0 16px}
+  .kicker{font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:var(--green);font-weight:700}
+  h1{font-size:clamp(30px,5.6vw,50px);line-height:1.05;font-weight:800;letter-spacing:-.02em;margin:14px 0 0}
+  h1 .hl{color:var(--green)}
+  .lead{font-size:clamp(15px,2.2vw,18px);color:var(--muted);max-width:760px;margin:14px 0 0;font-weight:500}
+  .promise{margin:20px 0 0;padding:17px 21px;background:var(--green-deep);color:#F6F2E9;border-radius:16px;font-size:clamp(14px,2vw,16.5px);font-weight:500;line-height:1.5}
+  .promise b{color:#F4C775;font-weight:600}
+
+  h2.sec{font-size:clamp(20px,3vw,26px);font-weight:800;letter-spacing:-.01em;margin:44px 0 4px}
+  .sub{color:var(--muted);font-size:14.5px;margin-bottom:14px;max-width:780px}
+  .sub b{color:var(--ink)}
+
+  /* недели */
+  .weeks{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:10px}
+  @media (max-width:760px){.weeks{grid-template-columns:1fr}}
+  .wk{background:var(--card);border:1px solid var(--line);border-radius:15px;padding:15px 17px}
+  .wk h4{font-family:"Unbounded";font-weight:700;font-size:13.5px;color:var(--green);margin-bottom:7px}
+  .wk li{font-size:13px;color:var(--muted);line-height:1.55;margin-left:17px}
+  .wk b{color:var(--ink)}
+  .wk .who{display:inline-block;font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;background:var(--amber-soft);color:var(--amber);border-radius:6px;padding:1px 7px;margin-right:4px}
+
+  /* экраны-моки */
+  .mock-cap{font-size:11.5px;color:var(--faint);text-align:center;margin:16px 0 8px}
+  .screen{max-width:640px;margin:0 auto;background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:0 18px 40px -28px rgba(20,40,30,.4);overflow:hidden}
+  .scr-h{background:var(--green-deep);color:#F6F2E9;padding:14px 18px}
+  .scr-h .t{font-family:"Unbounded";font-weight:700;font-size:14px}
+  .scr-h .s{font-size:12px;opacity:.75;margin-top:3px}
+  .scr-b{padding:16px 18px}
+
+  .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:0;background:#F1EFE8;border:1px solid var(--line);border-radius:11px;overflow:hidden}
+  @media (max-width:560px){.kpis{grid-template-columns:1fr 1fr}}
+  .kpi{padding:10px 12px;border-right:1px solid var(--line)}
+  .kpi:last-child{border-right:none}
+  @media (max-width:560px){.kpi:nth-child(2){border-right:none}.kpi:nth-child(1),.kpi:nth-child(2){border-bottom:1px solid var(--line)}}
+  .kpi .kl{font-size:10.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;font-weight:600}
+  .kpi .kv{font-family:"Unbounded";font-weight:800;font-size:18px;margin-top:3px}
+  .kpi .ks{font-size:10.5px;color:var(--faint);margin-top:1px}
+
+  table{width:100%;border-collapse:collapse;font-size:12.3px;margin-top:12px}
+  th{font-family:"Unbounded";font-size:9.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);text-align:left;padding:6px 8px 6px 0;border-bottom:1px solid var(--line)}
+  td{padding:7px 8px 7px 0;border-bottom:1px solid var(--line);vertical-align:top;line-height:1.45}
+  td b{font-weight:600}
+  .pill{display:inline-block;border-radius:999px;padding:1px 8px;font-size:10.5px;font-weight:700}
+  .p-red{background:var(--red-soft);color:var(--red)}
+  .p-green{background:var(--green-soft);color:var(--green)}
+  .p-amber{background:var(--amber-soft);color:var(--amber)}
+  .p-gray{background:#F1EFE8;color:var(--muted)}
+
+  .rz{border:1px solid var(--line);border-radius:11px;padding:11px 13px;margin-top:8px;background:var(--paper)}
+  .rz .rt{font-size:12.5px;font-weight:700}
+  .rz .rs{font-size:11.5px;color:var(--muted);margin-top:3px;line-height:1.5}
+  .rz .why{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;border-radius:6px;padding:1px 7px;margin-bottom:5px}
+
+  .trend{margin-top:12px;background:var(--green-soft);border:1px solid rgba(14,92,70,.2);border-radius:11px;padding:11px 13px;font-size:12.5px}
+  .bar{height:6px;border-radius:3px;background:#DCE7E0;margin-top:7px;overflow:hidden;position:relative}
+  .bar>div{height:100%;background:var(--green);border-radius:3px}
+
+  /* сообщение менеджеру */
+  .msg{max-width:480px;margin:0 auto;background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:0 14px 32px -24px rgba(20,40,30,.35);padding:15px 17px}
+  .msg .from{display:flex;align-items:center;gap:9px;margin-bottom:10px}
+  .msg .ava{width:32px;height:32px;border-radius:10px;background:var(--green-deep);color:#F4C775;display:flex;align-items:center;justify-content:center;font-size:15px;flex:none}
+  .msg .fn{font-size:12.5px;font-weight:700}
+  .msg .ft{font-size:10.5px;color:var(--faint)}
+  .msg .row{display:flex;gap:8px;align-items:center;background:#F1EFE8;border:1px solid var(--line);border-radius:10px;padding:9px 12px;font-size:12.5px}
+  .msg .fix{margin-top:8px;border-left:3px solid var(--red);background:var(--red-soft);border-radius:0 10px 10px 0;padding:9px 12px;font-size:12.5px;line-height:1.5}
+  .msg .tip{margin-top:8px;background:var(--green-soft);border-radius:10px;padding:9px 12px;font-size:12.5px;line-height:1.5}
+
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:10px}
+  @media (max-width:760px){.grid2{grid-template-columns:1fr}}
+  .panel{background:var(--card);border:1px solid var(--line);border-radius:15px;padding:15px 17px}
+  .panel h4{font-family:"Unbounded";font-weight:700;font-size:13.5px;color:var(--green);margin-bottom:7px}
+  .panel p, .panel li{font-size:13px;color:var(--muted);line-height:1.55}
+  .panel b{color:var(--ink)}
+  .panel ul{margin:4px 0 0 17px}
+
+  .okbox{margin-top:12px;border-radius:12px;padding:11px 14px;background:var(--green-soft);border:1px solid rgba(14,92,70,.22);font-size:13px}
+  .okbox b{color:var(--green-deep)}
+  .flag{margin-top:10px;border-radius:12px;padding:11px 14px;background:var(--red-soft);border:1px solid rgba(154,45,34,.25);font-size:13px}
+  .flag b{color:var(--red)}
+
+  footer{margin:52px 0 44px;padding-top:18px;border-top:1px solid var(--line);color:var(--muted);font-size:12.5px}
+  footer b{font-family:"Unbounded";color:var(--ink);font-weight:700}
+  footer a{color:var(--green)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="kicker">Старт внедрения · Фаза 0.5</div>
+    <h1>Скрипт + контроль — <span class="hl">воронку не трогаем</span></h1>
+    <p class="lead">Решение от 8 июля: менеджеры остаются в старой воронке. Сначала учим новому скрипту и презентации, сверху включаем ИИ-контроль без штрафов и сроков. Новая воронка — следующим шагом, когда скрипт устоится и баллу начнут доверять.</p>
+    <div class="promise">Три принципа фазы: <b>без штрафов, окон и жизней</b> — только зеркало и обучение · оценки <b>сначала видит только РОП</b> (1–2 недели, пока ИИ обкатывается на новом скрипте), потом менеджеры в режиме тренера · <b>одна перемена за раз</b> — сейчас меняем «как говорим», воронка «как ведём лидов» подключится следующей фазой.</div>
+  </header>
+
+  <h2 class="sec">План по неделям</h2>
+  <div class="weeks">
+    <div class="wk"><h4>Неделя 1 — фундамент</h4><ul>
+      <li><span class="who">прогер</span><b>Спайк телефонии (дни 1–2), единственный техблокер:</b> вебхук завершения звонка (менеджер + сделка), запись скачивается сразу (ссылки протухают), поток в транскрибацию. Готово = каждый звонок сам становится транскриптом.</li>
+      <li style="margin-top:6px"><span class="who">РОП</span><b>Тренинг (дни 1–3):</b> скрипт — 16 пунктов гейта, лестница денег, стоп-лист красных фраз; презентация — «ведём клиента по экранам голосом»; ролевые в парах.</li>
+      <li style="margin-top:6px"><span class="who">прогер</span><b>Теневой контур (дни 3–5):</b> транскрипт → ИИ-оценка → утренний дайджест РОПу (мок ниже). Менеджерам пока не показываем.</li>
+    </ul></div>
+    <div class="wk"><h4>Неделя 2 — калибровка</h4><ul>
+      <li><span class="who">РОП</span>Ежедневный разбор 2–3 звонков с командой по дайджесту — учим, не наказываем.</li>
+      <li style="margin-top:6px"><span class="who">РОП</span><b>Blind-сверка:</b> оценивает 20–30 звонков руками по «структуре оценки», сверяем с ИИ. Цель — расхождение &lt;5%; где разошлись → правим промт.</li>
+    </ul></div>
+    <div class="wk"><h4>Недели 3–4 — тренер менеджерам</h4><ul>
+      <li><b>Открываем оценки менеджерам:</b> после звонка — балл + «что исправить» + подсказка (мок ниже). Пока сообщением/примечанием — полноценное окно придёт вместе с движком.</li>
+      <li style="margin-top:6px"><span class="who">прогер</span>Фоном: настройка amoCRM по постановке (статусы 1–7, анкета на ст.7, «Робот-распределитель») и стройка движка.</li>
+    </ul></div>
+    <div class="wk"><h4>Переход в фазу 1 — по готовности</h4><ul>
+      <li>Добор гейта растёт от недели к неделе;</li>
+      <li>расхождение ИИ ↔ РОП меньше 5%;</li>
+      <li>менеджеры баллу доверяют (споров мало, разборы конструктивные);</li>
+      <li>amoCRM настроена → пересаживаемся на новую воронку.</li>
+      <li style="margin-top:6px"><b>Предохранитель:</b> не засиживаться дольше ~4 недель — старая воронка не лечит гниющих лидов и непроверенные закрытия.</li>
+    </ul></div>
+  </div>
+
+  <h2 class="sec">Что видит РОП — утренний дайджест</h2>
+  <p class="sub">Каждое утро, по вчерашним звонкам. Это главный экран фазы: РОП выбирает 2–3 звонка на разбор дня и следит за трендом добора гейта. Без воронки, без окон — только качество разговоров.</p>
+
+  <div class="screen">
+    <div class="scr-h">
+      <div class="t">Дайджест звонков · вторник, 14 июля</div>
+      <div class="s">вчера 47 звонков · оценено 28 (остальное — недозвоны и сервисные) · скрипту 6-й день</div>
+    </div>
+    <div class="scr-b">
+      <div class="kpis">
+        <div class="kpi"><div class="kl">Средний балл</div><div class="kv num" style="color:var(--amber)">64</div><div class="ks">граница 65 · цель 90</div></div>
+        <div class="kpi"><div class="kl">Гейт добит</div><div class="kv num">7<small style="font-size:11px;color:var(--faint)">/28</small></div><div class="ks">полных 16/16</div></div>
+        <div class="kpi"><div class="kl">Комплаенс</div><div class="kv num" style="color:var(--red)">5</div><div class="ks">флагов · 2 класса</div></div>
+        <div class="kpi"><div class="kl">Отказы</div><div class="kv num">2</div><div class="ks">оба корректные ✓</div></div>
+      </div>
+
+      <table>
+        <thead><tr><th>Менеджер</th><th>Звонки</th><th>Ср. балл</th><th>Гейт (ср.)</th><th>Системная ошибка недели</th><th></th></tr></thead>
+        <tbody>
+          <tr><td><b>Анастасия</b></td><td class="num">8</td><td class="num"><b>71</b></td><td class="num">11.2/16</td><td>«подумаю» — отпускает без вопроса намерения</td><td><span class="pill p-amber">2 флага</span></td></tr>
+          <tr><td><b>Денис</b></td><td class="num">6</td><td class="num"><b>68</b></td><td class="num">10.4/16</td><td>не спрашивает сделки за 3 года ⚠</td><td><span class="pill p-gray">—</span></td></tr>
+          <tr><td><b>Ульяна</b></td><td class="num">7</td><td class="num"><b>62</b></td><td class="num">9.1/16</td><td>цена без «потянете?», нет даты платежа</td><td><span class="pill p-red">3 флага</span></td></tr>
+          <tr><td><b>Камран</b></td><td class="num">7</td><td class="num"><b>55</b></td><td class="num">7.8/16</td><td>работает по старому скрипту — деньги на жизнь и госплатежи не проговаривает</td><td><span class="pill p-gray">—</span></td></tr>
+        </tbody>
+      </table>
+
+      <div style="font-family:'Unbounded';font-weight:700;font-size:12px;margin-top:14px">Разбор дня — ИИ предлагает 3 звонка</div>
+      <div class="rz"><span class="why p-red" style="background:var(--red-soft);color:var(--red)">давление после отказа</span>
+        <div class="rt">Ульяна · Пётр К. · вчера 16:12 · 4:07</div>
+        <div class="rs">Клиент в 03:47: «не звоните мне больше» — дальше три захода «а почему?». Разобрать грань «дожим ≠ давление»; менеджеру строка «не ок» уже показана.</div></div>
+      <div class="rz"><span class="why p-green" style="background:var(--green-soft);color:var(--green)">лучший звонок дня · 94</span>
+        <div class="rt">Анастасия · Ирина В. · вчера 12:40 · 27:15</div>
+        <div class="rs">Гейт 16/16, «платите 38 000 — 31 000 из них проценты», частичка 3 000 ₽ в звонке. Кандидат в библиотеку эталонов — включить кусок в утренний разбор.</div></div>
+      <div class="rz"><span class="why p-amber" style="background:var(--amber-soft);color:var(--amber)">комплаенс · класс 4</span>
+        <div class="rt">Ульяна · Сергей Т. · вчера 18:03 · 12:44</div>
+        <div class="rs">«Возьмите у знакомых или займ небольшой — и оплатим» (09:12). Красная линия «займ ради оплаты услуг». Режим «фиксируем и учим»: показать стоп-лист, штрафа нет.</div></div>
+
+      <div class="trend">
+        <b>Тренд недели — добор гейта:</b> пн 6.1 → вт 7.3 → ср 8.0 → чт 8.9 → пт <b>9.6 из 16</b> · скрипт приживается
+        <div class="bar"><div style="width:60%"></div></div>
+      </div>
+      <div class="trend" style="background:var(--amber-soft);border-color:rgba(194,121,15,.25)">
+        <b>Blind-сверка (неделя 2):</b> оценено руками 14 из 25 звонков · расхождение с ИИ сейчас <b class="num">7,2%</b> → цель &lt;5% · главный спор — зачёт п.14 «деньги на жизнь»
+      </div>
+    </div>
+  </div>
+
+  <h2 class="sec">Что видит менеджер — с недели 3, режим тренера</h2>
+  <p class="sub">После звонка — короткое сообщение в мессенджер (или примечание в amo): балл, одна главная ошибка, подсказка. Без последствий: ни жизни, ни рейтинг, ни лиды не трогаются — полноценное окно с «жизнями» придёт вместе с новой воронкой.</p>
+
+  <div class="msg">
+    <div class="from"><div class="ava">🤖</div><div><div class="fn">ИИ-тренер · разбор звонка</div><div class="ft">Иван С. · сегодня 14:51 · 18:24</div></div></div>
+    <div class="row"><span>Гейт <b class="num">9/16</b></span><span style="color:var(--line)">|</span><span>Продажа <b class="num">76</b>/100</span><span style="color:var(--line)">|</span><span style="color:var(--faint)">без последствий — режим тренера</span></div>
+    <div class="fix"><b>Главное — одно:</b> после частички 2 000 ₽ не проговорён договор. Деньги без договора = риск «устно ≠ договор». Сначала договор — он защищает клиента, потом деньги.</div>
+    <div class="tip"><b>Сделай сейчас:</b> набери Ивана до 18:00 — «оформим договор кодом из СМС, и остаток 10-го, как договорились». Недобрано 7 вопросов гейта — список в примечании карточки.</div>
+  </div>
+
+  <h2 class="sec">Чего в этой фазе нет — сознательно</h2>
+  <div class="grid2">
+    <div class="panel"><h4>Выключено до новой воронки</h4><ul>
+      <li>штрафы, рейтинг, «жизни», резка лидов — <b>балл ни на что не влияет</b>;</li>
+      <li>окна, потолки, сроки, авто-пул — воронка живёт по старым правилам;</li>
+      <li>×0 за комплаенс — только «фиксируем и учим» по стоп-листу;</li>
+      <li>замок закрытий и очередь добора — придут с движком.</li>
+    </ul></div>
+    <div class="panel"><h4>Что копится уже сейчас</h4><ul>
+      <li>оценки всех звонков → к запуску новой воронки будут <b>недели данных</b> для калибровки порогов;</li>
+      <li>библиотека эталонных звонков для обучения;</li>
+      <li>паттерны команды: что чаще всего пропускают в гейте, какие возражения не дожимают;</li>
+      <li>привычка к разборам — попап новой системы не будет шоком.</li>
+    </ul></div>
+  </div>
+
+  <div class="okbox"><b>Почему в дайджесте первых недель баллы низкие — это нормально.</b> Оценка меряет НОВЫЙ скрипт: пока команда говорит по-старому, гейт будет 7–10 из 16 — это точка старта, а не приговор. Смотрим не на уровень, а на тренд: добор растёт от недели к неделе → скрипт приживается. Именно поэтому первые 1–2 недели оценки видит только РОП.</div>
+  <div class="flag"><b>Красный флаг фазы:</b> расхождение ИИ ↔ РОП не сходится к 5% или менеджеры массово спорят с баллом → не открываем оценки команде и не идём дальше — чиним рубрику. Несправедливый балл отравляет систему с первого дня.</div>
+
+  <footer>
+    <b>SALE 100.0</b> · Старт внедрения · Фаза 0.5 (решение 2026-07-08) · промт v1.1.15, дожим v1.2, канон v2.11.<br>
+    Дальше по плану: <a href="../funnel-memo/">памятка «Воронка за 5 минут»</a> · <a href="../score/">структура оценки</a> · <a href="../script/">единый скрипт</a> · <a href="../qa/">контур AI-QA (попап, дашборд, калибровка)</a>.
+  </footer>
+</div>
+</body>
+</html>
